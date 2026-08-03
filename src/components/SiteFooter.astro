@@ -1,0 +1,55 @@
+---
+const year = 2026;
+
+const links = [
+  { href: '/curriculum/', label: 'Course' },
+  { href: '/library/', label: 'Library' },
+  { href: '/tracker/', label: 'Tracker' },
+  { href: '/about/', label: 'What this is' },
+  { href: 'https://github.com/mouneyrac/setting-out', label: 'Source' },
+];
+---
+
+<footer class="mt-20 relative">
+  <!-- A hedge line the footer sits behind, so the page ends in the garden -->
+  <svg viewBox="0 0 1200 60" class="w-full h-[44px] block" preserveAspectRatio="none" aria-hidden="true">
+    <path
+      d="M0 60 V32 q 40 -26 80 -2 q 44 -30 88 -4 q 42 -28 84 -2 q 46 -30 92 -4 q 40 -26 80 -2 q 44 -30 88 -4 q 42 -28 84 -2 q 46 -30 92 -4 q 40 -26 80 -2 q 44 -30 88 -4 q 42 -28 84 -2 q 40 -24 80 0 V60 Z"
+      fill="var(--surface)"></path>
+  </svg>
+
+  <div class="bg-surface">
+    <div class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-10 -mt-1">
+      <!-- The disclaimer is the only thing here that genuinely must be read. -->
+      <div class="sign sign-danger">
+        <div class="flex gap-3 items-start">
+          <span class="text-xl shrink-0" aria-hidden="true">⚠️</span>
+          <p class="text-[0.93rem] leading-relaxed">
+            <strong class="font-display"
+              >Written by AI. The person building it is not a landscaping professional, and most of
+              it has not been done yet.</strong
+            > Educational material, not professional advice — nothing here has been reviewed by anyone
+            qualified. Regulations change. Confirm with your local council, the Water Corporation, DWER
+            or a licensed trade before you build, dig or spend. Structural, electrical, plumbing, gas
+            and pool-barrier work in WA is regulated, and where a licensed trade is legally required
+            this course says so.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+        <span class="font-display font-700">Setting Out</span>
+        {
+          links.map((link) => (
+            <a href={link.href} class="text-sm text-soft hover:text-paw transition-colors">
+              {link.label}
+            </a>
+          ))
+        }
+        <span class="note ml-auto">
+          © {year} · Perth, WA · code MIT, content CC BY-SA · made in Perth, for Perth
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>

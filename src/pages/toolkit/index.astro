@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import { allLessons, lessonUrl } from '../../lib/curriculum';
+import { getPhase } from '../../data/phases';
+import { templates } from '../../data/templates';
+
+const lessons = await allLessons();
+const deliverables = lessons
+  .filter((l) => l.data.deliverable)
+  .map((l) => ({
+    phase: getPhase(l.data.phase),
+    lesson: l,
+    deliverable: l.data.deliverable!,
+  }));
+---
+
+<Base
+  title="Toolkit"
+  description="The documents you produce as you work through the course — brief, site analysis, plans, costings, maintenance calendar — and the templates for each."
+  sheetRef="SHEET 04 / TOOLKIT"
+>
+  <section class="mx-auto max-w-[86rem] px-4 sm:px-6 pt-10 pb-8">
+    <p class="label">Toolkit</p>
+    <h1 class="mt-3 font-display font-700 leading-[0.95]" style="font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);">
+      {deliverables.length} documents, and you have a design package
+    </h1>
+    <p class="mt-5 max-w-[64ch] text-lg leading-relaxed text-soft">
+      Every deliverable in the course, in the order you produce them. Work through the curriculum on
+      your own block and these stack up into a professional landscape documentation set for your
+      property — the same thing you would have paid a designer for, except you understand every page
+      of it.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-[86rem] px-4 sm:px-6 pb-10">
+    <h2 class="font-display font-900 text-2xl sm:text-3xl">Printable templates</h2>
+    <p class="note mt-1 max-w-[64ch]">
+      Fill them in on screen, print them to A4, or save as a PDF from your browser. Entries stay in
+      your own browser — nothing is sent anywhere.
+    </p>
+
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+      {
+        templates.map((t) => (
+          <li class="list-none">
+            <a href={`/toolkit/${t.slug}/`} class="cutout cutout-lift p-5 block h-full">
+              <p class="label">Phase {String(t.phase).padStart(2, '0')}</p>
+              <h3 class="font-display font-700 text-xl leading-tight mt-1">{t.title}</h3>
+              <p class="text-[0.93rem] leading-snug text-soft mt-1.5">{t.summary}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-[86rem] px-4 sm:px-6 pb-16">
+    <div class="sr-only mb-3"></div>
+    <p class="label mb-4">Documents you produce, in order</p>
+
+    <ol class="grid gap-3">
+      {
+        deliverables.map((d, i) => (
+          <li class="cutout p-4 sm:p-5">
+            <div class="flex gap-4">
+              <span class="phase-badge mt-1">{String(i + 1).padStart(2, '0')}</span>
+              <div class="min-w-0 flex-1">
+                <p class="label">
+                  Phase {String(d.phase.number).padStart(2, '0')} — {d.phase.title}
+                </p>
+                <h2 class="font-display text-2xl leading-tight mt-1">
+                  <a href={lessonUrl(d.lesson)} class="hover:text-paw transition-colors">
+                    {d.deliverable.title}
+                  </a>
+                </h2>
+                <p class="text-[0.95rem] leading-relaxed text-soft mt-1.5 max-w-[70ch]">
+                  {d.deliverable.prompt}
+                </p>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</Base>

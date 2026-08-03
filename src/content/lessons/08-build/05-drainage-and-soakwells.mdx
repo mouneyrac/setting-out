@@ -1,0 +1,310 @@
+---
+title: "Installing drainage and soakwells"
+phase: 8
+order: 5
+summary: "Digging in soakwells, connecting downpipes and surface drains, getting falls right, and the subsoil drainage that stops a low corner staying wet all winter. Do this before anything gets built on top of it."
+timeEstimate: "2 h"
+difficulty: advanced
+status: complete
+updated: 2026-08-02
+checklist:
+  - "Soakwells sized and positioned per your drainage plan"
+  - "All pipework laid to a consistent fall with no bellies"
+  - "Geotextile used where required to stop sand ingress"
+  - "System tested with water before backfilling"
+resources:
+  - title: "On Site Stormwater Drainage Criteria"
+    url: "https://www.stirling.wa.gov.au/awcontent/Web/Documents/Developing%20Property/Building%20documents/City-of-Stirling-On-Site-Drainage-Criteria-June-2024-1.pdf"
+    provider: "City of Stirling"
+    type: government
+    cost: free
+    duration: "15 min"
+    whyGood: "The clearest and most recent set of numbers any Perth council publishes, and the model for what to go and find for your own council. It gives the sizing formula (impervious area in square metres times 0.015 equals cubic metres of storage), a full soakwell capacity table from 900 x 600 mm up to 1800 x 1800 mm, the 1 metre edge-to-edge clearance from structures and boundaries, the requirement that downpipes discharge into grated inlets before entering an infiltration system, and the rule that anything under a driveway or carport must be trafficable with an approved base. It also lists the nine site conditions that force a full drainage management plan."
+    waRelevance: wa-specific
+    waCaveat: "This binds you only if you are in the City of Stirling. Councils differ materially — Cockburn uses a different design storm and a different formula. Use this to learn the shape of the rules, then download your own council's version."
+    checkedOn: 2026-08-02
+  - title: "On Site Drainage Requirements (Residential Lots)"
+    url: "https://www.cockburn.wa.gov.au/DATA/DocSetID-8843767"
+    provider: "City of Cockburn"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "Worth reading beside the Stirling document precisely because it disagrees with it. Cockburn sizes storage for a 1 in 20 year, 5 minute storm using V = A divided by 80, and publishes a table of how much roof area each soakwell size serves — 108.56 square metres for a 1200 x 1200 mm well, for instance. It also states the legal basis plainly: property owners have an obligation under common law and section 3.25(1) of the Local Government Act 1995 to confine stormwater within their boundaries."
+    waRelevance: wa-specific
+    waCaveat: "The version accessible in August 2026 carries a version date of 8 November 2019 and describes itself as a guide only. Confirm the current figures with Cockburn before you rely on them."
+    checkedOn: 2026-08-02
+  - title: "ABCB Housing Provisions 2025, Part 3.3 Drainage"
+    url: "https://ncc.abcb.gov.au/editions/ncc-2025/adopted/housing-provisions/3-site-preparation/part-33-drainage"
+    provider: "Australian Building Codes Board"
+    type: standard
+    cost: free
+    duration: "20 min"
+    whyGood: "The national deemed-to-satisfy figures, free to read online, and the ones a building surveyor will quote back at you. Clause 3.3.3 sets the ground fall away from a building at 50 mm over the first metre (25 mm in low rainfall areas with impermeable surfaces), 3.3.4 sets subsoil drains at a uniform fall of not less than 1:300, and 3.3.5 sets minimum cover over a 90 mm UPVC stormwater drain at 100 mm under soil, 50 mm under paving or concrete, and 75 to 100 mm under light vehicle traffic depending on the surface."
+    waRelevance: australian
+    waCaveat: "NCC 2025 was published on 1 May 2026 and Western Australia adopted it from 1 May 2026 with a 12 month transition period, so NCC 2022 may still apply to work approved before the changeover. The Part 3.3 drainage figures quoted here are identical in both editions."
+    checkedOn: 2026-08-02
+  - title: "Excavation: Code of Practice"
+    url: "https://www.worksafe.wa.gov.au/publications/code-practice-excavation"
+    provider: "WorkSafe WA"
+    type: government
+    cost: free
+    duration: "45 min for the relevant sections"
+    whyGood: "The WA regulator's own document on the part of this job that can kill you. It states that workers must not be required to work in an excavation 1.5 metres or more deep that is not protected by shoring, sets out battering, benching, shoring and trench shields, and devotes a full section to locating underground services — including the instruction that all digging to locate a service be done by hand approaching from the side, and that mechanical excavating equipment should never be used to locate services. It specifically names drainage pipes and soakwells as buried hazards to establish before you start, which is exactly your problem on a renovation."
+    waRelevance: wa-specific
+    waCaveat: "A transitional code of practice carried across to the Work Health and Safety Act 2020, so some regulation numbers refer to the old framework. Its duties bind a person conducting a business or undertaking; a homeowner digging on their own block is not automatically caught by them, but sand collapses on homeowners exactly as readily."
+    checkedOn: 2026-08-02
+  - title: "Before You Dig Australia"
+    url: "https://www.byda.com.au/"
+    provider: "Before You Dig Australia"
+    type: tool
+    cost: free
+    duration: "10 min to lodge"
+    whyGood: "The single free referral service that returns asset plans from the utilities for your dig site. Register, mark out your site, and the plans arrive by email. It is free, it takes minutes, and it is the first line in every excavation risk assessment in the country."
+    waRelevance: australian
+    waCaveat: "BYDA covers member utilities in public areas. It does not map privately owned services inside your boundary — the old power run to the shed, the previous owner's poly, or an abandoned soakwell. Those you find by hand."
+    checkedOn: 2026-08-02
+  - title: "Locating our assets"
+    url: "https://www.watercorporation.com.au/developing-and-building/working-near-assets/locating-our-assets"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The state utility's own statement of how much a plan is worth, which is: not enough. It says BYDA plans give approximate locations only, that potholing by careful hand digging or vacuum excavation is the only way of determining pipeline location with certainty, that potholed assets must be surveyed to MGA94 and AHD, and that an endorsed Asset Protection Risk Assessment is needed before work in most situations near their assets. Read it before you put a soakwell hole anywhere near the sewer running through your back yard."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Managing crystalline silica dust in the workplace"
+    url: "https://www.worksafe.wa.gov.au/managing-crystalline-silica-dust-workplace"
+    provider: "WorkSafe WA"
+    type: government
+    cost: free
+    duration: "15 min"
+    whyGood: "Cutting a concrete soakwell lid, a limestone block or a paver dry with an angle grinder is one of the highest silica exposures available to a domestic job, and this is the regulator's control hierarchy for it: wet cutting or wet polishing, fixed or on-tool local exhaust ventilation, shadow vacuuming while drilling, and respiratory protection where the other controls do not get there. The related duties page gives the workplace exposure standard as 0.05 mg per cubic metre averaged over eight hours."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Perth Groundwater Map"
+    url: "https://maps.water.wa.gov.au/#/webmap/gwm"
+    provider: "Department of Water and Environmental Regulation"
+    type: tool
+    cost: free
+    duration: "5 min for your address"
+    whyGood: "A soakwell whose base sits below the winter watertable is a holding tank, not a soakwell, and this free official map is how you find out before you dig rather than in July. Type in your address and it estimates depth to groundwater. The City of Stirling's own drainage criteria cites this same DWER map, and treats historical maximum groundwater within 1.2 metres of the surface as a trigger for a full drainage management plan."
+    waRelevance: wa-specific
+    waCaveat: "A JavaScript map application, so it needs a current browser and will not open usefully on a phone in the field. It gives a modelled estimate, not a measurement of your block."
+    checkedOn: 2026-08-02
+  - title: "bidim non-woven geotextile"
+    url: "https://www.geofabrics.co/products/bidim-non-woven-geotextile"
+    provider: "Geofabrics Australasia"
+    type: supplier
+    cost: free
+    duration: "10 min"
+    whyGood: "bidim is the product name Perth suppliers actually recognise when you ask for geotextile, and this manufacturer page separates the four jobs the fabric can do — drainage, filtration, separation and protection — which is the distinction that decides where you use it and where you must not. Filtration is the one that matters here: letting water through while preventing the migration of fine particles into your aggregate."
+    waRelevance: australian
+    waCaveat: "A manufacturer's page, so treat it as a product reference rather than design guidance. It does not list grades or roll sizes — those are in the technical data sheet it links to, and you should ask the supplier which grade suits fine Perth sand rather than guessing."
+    checkedOn: 2026-08-02
+videos: []
+regulations:
+  - claim: "The City of Stirling requires all rainfall falling within lot boundaries to be contained on site. Its minimum on-site drainage design is a 1 in 1 ARI (1 EY) 60 minute event, equivalent to 15 mm of rainfall across the entire site, using the formula: Impervious Area (square metres) x 0.015 m = capacity required in cubic metres."
+    source: "City of Stirling, On Site Stormwater Drainage Criteria (June 2024)"
+    sourceUrl: "https://www.stirling.wa.gov.au/awcontent/Web/Documents/Developing%20Property/Building%20documents/City-of-Stirling-On-Site-Drainage-Criteria-June-2024-1.pdf"
+    checkedOn: 2026-08-02
+  - claim: "In the City of Stirling, soakwells must be located at least 1 m edge to edge from adjacent structures and property boundaries (or the manufacturer's specification, whichever is greater), all downpipes must discharge to grated inlets before entering a below-ground infiltration system, drainage structures under driveways, carports or garages must be trafficable on an approved base, the minimum soakwell for roof water is 900 mm diameter x 600 mm deep, and roof runoff must be stored and infiltrated separately from other impervious areas."
+    source: "City of Stirling, On Site Stormwater Drainage Criteria (June 2024)"
+    sourceUrl: "https://www.stirling.wa.gov.au/awcontent/Web/Documents/Developing%20Property/Building%20documents/City-of-Stirling-On-Site-Drainage-Criteria-June-2024-1.pdf"
+    checkedOn: 2026-08-02
+  - claim: "The City of Cockburn sizes on-site storage for a 1 in 20 year storm of 5 minutes duration using V = A / 80 (impervious area in square metres divided by 80 gives cubic metres), requires linking pipes between soakwells to be not less than 100 mm diameter, and states that property owners have a statutory obligation under common law precedents and section 3.25(1) of the Local Government Act 1995 to confine stormwater within their boundaries."
+    source: "City of Cockburn, On Site Drainage Requirements (Residential Lots)"
+    sourceUrl: "https://www.cockburn.wa.gov.au/DATA/DocSetID-8843767"
+    checkedOn: 2026-08-02
+  - claim: "Under the NCC, surface water resulting from a storm with a 5% annual exceedance probability must be disposed of in a way that avoids the likelihood of damage or nuisance to any other property, and surface water from a 1% AEP storm must not enter the building. Compliance is achieved through AS/NZS 3500.3 or Part 3.3 of the ABCB Housing Provisions."
+    source: "Australian Building Codes Board, NCC 2022 Volume Two, Part H2"
+    sourceUrl: "https://ncc.abcb.gov.au/editions/ncc-2022/adopted/volume-two/h-class-1-and-10-buildings/part-h2-damp-and-weatherproofing"
+    checkedOn: 2026-08-02
+  - claim: "ABCB Housing Provisions clause 3.3.3 requires the ground to fall away from the building 50 mm over the first 1 m (25 mm in low rainfall areas with impermeable surfaces). Clause 3.3.4 requires subsoil drains to be graded with a uniform fall of not less than 1:300. Clause 3.3.5 sets minimum cover over a 90 mm UPVC stormwater drain at 100 mm under soil, 50 mm under paved or concrete areas, 75 mm where reinforced concrete carries light vehicle traffic and 100 mm where paving carries light vehicle traffic."
+    source: "Australian Building Codes Board, ABCB Housing Provisions 2025, Part 3.3"
+    sourceUrl: "https://ncc.abcb.gov.au/editions/ncc-2025/adopted/housing-provisions/3-site-preparation/part-33-drainage"
+    checkedOn: 2026-08-02
+  - claim: "NCC 2025 was published on 1 May 2026 and Western Australia adopted it from 1 May 2026 with a 12 month transition period."
+    source: "Australian Building Codes Board, NCC 2025 state and territory adoption information"
+    sourceUrl: "https://ncc.abcb.gov.au/ncc-2025/ncc-2025-state-and-territory-adoption-information"
+    checkedOn: 2026-08-02
+  - claim: "Workers must not be required to work in an excavation 1.5 metres or more deep that is not protected by shoring. The location of underground electricity, gas, water and sewerage services must be established before excavation work commences where there is any risk the work may interfere with them, all digging to locate a service should be carried out by hand approaching from the side, and mechanical excavating equipment should never be used to locate services."
+    source: "WorkSafe WA, Excavation: Code of Practice"
+    sourceUrl: "https://www.worksafe.wa.gov.au/publications/code-practice-excavation"
+    checkedOn: 2026-08-02
+  - claim: "The workplace exposure standard for respirable crystalline silica in Western Australia is an eight-hour time weighted average of 0.05 milligrams per cubic metre, and controls for cutting or grinding silica-containing material include wet methods, fixed or on-tool local exhaust ventilation and shadow vacuuming."
+    source: "WorkSafe WA"
+    sourceUrl: "https://www.worksafe.wa.gov.au/whs-duties-businesses-who-work-crystalline-silica-substances"
+    checkedOn: 2026-08-02
+  - claim: "Before You Dig Australia plans give the approximate location of Water Corporation assets only. Potholing by careful hand digging or vacuum excavation is the only way of determining pipeline location with certainty, potholed assets must be surveyed in MGA94 and AHD, and an endorsed Asset Protection Risk Assessment is required before commencing work in most situations near Water Corporation assets."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/developing-and-building/working-near-assets/locating-our-assets"
+    checkedOn: 2026-08-02
+---
+Drainage is the only part of a landscape you cannot go back and fix. Every other
+mistake here is recoverable — the wrong plant comes out, the wrong paver gets
+lifted. A soakwell in the wrong place, or a stormwater line with a sag in it, is
+under a hundred square metres of paving by the time you find out.
+
+So it goes in now, before base preparation, before retaining, before anything is
+built on top of it. On a renovation there is a second problem: there is already
+drainage down there. Old soakwells, abandoned brick soak pits, downpipes
+discharging onto bare sand beside the footings. Some of it works. Some of it is a
+void waiting to collapse under your new alfresco.
+
+## Safety before anything else
+
+Sand gives no warning before it collapses. WorkSafe WA's excavation code is
+blunt: nobody should work in an excavation 1.5 metres or more deep that is not
+protected by shoring. A 1200 mm soakwell hole in Perth sand, with a machine
+beside it and a concrete ring swinging overhead, is close enough to that line
+that you should not be standing in it. Work from the edge.
+
+- **Services.** Lodge a free [Before You Dig
+  Australia](https://www.byda.com.au/) enquiry before you touch the ground, then
+  treat the plans as approximate — Water Corporation says potholing by hand or
+  vacuum excavation is the only way to locate a pipeline with certainty. The
+  excavation code is sharper still: hand dig from the side, and never use a
+  machine to find a service. See
+  [locating services](/curriculum/site-analysis/locating-services/).
+- **Silica.** Cutting a concrete lid, a limestone block or a paver dry with an
+  angle grinder is the highest-exposure thing you will do on this site. Wet cut
+  or use on-tool extraction, plus a fitted P2. The WA exposure standard is
+  0.05 mg per cubic metre over eight hours, and you will exceed it in minutes
+  cutting dry.
+- **Load.** A concrete soakwell ring is a back injury waiting to happen. Chain it
+  to the machine.
+
+## What a professional does at this stage
+
+They set the drainage first and let everything else follow. An amateur designs
+the paving and then works out where the water goes. A landscaper starts at the
+lowest fixed point — the soakwell invert — and works backwards up the falls to
+the finished surface levels. The other way round is how you end up with 20 mm of
+fall across 9 metres and a puddle at the back door.
+
+Three checks before the first hole:
+
+1. **Your council's rule, in writing** — not a rule of thumb. Councils genuinely
+   differ: Stirling sizes storage at impervious area times 0.015 (15 mm across
+   the site), Cockburn uses V = A ÷ 80, or 12.5 mm, for a 1 in 20 year
+   five-minute storm. On 200 square metres that is 3.0 cubic metres against 2.5 —
+   one extra soakwell.
+2. **The winter watertable.** Check the [Perth Groundwater
+   Map](https://maps.water.wa.gov.au/#/webmap/gwm). A soakwell whose base sits
+   below the maximum groundwater level fills in June and stays full. That is a
+   tank, and the design has to change.
+3. **What is under the hole.** Coffee rock under Bassendean sand and cemented
+   limestone under Spearwood sand both stop infiltration dead, and your
+   [Perth soils](/curriculum/site-analysis/perth-soils/) test holes already told
+   you which you have.
+
+## Sizing and placing the wells
+
+Work from your [drainage plan](/curriculum/documentation/drainage-plan/). Measure
+every new impervious surface, apply your council's factor, divide by the capacity
+of the size you have chosen, round up. Capacities published by Stirling:
+
+| Soakwell (diameter x depth) | Capacity |
+| --- | --- |
+| 900 x 600 mm | 0.38 m³ |
+| 1200 x 900 mm | 1.02 m³ |
+| 1200 x 1200 mm | 1.36 m³ |
+| 1500 x 1200 mm | 2.10 m³ |
+| 1800 x 1200 mm | 3.05 m³ |
+
+Placement rules that catch people out:
+
+- **Clearance.** At least 1 metre edge to edge from any structure or boundary in
+  Stirling, or the manufacturer's spec if greater. Closer and you are soaking the
+  footings you meant to protect.
+- **Trafficable where it matters.** Under a driveway, carport or garage it must
+  be traffic rated on an approved base.
+- **Roof and surface water stay separate.** Stirling requires it, and surface
+  runoff carries the silt that kills infiltration.
+- **Access stays.** Raising levels means fitting a riser. Do not pave over a lid.
+
+## Falls, and the sin of the belly
+
+A belly is a sag that holds water. Silt drops out of standing water, builds, and
+blocks the line — usually in the third or fourth winter, under the paving.
+Bellies come from laying pipe on a lumpy trench bottom and letting the backfill do
+the shaping. So shape the trench, not the pipe:
+
+1. Trim the trench bottom to a continuous grade with a string line, working from
+   the invert you set at the well.
+2. Bed the full length on 50 mm of clean sand so the pipe is supported
+   continuously, not spanning high spots.
+3. Hold a minimum of 1 in 100 — 10 mm per metre. More fall is fine; inconsistent
+   fall is not. Cockburn requires at least 100 mm diameter where wells are
+   linked.
+4. Check with a level or laser every 2 metres as you lay, not at the end.
+5. Keep cover: 100 mm under soil and 50 mm under paving or concrete over a 90 mm
+   UPVC drain, more under vehicles.
+
+Surface falls are code too. The ground must fall away from the house 50 mm over
+the first metre (25 mm in low-rainfall areas with impermeable surfaces). And in
+Stirling, downpipes must discharge into a grated inlet before entering the
+infiltration system — no hard connection into the well, which is just as well,
+because the grate is your leaf and silt trap.
+
+## Geotextile
+
+Perth sand is fine and mobile. Geotextile stops it migrating into the voids you
+have just paid to create. Use a non-woven needle-punched fabric — ask for bidim —
+in three places:
+
+- **Over the lid and joints of a concrete soakwell** before backfilling. Sand
+  washes in through the ring joints, and a well half full of sand has half the
+  capacity you sized. Leave the base open.
+- **Wrapping the aggregate around a subsoil drain**: fabric, aggregate, pipe,
+  fold over. Water through, fines stopped.
+- **Between clean aggregate and surrounding sand** anywhere the two would mix.
+
+Do not wrap it across a face you rely on for infiltration into silty material —
+it will blind over.
+
+## Subsoil drainage for the wet corner
+
+A corner that stays damp all winter is perched water sitting on an impeding
+layer, and surface drainage will not touch it. The answer is a socked slotted agi
+line in a geotextile-wrapped trench of clean aggregate, at a uniform fall of not
+less than 1:300, running to a soakwell, a sump, or a low point on your own land.
+Never to the neighbour's: the NCC requires surface water from a 5% AEP storm to
+be disposed of without nuisance to any other property, and Cockburn puts it
+flatly — you confine stormwater within your boundaries.
+
+Depth matters more than length. The drain must sit at or below the impeding
+layer; a shallow agi line in sand does nothing. And if the corner is wet because
+the watertable is high rather than perched, the drain has nowhere to discharge —
+raise the levels or plant for it instead.
+
+## Test with water before you backfill
+
+The step people skip, and the cheapest insurance on the job. Trench open, every
+joint visible:
+
+1. **Run a hose** into each downpipe and grate for ten to fifteen minutes at real
+   flow, and walk the line while it runs.
+2. **Surface wetting** over the pipe means a joint that has not welded, or a
+   rubber ring that has rolled.
+3. **Water standing in the pipe** after the flow stops is a belly. Fix it now.
+4. **Water backing up at a grate** means a blockage, a reverse fall or an
+   undersized line.
+5. **Soak-test a well.** Fill it and time the drop. Still full an hour later on a
+   dry summer day means an impeding layer or the watertable, and the design
+   changes before it is buried.
+6. **Photograph everything** with a tape in frame against a fixed reference. That
+   is your as-built, and in ten years it is the difference between a repair and
+   an excavation.
+
+Then backfill in 150 to 200 mm compacted layers, haunching the first layer around
+the pipe by hand. Backfill a poly soakwell evenly on all sides at once — load one
+side and it will distort or float.
+
+## What this feeds
+
+Every level on the rest of the job now hangs off the inverts you have set. The
+next lesson takes them into [retaining
+walls](/curriculum/build/retaining-walls/), where the principle applies harder
+still: the drainage behind a wall goes in before the backfill, and there is no
+second chance at that either.

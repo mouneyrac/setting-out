@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import GrowingGarden from '../components/GrowingGarden.astro';
+import { lessonsByPhase, lessonUrl } from '../lib/curriculum';
+import { templates } from '../data/templates';
+
+const groups = await lessonsByPhase();
+const lessons = groups.flatMap((g) => g.lessons);
+const reference = await getCollection('reference');
+
+const fieldTested = lessons.filter((l) => l.data.fieldStatus === 'field-tested').length;
+// Reference pages carry resources too — counting only lessons under-reports.
+const resourceCount =
+  lessons.reduce((n, l) => n + l.data.resources.length, 0) +
+  reference.reduce((n, r) => n + r.data.resources.length, 0);
+
+// One click from an advert to actual teaching. The button goes to the first
+// lesson, not to a table of contents.
+const firstLesson = lessons[0];
+const firstLessonUrl = lessonUrl(firstLesson);
+---
+
+<Base
+  title="Setting Out"
+  description="Learn landscaping the way the Western Australian trade does it, on your own Perth block — playing both the client and the contractor. Free and open source."
+>
+  <!-- ── One idea, one action ─────────────────────────────────────────── -->
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-high) 0%, var(--sky-low) 58%, var(--paper) 100%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[84rem] px-4 sm:px-6 pt-14 sm:pt-20 pb-12">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,31rem)_1fr] lg:gap-16 items-center">
+        <div>
+          <p class="label">Perth, Western Australia · free and open source</p>
+
+          <h1
+            class="mt-3 font-display font-900 leading-[1.05]"
+            style="font-size: clamp(2.5rem, 1.4rem + 5vw, 4.75rem);"
+          >
+            Learn landscaping <span class="text-paw">on your own block.</span>
+          </h1>
+
+          <p class="mt-5 text-lg sm:text-xl leading-relaxed">
+            Eleven phases, the way a WA landscaper actually works — from the first phone call to the
+            tenth year of maintenance. You play both parts: the client who wants a garden, and the
+            contractor who has to price it, get it approved and build it.
+          </p>
+
+          <a
+            href={firstLessonUrl}
+            id="start-link"
+            data-first={firstLessonUrl}
+            class="btn btn-primary mt-8 text-lg py-4 px-7"
+          >
+            <span id="start-label">Start the course</span>
+            <span aria-hidden="true">→</span>
+          </a>
+
+          <p class="note mt-4">You will need a property in Perth. That is the whole prerequisite.</p>
+        </div>
+
+        <GrowingGarden grown={11} caption={false} />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── The one thing to know before reading ─────────────────────────── -->
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 -mt-2 pb-8">
+    <div class="sign">
+      <div class="flex gap-3.5 items-start">
+        <span class="text-2xl shrink-0" aria-hidden="true">🚧</span>
+        <p class="leading-relaxed">
+          <strong class="font-display">Written by AI, by someone who is not a landscaper</strong>, and
+          only {fieldTested} of {lessons.length} lessons have actually been done on a real block yet.
+          Every source was fetched and independently re-checked — but researched is not the same as
+          proven.
+          <a href="/about/" class="underline underline-offset-2 font-500 hover:text-paw">
+            Read the full account
+          </a>
+          before you act on anything.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── What is actually in it, in one row ───────────────────────────── -->
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-10">
+    <ul class="flex flex-wrap gap-2.5">
+      {
+        [
+          { href: '/resources/', n: resourceCount.toLocaleString('en-AU'), l: 'verified resources' },
+          { href: '/reference/', n: String(reference.length), l: 'WA reference pages' },
+          { href: '/toolkit/', n: String(templates.length), l: 'printable templates' },
+          { href: '/tracker/', n: `${fieldTested}/${lessons.length}`, l: 'actually done' },
+        ].map((s) => (
+          <li class="list-none">
+            <a href={s.href} class="cutout cutout-lift px-4 py-2.5 flex items-baseline gap-2">
+              <span class="font-display font-900 text-xl leading-none text-leaf tabular-nums">
+                {s.n}
+              </span>
+              <span class="label">{s.l}</span>
+            </a>
+          </li>
+        ))
+      }
+      <li class="list-none">
+        <a href="/library/" class="cutout cutout-lift px-4 py-2.5 flex items-center h-full">
+          <span class="label">See the library →</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── The path, straight to the point ──────────────────────────────── -->
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-20">
+    <h2 class="font-display font-900 text-2xl sm:text-3xl">The eleven phases</h2>
+
+    <ol class="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+      {
+        groups.map(({ phase, lessons: phaseLessons }) => (
+          <li class="list-none">
+            <a href={`/curriculum/${phase.slug}/`} class="cutout cutout-lift p-4 flex gap-3.5 h-full">
+              <span class="font-display font-900 text-2xl text-soft tabular-nums leading-none pt-0.5">
+                {String(phase.number).padStart(2, '0')}
+              </span>
+              <span class="min-w-0">
+                <span class="block font-display font-700 text-lg leading-tight">{phase.title}</span>
+                <span class="block note mt-0.5">{phase.tagline}</span>
+                <span class="block label mt-1.5">{phaseLessons.length} lessons</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <script>
+    // Turn "Start" into "Resume" once there is somewhere to resume to.
+    //
+    // Deliberately only localStorage: embedding the whole course order to work
+    // out a signed-in reader's next lesson cost 15 KB on the one page that most
+    // needs to be light. Signed-in readers get the authoritative answer from
+    // "My garden", which computes it server-side already.
+    const link = document.getElementById('start-link') as HTMLAnchorElement | null;
+    const label = document.getElementById('start-label');
+
+    if (link && label) {
+      try {
+        const last = JSON.parse(localStorage.getItem('last-lesson') ?? 'null');
+        if (last?.href && last?.title && last.href !== link.dataset.first) {
+          link.href = last.href;
+          label.textContent = `Resume: ${last.title}`;
+        }
+      } catch {
+        /* Nothing stored, or storage blocked. Start from the beginning. */
+      }
+    }
+  </script>
+
+</Base>

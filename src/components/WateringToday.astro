@@ -1,0 +1,186 @@
+---
+/**
+ * "Can I water today?"
+ *
+ * The single most-asked question this whole site can answer, and the one you
+ * ask standing in the garden holding a hose. Navigating a table to find your
+ * house-number digit is the wrong shape for that moment, so this answers it.
+ *
+ * Two deliberate constraints:
+ *
+ * - It states FACTS, it does not grant permission. "Today is one of your
+ *   rostered days" is verifiable; "you may water" is advice this site is in no
+ *   position to give.
+ * - It computes the date in Australia/Perth explicitly, never the device
+ *   timezone. Someone checking from another state would otherwise be told the
+ *   wrong day.
+ *
+ * Every rule below comes from the verified `regulations` block on this page.
+ */
+---
+
+<section
+  class="rounded-[18px] border-[3px] p-5 sm:p-6"
+  style="border-color: var(--leaf); background: color-mix(in srgb, var(--leaf) 8%, var(--surface));"
+  id="water-today"
+>
+  <h2 class="font-display font-900 text-2xl sm:text-3xl leading-tight">Can I water today?</h2>
+  <p class="note mt-1">Perth and Mandurah only. Pick the last digit of your house or lot number.</p>
+
+  <div class="flex flex-wrap gap-2 mt-4" role="group" aria-label="Last digit of your house number">
+    {
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
+        <button
+          type="button"
+          class="digit-btn"
+          data-digit={digit}
+          aria-pressed="false"
+          aria-label={`House number ending in ${digit}`}
+        >
+          {digit}
+        </button>
+      ))
+    }
+  </div>
+
+  <div id="water-answer" class="mt-5" hidden>
+    <p class="font-display font-900 text-xl sm:text-2xl leading-tight" id="water-headline"></p>
+    <p class="mt-2 leading-relaxed" id="water-detail"></p>
+    <p class="note mt-3" id="water-days"></p>
+  </div>
+
+  <p class="note mt-4">
+    Stated from the by-laws and Water Corporation guidance below, calculated in Perth time. It tells
+    you what the roster says — it is not permission. Exemptions, bore arrangements and local
+    variations exist; confirm with
+    <a
+      href="https://www.watercorporation.com.au/Help-and-advice/Water-restrictions/Watering-days"
+      class="underline underline-offset-2 hover:text-paw">Water Corporation</a
+    > if anything is unusual about your property.
+  </p>
+</section>
+
+<style>
+  .digit-btn {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    width: 2.9rem;
+    height: 2.9rem;
+    border-radius: 999px;
+    border: 2px solid var(--edge-strong);
+    background: var(--surface);
+    color: var(--ink);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
+  }
+  .digit-btn:hover {
+    border-color: var(--leaf);
+  }
+  .digit-btn[aria-pressed='true'] {
+    background: var(--leaf);
+    border-color: var(--leaf);
+    color: #fffdf7;
+  }
+</style>
+
+<script>
+  // Roster by the last digit of the house or lot number — Perth and Mandurah
+  // (Area 3). Source: DWER, "Check garden bore water restrictions".
+  const ROSTER: Record<number, [string, string]> = {
+    0: ['Friday', 'Monday'],
+    1: ['Wednesday', 'Saturday'],
+    2: ['Thursday', 'Sunday'],
+    3: ['Friday', 'Monday'],
+    4: ['Saturday', 'Tuesday'],
+    5: ['Sunday', 'Wednesday'],
+    6: ['Monday', 'Thursday'],
+    7: ['Tuesday', 'Friday'],
+    8: ['Wednesday', 'Saturday'],
+    9: ['Thursday', 'Sunday'],
+  };
+
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.digit-btn'));
+  const answer = document.getElementById('water-answer');
+  const headline = document.getElementById('water-headline');
+  const detail = document.getElementById('water-detail');
+  const daysLine = document.getElementById('water-days');
+
+  if (buttons.length && answer && headline && detail && daysLine) {
+    /** Today in Perth, regardless of where the device thinks it is. */
+    const perthNow = () => {
+      const parts = new Intl.DateTimeFormat('en-AU', {
+        timeZone: 'Australia/Perth',
+        weekday: 'long',
+        day: 'numeric',
+        month: 'numeric',
+      }).formatToParts(new Date());
+      const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
+      return { weekday: get('weekday'), month: Number(get('month')), day: Number(get('day')) };
+    };
+
+    // The Sprinkler Switch-off: 1 June to 31 August, every year.
+    const inSwitchOff = (month: number) => month >= 6 && month <= 8;
+
+    const render = (digit: number) => {
+      const [first, second] = ROSTER[digit];
+      const { weekday, month } = perthNow();
+
+      daysLine.textContent = `Houses ending in ${digit} are rostered for ${first} and ${second}.`;
+
+      if (inSwitchOff(month)) {
+        headline.textContent = 'No — the Sprinkler Switch-off is on.';
+        headline.style.color = 'var(--paw)';
+        detail.innerHTML =
+          'From <strong>1 June to 31 August</strong> sprinklers are banned across Perth and Mandurah, on scheme water <em>and</em> bore. The only lawful watering is a handheld hose with one outlet, or a watering can. A $100 fine applies, and a controller that was left programmed is not a defence.';
+      } else if (weekday === first || weekday === second) {
+        headline.textContent = `Yes — ${weekday} is one of your rostered days.`;
+        headline.style.color = 'var(--leaf-deep)';
+        detail.innerHTML =
+          'Sprinklers may run <strong>once</strong> today, either <strong>before 9am</strong> or <strong>after 6pm</strong> — one window, not both.';
+      } else {
+        headline.textContent = `No — ${weekday} is not one of your rostered days.`;
+        headline.style.color = 'var(--paw)';
+        detail.innerHTML = `Your days are <strong>${first}</strong> and <strong>${second}</strong>. Watering outside them risks a $100 on-the-spot fine. A handheld hose or watering can is allowed any day.`;
+      }
+
+      answer.hidden = false;
+    };
+
+    const select = (digit: number, remember = true) => {
+      for (const button of buttons) {
+        button.setAttribute('aria-pressed', String(Number(button.dataset.digit) === digit));
+      }
+      render(digit);
+      if (remember) {
+        try {
+          localStorage.setItem('house-digit', String(digit));
+        } catch {
+          /* Storage blocked — the answer still shows, it just will not persist. */
+        }
+      }
+    };
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => select(Number(button.dataset.digit)));
+    }
+
+    // Remembered from last time, or taken from your property profile if signed in.
+    try {
+      const stored = localStorage.getItem('house-digit');
+      if (stored !== null && /^\d$/.test(stored)) select(Number(stored), false);
+    } catch {
+      /* No storage. */
+    }
+
+    fetch('/api/me')
+      .then((r) => r.json())
+      .then((me) => {
+        const digit = me?.property?.houseNumberLastDigit;
+        if (/^\d$/.test(String(digit ?? ''))) select(Number(digit), false);
+      })
+      .catch(() => undefined);
+  }
+</script>

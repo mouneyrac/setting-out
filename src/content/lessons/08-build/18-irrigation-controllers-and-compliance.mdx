@@ -1,0 +1,375 @@
+---
+title: "Irrigation 7 — Controllers, smart controllers and roster compliance"
+phase: 8
+order: 18
+summary: "Programming a controller to water on your rostered days, inside the legal windows, and shutting down for the winter ban. Whether a smart or weather-based controller earns its money in Perth, and what a rain sensor is worth."
+timeEstimate: "60 min"
+difficulty: advanced
+status: complete
+updated: 2026-08-02
+series: "Irrigation mini-course"
+checklist:
+  - "Controller programmed to your rostered days only"
+  - "Start times set so all stations finish inside the legal window"
+  - "A plan for the winter sprinkler ban period"
+  - "Rain sensor or soil moisture sensor considered and justified"
+resources:
+  - title: "Check your watering days"
+    url: "https://www.watercorporation.com.au/waterwise/watering-days/check-your-watering-days"
+    provider: "Water Corporation"
+    type: tool
+    cost: free
+    duration: "5 min"
+    whyGood: "The official lookup that tells you which two days your address may run sprinklers, and the only source you should program from. It confirms the roster is set by street number rather than unit number, that garden bore users in Perth and Mandurah have the same rosters and times as scheme users, and that inspectors work seven days a week issuing $100 on-the-spot fines. It also kills the excuse most people try: a malfunctioning controller is not a defence, and sprinklers witnessed running outside the allocated days and times will attract an infringement."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Check garden bore water restrictions"
+    url: "https://www.wa.gov.au/service/building-utilities-and-essential-services/water-supply/check-garden-bore-water-restrictions"
+    provider: "Government of Western Australia"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The clearest published statement of the actual rule in one place: Perth and Mandurah get two rostered days a week, once a day, either before 9am or after 6pm, from 1 September to 31 May, with no sprinklers at all from 1 June to 31 August. It publishes the full allocation table so you can see which two days go with each last digit of a street number, and it shows scheme and bore users sharing identical days. Read this before you touch the controller, because everything you program is a consequence of this table."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Sprinkler Switch-off"
+    url: "https://www.watercorporation.com.au/waterwise/watering-days/sprinkler-switch-off"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The definitive page on the winter ban: 1 June until 31 August every year, households and businesses both included, and bore users caught irrigating referred to the Department of Water and Environmental Regulation. It also carries the line that matters most on a renovation — breaches are the responsibility of the property owner, not the person who installed the lawn — and sets the penalty for watering a new garden without an approved exemption at up to $500."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Apply for a watering exemption"
+    url: "https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "20 min"
+    whyGood: "The one page that lets you legally establish new lawn or garden outside the roster, and it publishes the exact watering schedule you must program to. From 1 October to 31 March the exemption runs up to 42 days from planting at 10mm a day, tapering from three applications a day down to every second day; from 1 April to 30 September it runs up to 35 days at 7.5mm a day. It also states you must apply on the day the lawn or garden is installed, that you are charged for the extra water, and that failing the conditions risks a $500 fine."
+    waRelevance: wa-specific
+    waCaveat: "The exemption covers new planting only. Everything else on the block stays on the normal roster at the same time, which means running the new area on a separate program or a separate controller output rather than lifting run times across the whole system."
+    checkedOn: 2026-08-02
+  - title: "Why you need to seasonally adjust your irrigation"
+    url: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/why-you-need-to-adjust-your-irrigation"
+    provider: "Water Corporation"
+    type: article
+    cost: free
+    duration: "10 min"
+    whyGood: "Publishes the month-by-month seasonal adjustment percentages for Perth and the South West — 100% in January and February, 80% in March, 60% in April, manual only in May and September, 60% in October, 80% in November, 90% in December — which is the single most useful number set for programming a controller here. It explains that the seasonal adjustment setting scales every station run time at once by a percentage, with a worked example, so you change one figure four or five times a year instead of editing every station."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Testing your irrigation"
+    url: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/testing-your-irrigation"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The rule you need the day you commission a controller: you may only test on your rostered days, before 9am or after 6pm, and for no longer than two minutes per station. It also states plainly that if you need to test outside your watering days or during the Sprinkler Switch-off, a Waterwise Garden Irrigator must perform the test, because professionals are exempt from the watering schedules. That is the legal route to commissioning a system in July instead of waiting until September."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "The right advice for waterwise sprinklers and irrigation systems"
+    url: "https://begroundwaterwise.wa.gov.au/the-right-advice-for-waterwise-sprinklers-and-irrigation-systems/"
+    provider: "Be Groundwater Wise, Department of Water and Environmental Regulation"
+    type: article
+    cost: free
+    duration: "10 min"
+    whyGood: "The state environmental regulator's own short position on controllers, and useful because it is written for bore users, who are the group most likely to believe the rules do not apply to them. It backs the seasonal adjustment setting, the 10mm catch-cup standard for Perth sand in summer, dripline in beds with rotary or gear-drive rotators on lawn, and switching the controller off when it rains in any season — and it acknowledges smart controllers that adjust run times to local weather and can be driven from a phone."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "WaterSense labelled irrigation controllers"
+    url: "https://www.epa.gov/watersense/watersense-labeled-controllers"
+    provider: "United States Environmental Protection Agency"
+    type: government
+    cost: free
+    duration: "15 min"
+    whyGood: "The only independent certification scheme for weather-based and soil-moisture-based controllers, and the clearest explanation of the difference between the two: weather-based units tailor schedules from local weather and landscape conditions, soil moisture units monitor the root zone and suppress watering when it is not needed. Products certified under both technologies must meet both specifications. Use it as a specification checklist when a retailer tells you a controller is smart."
+    waRelevance: overseas-adapt
+    waCaveat: "American, and its savings claims assume unrestricted watering. In Perth you are capped at two rostered days, so a weather-based controller can only shorten or skip waterings, never add them — which removes a large share of the savings the EPA figures are built on. There is no Australian equivalent label, so treat WaterSense as a feature checklist rather than proof a unit suits WA."
+    checkedOn: 2026-08-02
+  - title: "HOLMAN instruction manuals"
+    url: "https://www.holmanindustries.com.au/instruction-manuals/"
+    provider: "Holman Industries"
+    type: supplier
+    cost: free
+    whyGood: "Free downloadable manuals for around a hundred products, including the dial and Wi-Fi controllers stocked in every Perth hardware store and irrigation shop — the Dial Ezy 4 and 6 station units, the WX8 and the Bluetooth BTX6. Most retic controllers on Perth blocks are installed with the manual thrown out, and this is where you get the day-of-week programming, seasonal adjust and rain sensor terminal instructions back."
+    waRelevance: australian
+    waCaveat: "A manufacturer's own site, listed here because it hosts the documentation rather than as a product recommendation. Hunter, Rain Bird and Toro host equivalent manuals for their own ranges; buy on features and station count, not on brand loyalty."
+    checkedOn: 2026-08-02
+  - title: "Waterwise Irrigation Rebate"
+    url: "https://www.watercorporation.com.au/waterwise/waterwise-offers/waterwise-irrigation-rebate"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    whyGood: "Worth up to $200 credited to your Water Corporation account when an approved Waterwise Garden Irrigator repairs pipe leaks or faulty solenoid valves, and every rebated service includes a check of the automatic controller and an adjustment if required. If you are paying someone to fix a valve on an existing system anyway, doing it through a listed irrigator can return most of the cost and gets your controller programming checked by someone who does it daily."
+    waRelevance: wa-specific
+    waCaveat: "Checked on 2 August 2026, this page states \"This offer is currently closed\" — the last round covered services completed between 1 September 2025 and 31 May 2026, and properties that claimed in 2024/25 were excluded from 2025/26. Confusingly, the Waterwise offers index still displays it as open, so trust the rebate page itself and confirm the next round before you book work expecting a rebate."
+    checkedOn: 2026-08-02
+  - title: "Having electrical work done"
+    url: "https://www.wa.gov.au/government/multi-step-guides/electrical-safety-home/having-electrical-work-done"
+    provider: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The regulator's statement of where the line sits, and you need it because a controller has to be plugged into something. It states that it is illegal for an unlicensed person to carry out electrical work, including modifications to fixed wiring, that the work must be done by a person holding the relevant electrical licence, and that your electrical contractor must give you an electrical safety certificate within 28 days of completing the work."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+videos:
+  - youtubeId: "HsUkevHDvkc"
+    title: "Irrigation Controllers - Waterwise Community Workshop"
+    channel: "Irrigation Australia"
+    whyGood: "Irrigation Australia is the national industry body that delivers the Waterwise Garden Irrigator and Irrigation Design Shop programs on behalf of Water Corporation, so this is the controller session from the same organisation that trains the endorsed trade. It is the video the Department of Water and Environmental Regulation links to from its own Be Groundwater Wise irrigation page as the controller reference."
+    waRelevance: australian
+    waCaveat: "Title and channel verified on 2 August 2026 via the Be Groundwater Wise site. Check the upload date before you follow any specific day or time advice in it, and program from the Water Corporation roster lookup rather than from a video."
+    checkedOn: 2026-08-02
+  - youtubeId: "dEHTPs1jT7M"
+    title: "Be Groundwater Wise | Horticulturalist Sabrina Hahn addresses garden bore users in Perth + Mandurah"
+    channel: "Department of Water and Environmental Regulation"
+    whyGood: "Short piece aimed squarely at the group that most often programs a controller illegally — bore owners who assume that because they are not billed for the water, the roster is not theirs. It is the regulator's own channel, and Sabrina Hahn is a long-standing Perth horticultural broadcaster, so it lands better with a sceptical bore owner than a fact sheet does."
+    waRelevance: wa-specific
+    waCaveat: "Awareness material rather than a how-to. Use it to settle the argument about whether the rules apply, then go to the roster lookup for the actual days."
+    checkedOn: 2026-08-02
+regulations:
+  - claim: "In Perth and Mandurah, sprinklers may be used on two rostered days a week only, allocated by the last digit of the street number, once a day, either before 9am or after 6pm. This applies from 1 September to 31 May. Garden bore users have the same rostered days and times as scheme water users."
+    source: "Government of Western Australia"
+    sourceUrl: "https://www.wa.gov.au/service/building-utilities-and-essential-services/water-supply/check-garden-bore-water-restrictions"
+    checkedOn: 2026-08-02
+  - claim: "The Winter Sprinkler Switch-off runs from 1 June until 31 August every year and applies to both households and businesses, including bore users, who are referred to the Department of Water and Environmental Regulation if caught irrigating."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/sprinkler-switch-off"
+    checkedOn: 2026-08-02
+  - claim: "Breaching the watering roster attracts a $100 on-the-spot fine. A malfunctioning controller is not a defence — sprinklers witnessed by inspectors running outside the allocated days and times will attract an infringement."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/check-your-watering-days"
+    checkedOn: 2026-08-02
+  - claim: "A watering exemption for a new lawn or garden must be applied for on the day the lawn or garden is installed. From 1 October to 31 March it runs for up to 42 days from planting at 10mm a day; from 1 April to 30 September it runs for up to 35 days at 7.5mm a day. The extra water is charged to your account."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption"
+    checkedOn: 2026-08-02
+  - claim: "Watering a new lawn or garden during the Sprinkler Switch-off without an approved exemption, or failing the conditions of one, risks a fine of up to $500. Breaches are the responsibility of the property owner, not the person who installed the lawn."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/sprinkler-switch-off"
+    checkedOn: 2026-08-02
+  - claim: "You may test an irrigation system only on your rostered watering days, before 9am or after 6pm, and for no longer than two minutes per station. To test outside those windows or during the Sprinkler Switch-off, a Waterwise Garden Irrigator must perform the test, because professionals are exempt from the watering schedules."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/testing-your-irrigation"
+    checkedOn: 2026-08-02
+  - claim: "Hand watering is permitted any day of the week, using a watering can or a handheld hose with one outlet and a nozzle."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/waterwise/garden/how-much-water-does-my-garden-need"
+    checkedOn: 2026-08-02
+  - claim: "In Western Australia it is illegal for an unlicensed person to carry out electrical work, including modifications to fixed wiring. Electrical work must be done by a person holding the relevant electrical licence, and the electrical contractor must give you an electrical safety certificate within 28 days."
+    source: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    sourceUrl: "https://www.wa.gov.au/government/multi-step-guides/electrical-safety-home/having-electrical-work-done"
+    checkedOn: 2026-08-02
+  - claim: "Sprinkler rosters are not identical across WA and they do change. From 1 April 2026 the City of Karratha moved to a three day per week scheme water sprinkler roster for an initial six month trial, with a free controller reset service offered to affected households."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/waterwise-offers/west-pilbara-free-irrigation-controller-reset"
+    checkedOn: 2026-08-02
+---
+
+Every other part of this system is a physics problem. The controller is a legal
+one. You can build a technically perfect retic system and still breach the law
+twice a week because a box in the garage is set to Tuesday.
+
+Water Corporation inspectors work seven days a week and issue
+[$100 on-the-spot fines](https://www.watercorporation.com.au/waterwise/watering-days/check-your-watering-days),
+and their published position is explicit: a malfunctioning controller is not a
+defence. A flat backup battery or a power cut that reset the clock — the
+infringement still lands on you. On a renovation the risk is higher, because the
+program in the existing controller was written by someone else for a garden that
+no longer exists.
+
+## What a professional does at this stage
+
+A retic contractor programs the controller last, working backwards from two fixed
+numbers: **the roster days for that address**, and **9am**.
+
+They do not start from what the plants want. That was settled in
+[hydrozoning](/curriculum/build/irrigation-hydrozoning-and-stations/) and
+[run times](/curriculum/build/irrigation-scheduling-and-uniformity/). At the
+controller the only question is whether the whole program fits inside a legal
+window on two days a week. If it does not, that is a design fault to fix now, not
+something to fudge with an extra start time.
+
+They also write it down — a photograph of the controller face, the station
+schedule, and a roster card taped inside the door. That sheet goes into the
+[maintenance manual](/curriculum/handover/the-maintenance-manual/) and is what
+lets anyone rebuild the program after a blackout.
+
+## The rules you are programming to
+
+| Question | Perth and Mandurah |
+| --- | --- |
+| How many days | Two per week, fixed by the last digit of your street number |
+| Which two | Look yours up — never assume from a neighbour |
+| What time | Once on a rostered day, either **before 9am** or **after 6pm** |
+| Season | 1 September to 31 May |
+| Winter | No sprinklers 1 June to 31 August, scheme and bore alike |
+| Bore water | Identical roster, identical hours |
+| Hand watering | Any day, watering can or handheld hose with a nozzle |
+| Testing | Two minutes per station, on rostered days, in the windows |
+| Penalty | $100 on the spot; up to $500 for a new-garden breach |
+
+Two traps. The roster follows the **street number**, not the unit or villa number
+— on a multi-unit site use the higher street number. And rosters are not fixed
+forever: from
+[1 April 2026 the City of Karratha moved to a three day per week trial](https://www.watercorporation.com.au/waterwise/waterwise-offers/west-pilbara-free-irrigation-controller-reset).
+Perth and Peel remain on two days, but re-check yours each spring rather than
+trusting a program written years ago.
+
+## Making everything finish before 9am
+
+A standard controller runs stations **sequentially**. Your program length is the
+sum of every station's run time, not the longest one. Using Water Corporation's
+[published run times](https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/how-long-should-i-run-my-sprinklers-for)
+for a 10mm application — 13 to 16 minutes for spray, 40 to 60 for rotary, 30 to 40
+for gear drive rotary and dripline — a modest six-station block adds up fast:
+
+| Station | Type | Run time |
+| --- | --- | --- |
+| 1–2 | Lawn, gear drive rotary | 35 min each = 70 |
+| 3–5 | Beds, dripline | 35 min each = 105 |
+| 6 | Verge, spray | 15 |
+| **Total** | | **190 min (3 h 10 min)** |
+
+Latest start = 9:00am minus 190 minutes minus a 15 minute buffer for valve delays
+and a slow-closing solenoid. That is a **5:35am start**, and only if nothing is
+added later. Set it at 5:00am and stop thinking about it.
+
+Three failure modes:
+
+- **Stacking.** Put lawn on program A and beds on program B, and if A is still
+  running when B is due, most controllers queue B behind A instead of running both
+  together. Your finish time silently moves past 9am. Give B a start after A's
+  calculated finish, or use one program.
+- **AM/PM.** The most common programming error on Perth blocks is 6:00 PM entered
+  as 6:00 AM. WA has no daylight saving, so you never shift start times twice a
+  year — but check the clock and the date, not just the schedule.
+- **Cycle and soak.** Splitting a run into short cycles is right on sand and on
+  slopes, but keep every cycle inside the same window. Sprinklers may be used once
+  on a rostered day, and a program still soaking at 9:20am is a breach.
+
+Prefer the morning window: early morning is the calmest part of a Perth day, so
+distribution uniformity is at its best, and foliage dries as the sun comes up
+rather than staying wet all night.
+
+## The winter ban, and the exception a renovator needs
+
+From **1 June to 31 August** no sprinklers run, scheme or bore. Do not delete the
+program. Turn the controller to **OFF** — or set seasonal adjust to 0%, or a
+90-day rain delay — so the schedule survives, then put a reminder in your phone
+for 1 September. A controller left off through spring kills more Perth gardens
+than one left on.
+
+Renovations finish into new planting, and that is where the money is. Watering new
+lawn or garden during the switch-off **without an approved exemption risks a fine
+of up to $500**, and the breach is the property owner's responsibility, not the
+turf supplier's. Apply for the
+[watering exemption](https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption)
+**on the day the lawn or garden goes in**, and program to its schedule: up to 42
+days at 10mm a day between 1 October and 31 March, up to 35 days at 7.5mm a day
+between 1 April and 30 September, tapering from several applications a day down to
+every second day. Put the new area on its own program so the rest of the garden
+stays on the ordinary roster.
+
+Commissioning in winter is legal but constrained: you may test only on rostered
+days, in the windows, for **no more than two minutes per station**, and during the
+switch-off only a Waterwise Garden Irrigator may test for you, because endorsed
+professionals are exempt from the schedules. Book one, and again when you re-test
+in [install and audit](/curriculum/build/irrigation-install-and-audit/).
+
+## Seasonal adjustment: the setting nobody uses
+
+Almost every controller has a **seasonal adjust** percentage that scales every
+station at once — set 80% and a 10 minute station runs 8. Water Corporation
+publishes the schedule for Perth and the South West:
+
+| Month | Seasonal adjust |
+| --- | --- |
+| January–February | 100% |
+| March | 80% |
+| April | 60% |
+| May | Manual only |
+| June–August | Sprinkler Switch-off |
+| September | Manual only |
+| October | 60% |
+| November | 80% |
+| December | 90% |
+
+"Manual only" in May and September means the automatic program stays off and you
+water by hand if something genuinely needs it. Those two months are where most of
+the waste sits. Five diary reminders — 1 March, 1 April, 1 June, 1 September,
+1 October — turn the table into a maintained system. Carry them into
+[the Perth year](/curriculum/maintenance/the-perth-year/).
+
+## Do smart controllers earn their money in Perth?
+
+Sometimes. Understand what the roster does to the maths first.
+
+Weather-based controllers save water overseas mainly by watering more often for
+shorter periods. Here you are capped at two days, so a smart controller can only
+**shorten or skip** a watering, never add one — which removes a large share of the
+savings behind the
+[US EPA's WaterSense figures](https://www.epa.gov/watersense/watersense-labeled-controllers).
+What remains is narrower but real: it applies the seasonal curve daily instead of
+relying on your memory, it skips after genuine rain while you are away, and you
+drive it from your phone rather than from a garage wall you visit twice a year.
+
+Buy one only if three things are true. **The Wi-Fi reaches the controller** —
+check the signal at that exact spot before you buy. **It supports specific days of
+the week**, not just intervals or odd/even watering; an interval schedule drifts
+straight off a WA roster and odd/even is not our system at all. And **it lets you
+set a hard exclusion window** so it can never pick a start time between 9am and
+6pm on your behalf.
+
+If any of those fail, a standard controller with a seasonal adjust dial and five
+calendar reminders does the same job for less. There is no Australian smart
+controller certification, so ignore the word on the box and check the three
+features.
+
+## Rain and soil moisture sensors
+
+A rain sensor wires into two sensor terminals on almost any controller and
+interrupts the common wire when it is wet. Cheap, and the only device that stops
+your system while you are away.
+
+The Perth reality: most of our rain falls in winter, when sprinklers are banned
+anyway. A sensor earns its keep in April, May, September and October, and after
+the occasional summer storm. Set the trip threshold **high**, not low. On deep
+sand a 3mm shower wets the top 30mm and nothing more, and if the sensor cancels
+your Wednesday your next legal watering is Saturday — under a two-day roster,
+skipping a real watering costs you more than one small unnecessary one.
+
+Mount it in open sky at gutter height, never under an eave, and check it annually:
+the discs perish in WA UV and the vents block with dust, and a stuck-wet sensor
+quietly stops the entire system.
+
+Soil moisture sensors are more accurate and more work — buried in the root zone of
+your driest station, cabled back, calibrated. Rarely worth it on a suburban block,
+occasionally worth it on lawn over a bore where the water feels free.
+
+Neither device makes you compliant. Neither knows what day it is.
+
+## Power, batteries and where the licensed trade starts
+
+Controllers run off a plug pack or a hard-wired transformer. Installing a new
+fixed outdoor power point, or hard-wiring a transformer, is
+[electrical work, and in WA it is illegal for an unlicensed person to do it](https://www.wa.gov.au/government/multi-step-guides/electrical-safety-home/having-electrical-work-done).
+Use a licensed electrical contractor and keep the electrical safety certificate
+they must give you within 28 days. Mains voltage beside an irrigation system is
+the one place here where a shortcut kills someone;
+[garden lighting](/curriculum/build/garden-lighting/) draws the same line.
+
+Replace the backup battery every year. A power cut with a dead battery loses the
+clock, and the unit restarts on a default program that knows nothing about your
+roster. That is the $100 fine most people actually get.
+
+## What happens to this next
+
+You now have a written program: stations, run times, start times, roster days,
+seasonal adjust schedule and a winter plan. The next lesson installs and
+commissions the system against it — flushing, arcs, pressure at the furthest head,
+and the catch-cup audit that says whether those run times deliver what you
+designed. Expect it to change some of these numbers. That is what it is for.

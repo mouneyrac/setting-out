@@ -1,0 +1,79 @@
+---
+interface Video {
+  youtubeId: string;
+  title: string;
+  channel: string;
+  duration?: string;
+  whyGood: string;
+  waRelevance: 'wa-specific' | 'australian' | 'universal' | 'overseas-adapt';
+  waCaveat?: string;
+  checkedOn: Date;
+}
+
+const { video: v } = Astro.props as { video: Video };
+
+const relevance: Record<Video['waRelevance'], string> = {
+  'wa-specific': '📍 Perth / WA',
+  australian: '🇦🇺 Australian',
+  universal: '🌏 Works anywhere',
+  'overseas-adapt': '✈️ Overseas — adapt it',
+};
+---
+
+<article class="cutout cutout-lift overflow-hidden">
+  <a
+    href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+    rel="noopener"
+    class="block group"
+    aria-label={`Watch ${v.title} on YouTube`}
+  >
+    <div class="relative aspect-video bg-surface-2 overflow-hidden">
+      <img
+        src={`https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`}
+        alt=""
+        loading="lazy"
+        width="480"
+        height="360"
+        class="w-full h-full object-cover"
+      />
+      <span class="absolute inset-0 grid place-items-center bg-black/20 group-hover:bg-black/5 transition-colors">
+        <span
+          class="w-14 h-14 grid place-items-center rounded-full text-white shadow-lg transition-transform duration-200 group-hover:scale-110"
+          style="background: var(--paw);"
+          aria-hidden="true"
+        >
+          <svg viewBox="0 0 24 24" class="w-6 h-6 ml-1" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+        </span>
+      </span>
+    </div>
+  </a>
+
+  <div class="p-4">
+    <h3 class="font-display font-700 text-lg leading-tight">
+      <a
+        href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+        rel="noopener"
+        class="hover:text-paw transition-colors">{v.title}</a
+      >
+    </h3>
+
+    <div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5">
+      <span class="label">{v.channel}</span>
+      {v.duration && <span class="label">{v.duration}</span>}
+      <span class:list={['label', v.waRelevance === 'wa-specific' && 'text-leaf']}>
+        {relevance[v.waRelevance]}
+      </span>
+    </div>
+
+    <p class="mt-2 text-[0.95rem] leading-relaxed text-soft">{v.whyGood}</p>
+
+    {
+      v.waCaveat && (
+        <div class="mt-2.5 rounded-xl p-3" style="background: color-mix(in srgb, var(--sky-high) 16%, var(--surface));">
+          <span class="label block mb-0.5">Change this for Perth</span>
+          <p class="text-[0.92rem] leading-relaxed">{v.waCaveat}</p>
+        </div>
+      )
+    }
+  </div>
+</article>

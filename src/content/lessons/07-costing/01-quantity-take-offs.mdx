@@ -1,0 +1,288 @@
+---
+title: "Quantity take-offs from your own drawings"
+phase: 7
+order: 1
+summary: "Areas, volumes, linear metres and counts, calculated systematically off the plan, with the wastage allowances the trade actually uses. Do it properly once and everything downstream gets easier."
+timeEstimate: "3 h"
+difficulty: intermediate
+status: complete
+updated: 2026-08-02
+deliverable:
+  title: "Quantity take-off"
+  prompt: "Produce a full take-off from your drawings: m² of each surface, m³ of excavation, fill, sub-base, sand and soil, linear metres of edging, pipe and cable, and counts of every plant, fitting and unit — each with its wastage allowance."
+  workbookKey: "take-off"
+checklist:
+  - "Every element on the drawings appears in the take-off"
+  - "Volumes account for compaction and wastage"
+  - "Units match how suppliers actually sell the material"
+  - "A second pass found the things the first pass missed"
+resources:
+  - title: "How to Lay Pavers: An Expert Guide"
+    url: "https://www.midlandbrick.com.au/how-to-lay-pavers"
+    provider: "Midland Brick"
+    type: article
+    cost: free
+    duration: "15 min"
+    whyGood: "Midland Brick is the paver most Perth blocks are already laid in, and this is the closest thing to a WA house standard published free. It gives the numbers a take-off needs: a minimum 100 mm compacted road base, bedding sand screeded to approximately 30 mm, 2 to 3 mm joints, control joints every 6 m at 10 to 15 mm, and the explicit instruction to allow an extra 5% for cuts, wastage or breakage. It also tells you to wet the pavers before cutting to stop slurry staining, which is the same habit that keeps the dust down."
+    waRelevance: wa-specific
+    waCaveat: "It is a manufacturer's guide and it assumes its own products. The 5% cut allowance is right for a rectangular area laid in stretcher bond; it is not enough for herringbone, 45-degree lay, or a curved or circular area."
+    checkedOn: 2026-08-02
+  - title: "Construction of Interlocking Concrete Pavements (PAV-TEC-002)"
+    url: "https://www.cmha.org/resource/pav-tec-002/"
+    provider: "Concrete Masonry and Hardscapes Association"
+    type: article
+    cost: free
+    duration: "45 min"
+    whyGood: "The free technical bulletin behind the numbers you are about to multiply out. It sets base thickness by use rather than by habit — roughly 100 mm for pedestrian areas, 150 mm for residential driveways, 200 to 250 mm for residential streets — screeds bedding sand to an uncompacted nominal 25 mm, and specifies compaction to 98% standard Proctor on the subgrade and 98% modified Proctor for vehicular base. When you are deciding whether your driveway base is 100 mm or 150 mm, that one decision moves your sub-base volume by half, so it is worth reading before you multiply."
+    waRelevance: overseas-adapt
+    waCaveat: "North American, written in inches and converted here. Ignore the freeze-thaw content. Substitute compacted crushed limestone for the crushed aggregate base it describes, since that is the Perth default, and read its subgrade advice as being about compaction rather than saturation — a Perth sand subgrade drains fast but moves under load if it was never compacted."
+    checkedOn: 2026-08-02
+  - title: "Soil calculator"
+    url: "https://www.bibralakesoils.com.au/soil-calculator/"
+    provider: "Bibra Lake Soils"
+    type: calculator
+    cost: free
+    duration: "5 min"
+    whyGood: "A working Perth yard's own calculator, which is the fastest way to see the unit reality: you enter length, width and depth in metres for a rectangle, circle or triangle, and it returns cubic metres. Nothing else. It also publishes the conversion that decides how you get the material home — 1 cubic metre is about 1.5 trailer loads, 2 cubic metres about 3 trailers — which is the number that tells you when to stop pretending you will cart it yourself."
+    waRelevance: wa-specific
+    waCaveat: "It is a supplier's own tool and it returns loose supplied volume with no allowance for compaction or settlement. Add your own compaction factor to any base course result and your own settlement allowance to soil and mulch. Its sister pages also list the standard Perth reconstituted limestone block sizes, which are sold per block, not per square metre."
+    checkedOn: 2026-08-02
+  - title: "DIY lawn installation"
+    url: "https://greenacresturfgroup.com.au/lawn-installation/diy-lawn-installation/"
+    provider: "Greenacres Turf Group"
+    type: article
+    cost: free
+    duration: "12 min"
+    whyGood: "The levels detail that stops a new lawn sitting proud of the paving. A WA turf farm's own guide, it specifies 70 to 150 mm of quality landscape soil with 100 mm as the working minimum, and tells you to finish the soil 30 to 40 mm below footpaths and driveways to allow for the roll thickness — turf is about 35 mm thick — plus 5 to 10 mm of growth. That single relationship converts your lawn area straight into both a soil volume and a finished level."
+    waRelevance: wa-specific
+    waCaveat: "A turf farm's own page, so it is generous about soil depth on the way to selling turf. It publishes no wastage allowance for the turf itself — use your own, and note that its worked soil example contains an arithmetic error, so do the multiplication yourself."
+    checkedOn: 2026-08-02
+  - title: "Establishing a new lawn"
+    url: "https://www.watercorporation.com.au/help-and-advice/waterwise/lawn-care/establishing-a-new-lawn"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "15 min"
+    whyGood: "The state water utility's soil preparation spec for a Perth lawn, and it differs by soil type — on grey sands, remove the top 100 to 150 mm and replace it with a 70% red or yellow sand and 30% organic blend; on yellow sands, incorporate organics through the top 100 to 150 mm. That distinction is a real difference in the take-off, because one is a remove-and-replace volume with spoil to dispose of and the other is an amendment volume with nothing leaving site."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Apply for a watering exemption"
+    url: "https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "Establishment water is a real line item that almost every amateur take-off leaves out, and in Perth you cannot legally deliver it without this. The exemption covers new lawn — roll-on, runners, shredded lawn or seed — and new garden, and runs up to 42 days from 1 October to 31 March or up to 35 days from 1 April to 30 September, with a recommended 10 mm per day in the warm half of the year and 7.5 mm in the cool half. It is free to apply for, the water is billed, and non-compliance risks a $500 fine."
+    waRelevance: wa-specific
+    waCaveat: "The exemption starts on the day you install, so apply the moment your programme has a turf date. If your build slips, the days are gone."
+    checkedOn: 2026-08-02
+  - title: "Waste levy rate schedule"
+    url: "https://www.wa.gov.au/service/environment/environment-information-services/waste-levy-rate-schedule"
+    provider: "Department of Water and Environmental Regulation"
+    type: government
+    cost: free
+    duration: "5 min"
+    whyGood: "The published forward schedule of the WA waste levy, which is the reason your skip bin quote is what it is. It gives both a per tonne and a per cubic metre rate for each financial year, so you can see exactly what it costs to send a cubic metre of spoil, rubble or green waste to landfill in the Perth metropolitan region before the operator adds cartage and margin. Read it once and separating clean fill from mixed rubbish stops feeling like fussiness."
+    waRelevance: wa-specific
+    waCaveat: "The schedule marks only the current financial year's rates as prescribed by regulation; later years are indicative and inflation-adjusted. The levy is charged to the landfill operator, not to you, so what you actually pay is a gate fee or bin hire that includes it plus everything else."
+    checkedOn: 2026-08-02
+  - title: "Managing crystalline silica dust in the workplace"
+    url: "https://www.worksafe.wa.gov.au/managing-crystalline-silica-dust-workplace"
+    provider: "WorkSafe WA"
+    type: government
+    cost: free
+    duration: "25 min"
+    whyGood: "Read this before you settle on a laying pattern, because the take-off is what tells you how many cuts the job contains. WorkSafe treats cutting, grinding, jackhammering, excavating and even sweeping up crystalline silica substances as processing, and requires wet methods, on-tool or fixed extraction, vacuum rather than broom clean-up, respiratory protection selected to AS/NZS 1715, and a silica risk control plan for high-risk processing. A brick saw run dry on a Perth driveway is one of the highest-exposure things a residential site produces."
+    waRelevance: wa-specific
+    waCaveat: "These duties bind a person conducting a business or undertaking, which includes any contractor you engage and, on a site you control, shapes what you must let them do. A homeowner cutting their own pavers is not the regulator's target, but the dust does not know that — the controls are the same either way."
+    checkedOn: 2026-08-02
+  - title: "Australian and New Zealand Standard Method of Measurement (ANZSMM)"
+    url: "https://www.aiqs.com.au/product/australian-and-new-zealand-standard-method-of-measurement-anzsmm"
+    provider: "Australian Institute of Quantity Surveyors"
+    type: standard
+    cost: paid
+    price: "$100 non-member, $85 member or student"
+    whyGood: "The document professional quantity surveyors measure to, so that two estimators measuring the same drawing arrive at the same quantity and describe it the same way. Worth buying only if you are heading towards doing this for other people or you want the discipline of a defined measurement convention rather than your own. For a single suburban block, the free alternative is the method in this lesson plus a spreadsheet that keeps the working visible."
+    waRelevance: australian
+    waCaveat: "The AIQS product page publishes the price but not a contents listing, so buy it for the convention rather than for landscape-specific rules. It is a building measurement standard; soft landscape and irrigation are not its focus."
+    checkedOn: 2026-08-02
+videos: []
+regulations:
+  - claim: "The WA waste levy applies to waste received for disposal at landfills in the Perth metropolitan region, and to waste collected within the metropolitan region and disposed of at landfills outside it. The published rate schedule sets $90 per tonne, or $136 per cubic metre, from 1 July 2026, following $88 per tonne or $133 per cubic metre from 1 July 2025. Only the current year's rates are prescribed by regulation; later years in the schedule are indicative."
+    source: "Department of Water and Environmental Regulation"
+    sourceUrl: "https://www.wa.gov.au/service/environment/environment-information-services/waste-levy-rate-schedule"
+    checkedOn: 2026-08-02
+  - claim: "Workers must not be exposed to respirable crystalline silica above the workplace exposure standard of 0.05 mg/m³ measured over a standard eight-hour shift."
+    source: "WorkSafe WA"
+    sourceUrl: "https://www.worksafe.wa.gov.au/frequently-asked-questions-silica"
+    checkedOn: 2026-08-02
+  - claim: "Watering a newly installed lawn or garden outside the sprinkler roster requires an approved Water Corporation exemption. Exemptions run up to 42 days between 1 October and 31 March and up to 35 days between 1 April and 30 September, start on the day of installation, and cost nothing to apply for, though the additional water is billed. Random inspections occur and non-compliance risks a $500 fine."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption"
+    checkedOn: 2026-08-02
+---
+
+A take-off is the bridge between the drawings you finished in Phase 6 and the
+money you are about to spend. It is one job: convert every line on the plan into
+a quantity, in the unit a supplier will actually sell it to you in.
+
+Everything downstream depends on it. Price the wrong quantity accurately and you
+still get the wrong number. On a renovation there is a second half most people
+forget — you also have to measure what leaves the site, because demolition,
+cartage and disposal are priced by volume and weight, and they are not small.
+
+Set aside a clear three hours, a printed set of drawings, a scale rule, three
+highlighters and a spreadsheet. Do not do this on the phone in the garden.
+
+## What a professional does at this stage
+
+Four habits separate a take-off you can trust from a list of guesses.
+
+**They measure on paper, once, and mark it off.** Every element gets
+highlighted on the print the moment it is measured. A colour per category —
+hard surfaces, soft landscape, services. At the end, anything unhighlighted has
+not been measured. This is the entire quality control system, and it works.
+
+**They keep nett and order quantities in separate columns.** Nett is what the
+drawing says: 48.6 m² of paving. Order is what you buy: 51 m², rounded up to
+whole packs. Wastage lives in the order column and never gets buried in the
+nett figure, because six weeks later you will need to know which number was
+measured and which was an allowance.
+
+**They keep the working visible.** Every line shows its dimensions —
+`5.4 × 3.2 × 0.1` — not just the answer. When the client (you) moves the
+alfresco 600 mm, you edit one line rather than redo three hours of work.
+
+**They measure in supplier units.** Not "some limestone". Cubic metres of
+crushed limestone, tonnes of aggregate, whole packs of pavers, 25 m coils of
+poly, plants by pot size. A take-off in units nobody sells is a take-off you
+have to do twice.
+
+## Work in build order, not plan order
+
+Measure in the order the work happens. Following the build sequence is what
+stops you forgetting the layers you cannot see once the job is finished.
+
+1. Demolition and disposal — what comes out
+2. Excavation and spoil — cut and fill
+3. Drainage, soakwells, pits and pipe
+4. Retaining walls, footings, backfill, drainage aggregate
+5. Sub-base and bedding under every hard surface
+6. Hard surfaces themselves
+7. Edges and restraints
+8. Structures, footings, fixings
+9. Services: retic pipe, wire, sleeves, lighting cable
+10. Soil, amendment, planting, turf, mulch
+11. Establishment: stakes, ties, wetting agent, water
+
+Compare that list to your [schedule of works](/curriculum/documentation/specification-and-schedule-of-works/).
+If an item is in the specification but not in the take-off, one of the two
+documents is wrong.
+
+## Areas: the wastage is in the cuts
+
+Break every irregular shape into rectangles and triangles and keep them as
+separate lines. Measure to a consistent edge — the outside face of the edge
+restraint, every time.
+
+Deduct openings over about 1 m². Do not bother deducting a 400 mm planting
+pocket; the labour to cut around it costs more than the pavers you saved.
+
+Cut allowance depends on the pattern, not the material:
+
+| Situation | Add | Why |
+| --- | --- | --- |
+| Rectangular area, stretcher bond, running parallel to the edges | 5% | Cuts only at two ends. This is the Midland Brick figure. |
+| Herringbone or 45-degree lay | 10% | Every perimeter unit is a cut, and half of each cut is waste. |
+| Curves, circles, radius edges | 12–15% | Nothing tessellates. Expect offcuts you cannot use anywhere. |
+| Small or fiddly areas under about 15 m² | 15% | Wastage is a perimeter effect, and small areas are almost all perimeter. |
+| Natural stone or a discontinued paver | 15% plus attic stock | You cannot go back for four more in two years. |
+
+Then round up to whole packs. Pavers are sold by the pack or the pallet, and
+buying 51 m² usually means buying 54.
+
+The cut count is also a safety number. Cutting pavers, limestone, concrete or
+stone releases respirable crystalline silica, and the WA exposure standard is
+0.05 mg/m³ over an eight-hour shift. Cut wet, use on-tool extraction, wear a
+correctly fitted P2 or better, and vacuum rather than sweep. A herringbone
+driveway is a day on a brick saw — if that changes your appetite for the
+pattern, better to learn it now than on the day.
+
+## Volumes: three multipliers people miss
+
+Volume is where amateur take-offs fail, because the volume you calculate is
+almost never the volume you order.
+
+**Compaction.** Crushed limestone is delivered loose and ends up compacted. A
+100 mm compacted base over 10 m² is 1.0 m³ finished, but you must buy more than
+that. Plan on roughly 25% extra and confirm the factor with your yard for the
+specific product — ask them directly, they will tell you.
+
+**Bulking.** Excavated sand swells when you dig it. A 10 m³ hole produces
+noticeably more than 10 m³ of loose spoil in the bin. Order disposal on the
+loose volume, not the hole.
+
+**Settlement.** Soil blends and mulch consolidate. Order to the depth you want
+in twelve months, not the depth on the day.
+
+Useful conversions, all per 10 m² of area:
+
+| Layer | Typical depth | Compacted or finished m³ | Order |
+| --- | --- | --- | --- |
+| Base under paths and patios | 100 mm | 1.0 | ~1.25 m³ loose |
+| Base under a driveway | 150 mm | 1.5 | ~1.9 m³ loose |
+| Bedding sand | 30 mm | 0.3 | 0.3 m³ (1 m³ covers about 33 m²) |
+| Turf underlay soil | 100 mm | 1.0 | 1.1 m³ |
+| Garden bed amendment | 300 mm worked in | varies | measure the bed area, not the block |
+| Mulch | 50–100 mm | 0.5–1.0 | 1.0 m³ |
+
+Perth yards sell soil, mulch and sand by the cubic metre and often price
+aggregate and road base by the tonne as well. Ask which. A cubic metre of damp
+sand is roughly one and a half tonnes, so the two prices are not comparable and
+mixing them up is a classic 30% error.
+
+## Linear metres and counts
+
+Edging, pipe, cable and timber are measured along the centre-line of the run,
+not the straight-line distance. Add 5% for the wander, then round up to whole
+supplied lengths — poly comes in fixed coils, aluminium edging in fixed
+sections. Nobody sells 47.3 m of anything.
+
+For [irrigation](/curriculum/documentation/irrigation-plan/), measure mainline
+and laterals separately, add 300 mm per riser, and measure valve wire along the
+trench route with a 1 m tail at each end.
+
+Counts come straight off the schedules. Plants get counted by pot size, because
+that is how a nursery sells them — a 140 mm tube and a 45 L specimen of the same
+species are different line items. Count sprinklers, drippers, lights, fixings,
+blocks and caps as separate items. Retaining blocks are sold per block in Perth,
+not per square metre, so you need the block dimensions before you can convert
+wall area into a count.
+
+## Renovation: measure what leaves
+
+Go back to your [existing garden audit](/curriculum/site-analysis/auditing-an-existing-garden/)
+and turn every REMOVE and REPLACE verdict into a volume and a weight.
+
+Rubble is heavy. A cubic metre of broken concrete or limestone is close to two
+tonnes, and most skip bins have a weight cap you will hit well before the bin
+looks full. Separating clean fill from mixed rubbish is worth real money,
+because the WA waste levy is charged per tonne or per cubic metre of what goes
+to landfill in the metropolitan area. Confirm bin sizes, weight limits and
+whether your operator takes segregated loads before you book.
+
+Then add the things that never appear on a drawing: sand for backfill, wetting
+agent, stakes and ties, fixings, hire, and establishment water under a
+[watering exemption](https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption)
+if you are laying turf.
+
+## The second pass
+
+Do it on a different day, by a different route. If the first pass went area by
+area, do the second by trade. Then sanity-check the totals: your hard surfaces,
+garden beds and lawn should add up to roughly the block area minus the house
+footprint. If they do not, something is missing or double-counted, and it is
+much cheaper to find it now.
+
+The next lesson takes this take-off to Perth suppliers and turns each line into
+a real, current, delivered price.

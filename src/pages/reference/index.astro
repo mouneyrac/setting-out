@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const pages = (await getCollection('reference')).sort((a, b) => a.data.order - b.data.order);
+
+/** The reference pages this section will hold, whether written yet or not. */
+const planned = [
+  {
+    slug: 'perth-soils',
+    title: 'Perth soils',
+    summary:
+      'The Swan Coastal Plain dune systems — Bassendean, Spearwood, Karrakatta — how to tell which one you are on, and what each means for water, nutrient and plant choice.',
+  },
+  {
+    slug: 'sprinkler-roster',
+    title: 'Sprinkler roster and water rules',
+    summary:
+      'Rostered watering days by house number, legal watering windows, the winter sprinkler ban, bore rules and new-garden exemptions.',
+  },
+  {
+    slug: 'permits-and-thresholds',
+    title: 'Permits and thresholds',
+    summary:
+      'What triggers a building permit or development approval in WA — retaining wall heights, structures, pools, fences — and who to ask.',
+  },
+  {
+    slug: 'plant-selection',
+    title: 'Plant selection for Perth',
+    summary:
+      'Waterwise and WA native plants that perform here, grouped by hydrozone, aspect and purpose, with the phosphorus-sensitive species flagged.',
+  },
+  {
+    slug: 'suppliers',
+    title: 'Supplier directory',
+    summary:
+      'Where the trade actually buys in Perth: landscape supply yards, wholesale nurseries, turf farms, paving, limestone, retic and hire.',
+  },
+  {
+    slug: 'noongar-seasons',
+    title: 'The Noongar six seasons',
+    summary:
+      'Birak, Bunuru, Djeran, Makuru, Djilba and Kambarang — the seasonal calendar that actually describes what happens in a Perth garden.',
+  },
+];
+
+const written = new Map(pages.map((p) => [p.id, p]));
+---
+
+<Base
+  title="WA reference"
+  description="Western Australian reference material for landscaping: Perth soils, the sprinkler roster, permit thresholds, plant selection, suppliers and the Noongar six seasons."
+  sheetRef="SHEET 03 / WA REFERENCE"
+>
+  <section class="mx-auto max-w-[86rem] px-4 sm:px-6 pt-10 pb-8">
+    <p class="label">Western Australia</p>
+    <h1 class="mt-3 font-display font-700 leading-[0.95]" style="font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);">
+      The facts that change, kept in one place
+    </h1>
+    <p class="mt-5 max-w-[64ch] text-lg leading-relaxed text-soft">
+      Rosters, rebates, permit thresholds and council fees all date fast. Rather than scattering
+      them through ninety-one lessons where they quietly go stale, they live here — each with the
+      primary source and the date it was last checked.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-[86rem] px-4 sm:px-6 pb-16">
+    <div class="sr-only mb-3"></div>
+    <ul class="grid gap-3 sm:grid-cols-2">
+      {
+        planned.map((item) => {
+          const entry = written.get(item.slug);
+          return (
+            <li class="cutout p-5">
+              {entry ? (
+                <a href={`/reference/${entry.id}/`} class="block group">
+                  <h2 class="font-display text-2xl leading-tight group-hover:text-paw transition-colors">
+                    {entry.data.title}
+                  </h2>
+                  <p class="text-sm leading-relaxed text-soft mt-2">{entry.data.summary}</p>
+                </a>
+              ) : (
+                <>
+                  <div class="flex items-start gap-2 flex-wrap">
+                    <h2 class="font-display text-2xl leading-tight text-soft">{item.title}</h2>
+                    <span class="label border border-edge px-1.5 py-0.5 mt-1 shrink-0">
+                      Unwritten
+                    </span>
+                  </div>
+                  <p class="text-sm leading-relaxed text-soft mt-2">{item.summary}</p>
+                </>
+              )}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+</Base>

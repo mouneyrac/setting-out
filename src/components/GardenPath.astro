@@ -1,0 +1,103 @@
+---
+/**
+ * The eleven phases as a garden path winding down the page.
+ *
+ * The numbering is not decoration — the phases are a genuine sequence, and
+ * doing them out of order is how people end up paving over a soakwell. The
+ * planting beside the path gets denser as you go, so the page itself shows the
+ * garden establishing.
+ */
+import { phases } from '../data/phases';
+
+interface Props {
+  counts: Map<number, number>;
+  /** Phases already completed, for the signed-in view. */
+  done?: Set<number>;
+}
+const { counts, done = new Set<number>() } = Astro.props;
+
+/** Little plants that appear beside the path, denser further along. */
+const sprigs = (n: number) => Math.min(5, 1 + Math.floor(n / 2.4));
+---
+
+<ol class="relative">
+  <!-- The path itself: small round pebbles running down behind the stones -->
+  <div
+    class="absolute left-[22px] sm:left-[29px] top-8 bottom-8 w-5 -z-10"
+    style="background-image: radial-gradient(circle at 50% 50%, var(--edge-strong) 0 3.5px, transparent 4px); background-size: 20px 20px;"
+    aria-hidden="true"
+  >
+  </div>
+
+  {
+    phases.map((phase) => {
+      const count = counts.get(phase.number) ?? 0;
+      const complete = done.has(phase.number);
+      return (
+        <li class="relative pl-16 sm:pl-24 pb-5 last:pb-0">
+          {/* Stepping stone */}
+          <a
+            href={`/curriculum/${phase.slug}/`}
+            class="absolute left-0 top-1 w-14 h-14 sm:w-[70px] sm:h-[70px] rounded-full grid place-items-center font-display font-900 text-xl sm:text-2xl border-[3px] transition-transform duration-200 hover:scale-105 focus-visible:scale-105"
+            style={
+              complete
+                ? 'background: var(--leaf); border-color: var(--leaf-deep); color: #FFFDF7;'
+                : 'background: var(--surface); border-color: var(--edge-strong); color: var(--ink);'
+            }
+            aria-label={`Phase ${phase.number}: ${phase.title}`}
+          >
+            {complete ? '✓' : String(phase.number).padStart(2, '0')}
+          </a>
+
+          {/* Sprigs growing beside the stone */}
+          <span
+            class="absolute left-[46px] sm:left-[58px] top-[46px] sm:top-[58px] flex gap-1 items-end pointer-events-none"
+            aria-hidden="true"
+          >
+            {Array.from({ length: sprigs(phase.number) }).map((_, i) => (
+              <svg
+                width="16"
+                height={20 + ((i * 7) % 16)}
+                viewBox="0 0 16 32"
+                class="anim-sway"
+                style={`transform-origin: bottom center; animation-duration: ${6 + i}s; animation-delay: -${i}s;`}
+              >
+                <path
+                  d="M8 32V11"
+                  stroke="var(--leaf)"
+                  stroke-width="2.6"
+                  stroke-linecap="round"
+                  fill="none"
+                />
+                <path d="M8 15q-7-3-8-10 7 0 8 10z" fill="var(--leaf)" />
+                <path d="M8 20q7-3 8-9-7 0-8 9z" fill="var(--leaf)" opacity="0.8" />
+              </svg>
+            ))}
+          </span>
+
+          <article class="cutout cutout-lift p-4 sm:p-5">
+            <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h2 class="font-display font-700 text-2xl sm:text-[1.7rem] leading-tight">
+                <a
+                  href={`/curriculum/${phase.slug}/`}
+                  class="hover:text-paw transition-colors"
+                >
+                  {phase.title}
+                </a>
+              </h2>
+              <span class="label">{count} lessons</span>
+            </div>
+
+            <p class="note mt-0.5">{phase.tagline}</p>
+            <p class="mt-2.5 leading-relaxed text-soft text-[0.98rem]">{phase.description}</p>
+
+            <p class="mt-3 text-[0.95rem] leading-relaxed">
+              <span class="label block mb-0.5">You end up with</span>
+              {phase.outcome}
+            </p>
+          </article>
+        </li>
+      );
+    })
+  }
+</ol>

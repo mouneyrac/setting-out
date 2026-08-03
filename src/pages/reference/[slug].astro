@@ -1,0 +1,147 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ResourceCard from '../../components/ResourceCard.astro';
+import WateringToday from '../../components/WateringToday.astro';
+
+export const getStaticPaths = (async () => {
+  const pages = await getCollection('reference');
+  const sorted = pages.sort((a, b) => a.data.order - b.data.order);
+  return sorted.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, prev: sorted[i - 1], next: sorted[i + 1] },
+  }));
+}) satisfies GetStaticPaths;
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const updated = d.updated?.toLocaleDateString('en-AU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<Base title={d.title} description={d.summary}>
+  <article class="mx-auto max-w-[84rem] px-4 sm:px-6" data-pagefind-body>
+    <header class="pt-8 pb-6">
+      <nav class="label flex items-center gap-2 flex-wrap" aria-label="Breadcrumb">
+        <a href="/reference/" class="hover:text-paw transition-colors">WA guide</a>
+        <span aria-hidden="true">›</span>
+        <span>{d.title}</span>
+      </nav>
+
+      <h1
+        class="mt-4 font-display font-900 leading-[1.08] max-w-[22ch]"
+        style="font-size: clamp(1.9rem, 1.35rem + 2.6vw, 3.25rem);"
+      >
+        {d.title}
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed max-w-[66ch] text-soft">{d.summary}</p>
+
+      {
+        updated && (
+          <p class="note mt-4">
+            Everything on this page was checked on {updated}. WA rules move — the sources are linked
+            so you can confirm anything that matters before you act on it.
+          </p>
+        )
+      }
+    </header>
+
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-12 pb-4">
+      <div class="min-w-0">
+        {/* The one lookup people make standing in the garden gets answered
+            before the reading starts, not after it. */}
+        {entry.id === 'sprinkler-roster' && <WateringToday />}
+
+        <div class="prose-garden" class:list={[entry.id === 'sprinkler-roster' && 'mt-10']}>
+          <Content />
+        </div>
+
+        {
+          d.regulations.length > 0 && (
+            <section class="mt-10">
+              <h2 class="font-display font-900 text-2xl sm:text-3xl">The rules, with sources</h2>
+              <ul class="grid gap-3 mt-4">
+                {d.regulations.map((reg) => (
+                  <li class="sign list-none">
+                    <p class="leading-relaxed">{reg.claim}</p>
+                    <p class="label mt-2">
+                      <a
+                        href={reg.sourceUrl}
+                        class="underline underline-offset-2 hover:text-paw transition-colors"
+                      >
+                        {reg.source} ↗
+                      </a>
+                      {' · checked '}
+                      {reg.checkedOn.toLocaleDateString('en-AU', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          d.resources.length > 0 && (
+            <section class="mt-10">
+              <h2 class="font-display font-900 text-2xl sm:text-3xl">Sources and further reading</h2>
+              <ul class="grid gap-3 mt-4">
+                {d.resources.map((r) => (
+                  <ResourceCard resource={r} />
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </div>
+
+      <aside class="lg:sticky lg:top-24 lg:self-start">
+        <div class="sign">
+          <p class="font-display font-700 leading-tight">Confirm before you act</p>
+          <p class="text-[0.93rem] leading-relaxed mt-1.5">
+            This page exists so the facts that date fastest live in one place. It is still
+            educational material, not advice. Council rules differ across the Perth metropolitan
+            area — check yours.
+          </p>
+        </div>
+
+        <a href="/reference/" class="btn btn-ghost w-full justify-center mt-3 text-sm">
+          All reference pages
+        </a>
+      </aside>
+    </div>
+
+    <nav class="mt-10 mb-16 grid gap-3 sm:grid-cols-2">
+      {
+        prev ? (
+          <a href={`/reference/${prev.id}/`} class="cutout cutout-lift p-5">
+            <p class="label">← Previous</p>
+            <p class="font-display font-700 text-lg mt-1 leading-tight">{prev.data.title}</p>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a href={`/reference/${next.id}/`} class="cutout cutout-lift p-5 sm:text-right">
+            <p class="label">Next →</p>
+            <p class="font-display font-700 text-lg mt-1 leading-tight">{next.data.title}</p>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </article>
+</Base>

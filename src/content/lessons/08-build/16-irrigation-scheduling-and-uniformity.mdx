@@ -1,0 +1,332 @@
+---
+title: "Irrigation 5 — Precipitation rate, distribution uniformity and run times"
+phase: 8
+order: 16
+summary: "How to calculate how long a station must run to deliver a given depth of water, how to measure whether it lands evenly, and how to set run times that suit sand — which holds almost nothing and drains almost instantly."
+timeEstimate: "90 min"
+difficulty: advanced
+status: complete
+updated: 2026-08-02
+series: "Irrigation mini-course"
+checklist:
+  - "Calculate precipitation rate for each station"
+  - "Run a catch-cup test and calculate distribution uniformity"
+  - "Convert a target water depth into a run time per station"
+  - "Understand cycle-and-soak and why sand still needs it on slopes"
+resources:
+  - title: "How long should I run my sprinklers for?"
+    url: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/how-long-should-i-run-my-sprinklers-for"
+    provider: "Water Corporation"
+    type: calculator
+    cost: free
+    duration: "5 min"
+    whyGood: "The state water utility's published application rate for every common sprinkler type, which is the number that turns minutes into millimetres. Pop-up and fixed spray and micro spray apply 35 to 45 mm per hour and need 13 to 16 minutes for 10 mm; rotary applies 10 to 15 mm per hour and needs 40 to 60 minutes; gear drive rotary applies 10 to 20 mm per hour and needs 30 to 40 minutes; dripline applies 15 to 20 mm per hour and needs 30 to 40 minutes. Read them as starting bands to sanity-check your own measurement against, not as answers."
+    waRelevance: wa-specific
+    waCaveat: "The 10 mm per rostered day target is a Perth and South West default for sandy soil on a two-day roster. It is a scheduling starting point, not a plant water requirement, and the bands are wide enough that two stations built with the same nozzle can sit at opposite ends of one."
+    checkedOn: 2026-08-02
+  - title: "How efficient is my irrigation system? (catch cup test)"
+    url: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/how-efficient-is-my-irrigation-system"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The official WA method for a catch-cup test, in three steps: spread the cups evenly through the zone at least 1 metre from the nearest sprinkler, run the station and time how long it takes to reach 10 mm, then set the controller to that time. It also names the four faults that uneven cup readings point to — misalignment, leaks, blocked or worn nozzles, and simply the wrong sprinkler type for the shape of the area — and tells you where to buy catch cups. Short, official and free of product pitch."
+    waRelevance: wa-specific
+    waCaveat: "It does not tell you how many cups to use, how to calculate distribution uniformity from the readings, or that a 15-minute test run has to happen inside your rostered watering window. Pair it with the Irrigation Association audit guidelines below for the statistics and with the testing rules page for the legalities."
+    checkedOn: 2026-08-02
+  - title: "2-day Rostered Watering fact sheet"
+    url: "https://begroundwaterwise.wa.gov.au/wp-content/uploads/2022/11/2_days_watering_fact_sheet.pdf"
+    provider: "Be Groundwater Wise, Department of Water and Environmental Regulation"
+    type: government
+    cost: free
+    duration: "15 min"
+    whyGood: "The single best two pages in print on Perth watering arithmetic, and the source of the phrase this lesson is built around — 'millimetres, not minutes'. It states that 1 mm of water equals 1 litre applied evenly over 1 square metre, that most plant roots sit in the top 30 cm, and that for Perth's sandy soils a 10 mm standard drink per rostered day is enough to put water where the roots are without pushing it past them. It carries the sprinkler run-time table, the month-by-month seasonal adjustment table, and the explicit warning that those run times are for sandy soils and need adjusting for clay or loam."
+    waRelevance: wa-specific
+    waCaveat: "Published in 2022, when the Perth and Mandurah bore roster was aligned to two days a week. The watering rules and the run-time table still match Water Corporation's current pages, but check the rebate and free-catch-cup offers against the live Water Corporation site before relying on them."
+    checkedOn: 2026-08-02
+  - title: "Why you need to adjust your irrigation (seasonal adjustment guide)"
+    url: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/why-you-need-to-adjust-your-irrigation"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "Publishes the month-by-month seasonal adjustment percentages for Perth and the South West, which is how you turn one measured summer run time into a whole year of scheduling without reprogramming every station. 100% for January and February, 80% in March, 60% in April, manual only in May and September, the switch-off from June to August, then 60% in October, 80% in November and 90% in December. There is a separate North West table if you are outside the South West."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Irrigation Audit Guidelines"
+    url: "https://www.irrigation.org/IA/Resources/Technical-Resources/Irrigation-Auditing/Audit-Guidelines/IA/Resources/Audit-Guidelines.aspx?hkey=d3af0807-efe0-4779-a31f-c6011b23c6d3"
+    provider: "Irrigation Association"
+    type: standard
+    cost: free
+    duration: "30 min"
+    whyGood: "The free download that contains the actual maths a certified auditor uses: low-quarter distribution uniformity is the average of the driest quarter of catch devices divided by the overall average, and the run time multiplier is 1 divided by (0.4 + 0.6 x DU). It also sets the fieldwork rules that make a catch-cup test repeatable — a minimum of 24 identical catch devices, wind no more than 5 mph (about 8 km/h) monitored every five minutes, and devices set 300 to 600 mm in from the zone edges. It ends with the line worth memorising: below a DU of 0.40, fix the sprinklers rather than schedule around them."
+    waRelevance: universal
+    waCaveat: "American, and in imperial units — its precipitation rate formula is in inches per hour from millilitre catches. Ignore it and use the metric shortcut in this lesson instead, because 1 mm of depth is 1 litre per square metre and the conversion is unnecessary here. The uniformity maths, the run time multiplier and the fieldwork protocol are unit-free and transfer to Perth without change."
+    checkedOn: 2026-08-02
+  - title: "2014 Landscape Irrigation Best Management Practices"
+    url: "https://www.irrigation.org/IA/FileUploads/IA/Advocacy/Landscape-Irrigation-BMP.pdf"
+    provider: "Irrigation Association and American Society of Irrigation Consultants"
+    type: standard
+    cost: free
+    duration: "2 h"
+    whyGood: "A 57-page free standard covering design, installation and management, and the clearest published explanation of cycle-and-soak: split the calculated run time into shorter cycles with a soak between them, one or two cycles on coarse soils and three or four on fine soils, and when you actually observe runoff, cut each subsequent cycle by about 20 per cent. It also gives the matched precipitation rate tolerance for heads on one station (plus or minus 5 per cent), the reason to specify lower precipitation rate sprinklers on slopes, and a worked run-time calculation. This is the document behind most of what good irrigators do by instinct."
+    waRelevance: overseas-adapt
+    waCaveat: "Written for a US market with no equivalent of the Perth roster or the winter switch-off, and its worked examples are in inches and gallons. The bigger adaptation is the soil: its cycle-and-soak advice assumes runoff is the default risk, whereas on deep Perth sand the default risk is the opposite — water dropping straight past the root zone. Apply its cycle logic to your slopes, water-repellent patches and compacted areas, not to your whole garden."
+    checkedOn: 2026-08-02
+  - title: "Testing your irrigation"
+    url: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/testing-your-irrigation"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The page that keeps a commissioning session legal. It sets the rule that you may only test on your rostered watering days, before 9am or after 6pm, and for no longer than two minutes per station, and it confirms that a Waterwise Garden Irrigator can test outside those windows and during the Sprinkler Switch-off because they are exempt from the restrictions. It also gives the meter-and-isolation-valve sequence for isolating a leak between the master valve, a zone solenoid and zone pipe."
+    waRelevance: wa-specific
+    waCaveat: "The two-minute allowance is for fault-finding and flushing, not for a catch-cup test. A 15-minute catch-cup run is a watering event and has to happen as your once-per-rostered-day watering, before 9am or after 6pm."
+    checkedOn: 2026-08-02
+  - title: "Apply for a watering exemption"
+    url: "https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "15 min"
+    whyGood: "The only legal way to water new lawn or new planting outside the roster while it establishes, and the page publishes the actual schedule in millimetres — which makes it directly usable once you know your precipitation rate. Between 1 October and 31 March you get up to 42 days: 3.5 mm three times daily for days 1 to 10, 5 mm twice daily to day 20, 10 mm daily to day 28, then 10 mm every second day. Between 1 April and 30 September you get up to 35 days at 4 mm twice daily, then 7.5 mm daily, then 7.5 mm every second day."
+    waRelevance: wa-specific
+    waCaveat: "Apply on the day the lawn or garden goes in, because the exemption is counted from the installation date whenever you lodge it. Breaching the exemption conditions risks a $500 fine, and the page is explicit that the breach belongs to the property owner, not the contractor who laid the turf."
+    checkedOn: 2026-08-02
+  - title: "Find a Waterwise Programs Specialist"
+    url: "https://www.waterwiseprograms.com.au/find-a-water-specialist"
+    provider: "Irrigation Australia and Water Corporation"
+    type: directory
+    cost: free
+    whyGood: "Searchable by suburb and radius, and filterable by Garden Irrigator Member or Irrigation Design Shop Member. Design shops are where catch cups come from and where you can have a nozzle chart checked; Garden Irrigators are the ones legally exempt from the roster, so they are who you call if your uniformity test has to happen during the June to August Sprinkler Switch-off."
+    waRelevance: wa-specific
+    waCaveat: "Endorsement means the business has been appointed to deliver the Waterwise programs, not that it is the cheapest or the best. The list includes members outside WA, so filter by suburb."
+    checkedOn: 2026-08-02
+videos:
+  - youtubeId: "aT6ooJIdBaw"
+    title: "Using catch cups"
+    channel: "Water Corporation"
+    duration: "2:33"
+    whyGood: "The state water utility's own demonstration, and the only short video that frames catch cups as a way of working out precipitation rate rather than a vague garden tip. Two and a half minutes of exactly the right method for a Perth block, with no product being sold."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - youtubeId: "x3C7DgDBtnA"
+    title: "Explaining seasonal adjustment"
+    channel: "Water Corporation"
+    duration: "1:43"
+    whyGood: "Shows the seasonal adjustment dial on a real controller and what the percentage actually does to a run time — it scales every station at once, so a 10-minute summer time becomes 8 minutes at 80%. That single setting is what stops a correctly measured summer schedule from drowning the garden in April."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+regulations:
+  - claim: "Perth and Mandurah properties may use sprinklers on two rostered days per week, once per day, either before 9am or after 6pm. Since 1 September 2022 the same two-day roster applies to garden bores as to scheme water. Breaching the roster attracts a $100 fine."
+    source: "Be Groundwater Wise, Department of Water and Environmental Regulation"
+    sourceUrl: "https://begroundwaterwise.wa.gov.au/garden-bore-regulation/"
+    checkedOn: 2026-08-02
+  - claim: "The Sprinkler Switch-off runs from 1 June to 31 August every year in Perth, Mandurah and parts of the South West and Great Southern, for households and businesses, and for bore water as well as scheme water. It has been a permanent measure since 2010 and the fine is $100. Irrigation systems fed only from rainwater tanks are not covered."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/sprinkler-switch-off"
+    checkedOn: 2026-08-02
+  - claim: "Irrigation testing must be done on your rostered watering days, before 9am or after 6pm, and limited to two minutes per station. To test outside those windows or during the Sprinkler Switch-off, a Waterwise Garden Irrigator must perform the test, as they are exempt from the restrictions."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/testing-your-irrigation"
+    checkedOn: 2026-08-02
+  - claim: "Watering new lawn or garden more often than the roster allows requires a watering exemption. Exemptions run up to 42 days for installations between 1 October and 31 March, and up to 35 days between 1 April and 30 September, counted from the installation date. Failing to comply with the exemption conditions risks a $500 fine, and the breach is the responsibility of the property owner rather than the installer."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption"
+    checkedOn: 2026-08-02
+---
+
+Everything in this mini-course so far has been hardware. This lesson is where the
+hardware becomes a number of minutes on a controller, and it is the step most
+Perth retic installs skip entirely. A system with correct pipe sizing, matched
+nozzles and sensible stations will still kill a garden if the run times were
+guessed off the back of the controller box.
+
+The unit that matters is the millimetre, not the minute. One millimetre of water
+is one litre spread evenly over one square metre — the same unit the weather
+bureau uses for rain. Water Corporation's target for a Perth garden is
+[10 mm on each rostered watering day](https://www.watercorporation.com.au/help-and-advice/waterwise/garden/how-much-water-does-my-garden-need),
+twice a week in summer. Your controller has no millimetre button. Converting
+between the two is the entire job of this lesson.
+
+This is also the safest lesson in the mini-course. The hazards are legal and
+financial rather than physical — testing outside your watering window is a $100
+fine, and the trenching, pressure and wiring risks sit in
+[lesson 6](/curriculum/build/irrigation-mainline-valves-and-wiring/). The one
+physical caution is heat: your summer windows are before 9am and after 6pm, so
+take the dawn slot, not the end of a 40-degree day.
+
+## What a professional does at this stage
+
+A retic installer doing the job properly does not read run times off a chart.
+They measure the precipitation rate of each station they built, on the site they
+built it, and set run times from that measurement.
+
+The published numbers are bands, not values. Water Corporation lists spray heads
+at 35 to 45 mm per hour, but a station whose heads ended up 3.5 metres apart
+instead of the designed 4.5 applies water far faster than a correctly spaced one
+using identical nozzles. Spacing, real operating pressure, arc settings and how
+much of the zone is hard surface all move the rate. The only way to know it is
+to catch it in a cup.
+
+The second thing they measure is **uniformity** — whether the water lands evenly.
+If the driest part of a zone gets half what the average gets, you must either
+accept a dead corner or drown everything else to keep it alive.
+
+Then they write both numbers down, station by station, so that in three years
+someone can adjust the schedule without starting again. That record belongs in
+the [as-built](/curriculum/build/irrigation-install-and-audit/).
+
+## Precipitation rate, three ways
+
+In increasing order of trust.
+
+**1. The published band.** Fastest, least accurate. A sanity check, not an answer.
+
+| Sprinkler type | Application rate | Run time for 10 mm |
+| --- | --- | --- |
+| Pop-up and fixed spray | 35–45 mm/h | 13–16 min |
+| Micro spray | 35–45 mm/h | 13–16 min |
+| Gear drive rotary | 10–20 mm/h | 30–40 min |
+| Rotary | 10–15 mm/h | 40–60 min |
+| Dripline | 15–20 mm/h | 30–40 min |
+
+**2. Flow divided by area.** Because 1 mm equals 1 litre per square metre, the
+metric version is trivial:
+
+> **PR (mm/h) = station flow (L/h) ÷ irrigated area (m²)**
+
+Eight spray heads totalling 30 L/min over a 45 m² lawn is 1,800 L/h over 45 m²:
+40 mm/h, so 15 minutes for 10 mm. Do this for every station while the design is
+still on paper. It takes a minute and it catches gross errors before you dig.
+
+**3. Catch cups.** The only method that includes wind, pressure loss, worn
+nozzles and the arc someone set badly. This is the one that counts.
+
+## Running the catch-cup test
+
+**Get the legal part right first.** A catch-cup test is a watering event, not a
+test in the regulatory sense — the two-minute allowance is for fault-finding.
+Run it as your once-per-day watering on a rostered day, before 9am or after 6pm.
+Between 1 June and 31 August you cannot run it at all: that is the Sprinkler
+Switch-off, it covers bore water, and the fine is $100. In that window a
+Waterwise Garden Irrigator can legally test for you.
+
+Then the method:
+
+1. **Pick a still morning.** The Irrigation Association caps audit wind at 5 mph,
+   about 8 km/h. In Perth that rules out most summer evenings, because the sea
+   breeze is still up at 6pm. Dawn is the reliable slot.
+2. **Use identical straight-sided containers.** Catch cups from a Waterwise
+   Irrigation Design Shop are calibrated and cheap; twelve matching tuna tins
+   work and cost nothing.
+3. **Use enough of them.** The professional minimum is 24. On a suburban lawn
+   station, 12 to 16 in an even grid is a workable compromise; below about eight
+   the figure is not worth calculating. Keep them a metre from the nearest head
+   and 300 to 600 mm in from the zone edges.
+4. **Run 15 minutes**, then measure each cup in millimetres with a steel rule,
+   recording readings in position order so you can map the dry patch.
+
+Twelve cups, 15 minutes, readings in millimetres:
+9, 7, 8, 10, 6, 8, 9, 5, 7, 8, 9, 6. Total 92, average **7.67 mm**.
+
+> **PR = average catch (mm) × 60 ÷ run time (min)** = 7.67 × 60 ÷ 15 =
+> **30.7 mm/h**
+
+Not 40. This station is a third slower than the flow-and-area calculation
+predicted, which is exactly why you measure.
+
+## Distribution uniformity
+
+Sort the readings, take the driest quarter — with 12 cups that is the lowest
+three: 5, 6, 6, averaging 5.67 mm.
+
+> **DU = average of the driest quarter ÷ average of all cups** =
+> 5.67 ÷ 7.67 = **0.74**
+
+Then apply a run time multiplier so the dry quarter still gets the target depth:
+
+> **RTM = 1 ÷ (0.4 + 0.6 × DU)**
+
+| DU | Multiplier | Verdict |
+| --- | --- | --- |
+| 0.90 | 1.06 | Excellent. Drip and good rotor zones reach this. |
+| 0.80 | 1.14 | Good for spray. A realistic suburban lawn target. |
+| 0.70 | 1.22 | Acceptable. Worth chasing the worst head. |
+| 0.60 | 1.32 | Poor. A third extra water, bought for one dry corner. |
+| 0.50 | 1.43 | Bad. Find the cause before touching the controller. |
+| Below 0.40 | — | Fix the sprinklers. Do not schedule around this. |
+
+Low uniformity is almost always a physical fault, not a scheduling problem:
+mixed head types on one station, heads not spaced head-to-head, pressure too low
+at the end of the run, a worn or blocked nozzle, an arc throwing at a fence. Fix
+those first. Every point of DU you recover is water you stop buying forever.
+
+## Turning a depth into minutes
+
+> **Run time (min) = target depth (mm) ÷ PR (mm/h) × 60 × RTM**
+
+For the station above, targeting 10 mm: 10 ÷ 30.7 × 60 = 19.6 minutes, × 1.18 =
+**23 minutes**.
+
+That is well outside the published 13 to 16 minutes for spray, and it is
+correct — this station is slow and slightly uneven. That number goes on the
+controller and into the handover file.
+
+Do this for every station, then check the total: all stations plus any soak gaps
+must finish inside the window. If they do not, you have too many stations on one
+start time, which sends you back to
+[hydrozoning and stations](/curriculum/build/irrigation-hydrozoning-and-stations/).
+
+Set the summer number once and let seasonal adjustment cover the rest of the
+year: 100% in January and February, 80% in March, 60% in April, manual only in
+May and September, off from June to August, then 60% in October, 80% in November
+and 90% in December.
+
+## Cycle-and-soak, and when Perth actually needs it
+
+Cycle-and-soak means splitting a run time into shorter bursts with a soak
+between, so water infiltrates instead of running off. On clay it is essential.
+On deep Bassendean or Spearwood sand, infiltration sits so far above any
+sprinkler's application rate that runoff is not normally the constraint — the
+Perth failure is the opposite, a single long run pushing water past the root
+zone and into the groundwater.
+
+So on flat, deep sand, one uninterrupted run is usually right. Cycle-and-soak
+earns its place in five specific situations:
+
+- **Slopes and verges**, where water moves sideways before it moves down.
+- **Water-repellent sand**, which sheds and channels the first few minutes of
+  every watering. See [Perth soils](/curriculum/site-analysis/perth-soils/).
+- **Compacted ground** — old driveways, paths, anywhere plant has run.
+- **Clay-amended or imported loam topsoil**, which is what
+  [turning Perth sand into soil](/curriculum/build/turning-perth-sand-into-soil/)
+  creates.
+- **Thatchy lawn**, where thatch intercepts water before the soil sees it.
+
+Split the run time into two to four cycles with 20 to 40 minutes of soak between
+starts — the 23-minute station above becomes three starts of 8 minutes. If water
+still moves downhill, cut each subsequent cycle by about 20 per cent. Watch the
+clock: soak time is dead time inside a window that closes at 9am.
+
+## New lawn and new planting
+
+If you are laying turf or planting in this renovation, the roster will not keep
+it alive, and watering more often without an exemption is a breach. A
+[watering exemption](https://www.watercorporation.com.au/help-and-advice/exemptions-and-breaches/watering-exemption/apply-for-a-watering-exemption)
+gives up to 42 days from 1 October to 31 March, or 35 days from 1 April to
+30 September, on a published schedule running from 3.5 mm three times a day down
+to 10 mm every second day. Apply on the installation day — the clock runs from
+then regardless of when you lodge it. Those are depths, and you now own the only
+thing that converts them into minutes.
+
+## What happens next
+
+Per station you now have a measured precipitation rate, a distribution
+uniformity, a run time multiplier and a summer run time. That is the schedule,
+and it is also most of your
+[annual retic audit](/curriculum/maintenance/watering-and-retic-audit/).
+
+The next lesson goes back underground — mainline, valve boxes, solenoid wiring
+and backflow prevention. That is the plumbing that has to be right before any of
+these numbers can be delivered reliably.

@@ -1,0 +1,170 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import AlphaBanner from '../components/AlphaBanner.astro';
+import { BUILD_ID } from '../lib/build';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Legacy from the previous art direction — accepted, no longer rendered. */
+  sheetRef?: string;
+}
+
+const { title, description } = Astro.props;
+const fullTitle = title === 'Setting Out' ? title : `${title} — Setting Out`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#7FC4E8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16232B" media="(prefers-color-scheme: dark)" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Klee+One:wght@400;600&display=swap"
+    />
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- iOS has no manifest support, so standalone mode is opted into here. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Setting Out" />
+    <meta name="build-id" content={BUILD_ID} />
+
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'dark' || stored === 'light') {
+          document.documentElement.dataset.theme = stored;
+        }
+      })();
+    </script>
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-3 focus:left-3 btn btn-primary"
+    >
+      Skip to content
+    </a>
+
+    <AlphaBanner />
+    <SiteHeader />
+
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+
+    <SiteFooter />
+
+    <!-- Shown only when a deploy happened while you were away and it was not
+         safe to reload on your behalf (because you were typing). -->
+    <div
+      id="update-pill"
+      class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 cutout px-4 py-2.5 flex items-center gap-3"
+      hidden
+    >
+      <span class="font-display font-700 text-sm">There is a newer version</span>
+      <button type="button" id="update-now" class="btn btn-primary text-sm py-1.5 px-3.5">
+        Refresh
+      </button>
+    </div>
+
+    <script is:inline>
+      // ── Offline support and update detection ──────────────────────────
+      // The course gets read standing in a garden with patchy signal, so
+      // pages you have opened stay readable. A deploy while the app is
+      // backgrounded is picked up when you come back to it.
+      (() => {
+        if (!('serviceWorker' in navigator)) return;
+
+        const myBuild = document.querySelector('meta[name="build-id"]')?.content;
+        const pill = document.getElementById('update-pill');
+        let prompted = false;
+
+        addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {
+            /* Private mode, or the browser said no. The site still works. */
+          });
+        });
+
+        // Reloading under someone's fingers would lose what they are typing.
+        const isTyping = () => {
+          const el = document.activeElement;
+          if (!el) return false;
+          const tag = el.tagName;
+          return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable === true;
+        };
+
+        const applyUpdate = () => {
+          navigator.serviceWorker.getRegistration().then((reg) => {
+            reg?.waiting?.postMessage('skip-waiting');
+            location.reload();
+          });
+        };
+
+        document.getElementById('update-now')?.addEventListener('click', applyUpdate);
+
+        const checkForUpdate = async () => {
+          if (prompted || !myBuild) return;
+          try {
+            const response = await fetch('/version.json', { cache: 'no-store' });
+            if (!response.ok) return;
+            const { build } = await response.json();
+            if (!build || build === myBuild) return;
+
+            const reg = await navigator.serviceWorker.getRegistration();
+            await reg?.update().catch(() => undefined);
+
+            if (isTyping()) {
+              prompted = true;
+              if (pill) pill.hidden = false;
+            } else {
+              applyUpdate();
+            }
+          } catch {
+            /* Offline. Nothing to update to. */
+          }
+        };
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') checkForUpdate();
+        });
+        addEventListener('pageshow', (event) => {
+          // Restored from the back-forward cache — the page is stale by
+          // definition, so this is exactly when to check.
+          if (event.persisted) checkForUpdate();
+        });
+      })();
+
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const current =
+          root.dataset.theme ??
+          (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        localStorage.setItem('theme', next);
+      });
+    </script>
+  </body>
+</html>

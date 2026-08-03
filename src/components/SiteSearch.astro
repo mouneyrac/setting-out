@@ -1,0 +1,206 @@
+---
+/**
+ * Search over the whole course.
+ *
+ * Pagefind builds a static index at build time (91 pages), so this is entirely
+ * client-side — no search backend, no query costs, and it works offline once
+ * the index chunks are cached.
+ *
+ * The default Pagefind UI would look nothing like the rest of the site, so this
+ * uses the Pagefind JS API and renders results in the site's own language.
+ */
+---
+
+<button
+  type="button"
+  id="search-open"
+  class="flex items-center gap-2 rounded-full border-2 border-edge bg-surface px-3 h-10 text-soft hover:border-[var(--leaf)] hover:text-ink transition-colors"
+  aria-label="Search the course"
+  aria-keyshortcuts="Control+K Meta+K"
+>
+  <svg viewBox="0 0 20 20" class="w-4.5 h-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <circle cx="9" cy="9" r="6"></circle>
+    <path d="m13.5 13.5 4 4" stroke-linecap="round"></path>
+  </svg>
+  <!-- Labelled from small screens up. Search is the right tool for a lookup,
+       and an unlabelled magnifier is a poor advertisement for it. -->
+  <span class="hidden sm:inline font-display font-700 text-sm">Search</span>
+  <kbd
+    class="hidden lg:inline font-display text-[0.65rem] border-2 border-edge rounded-md px-1.5 py-0.5 leading-none"
+    aria-hidden="true">⌘K</kbd
+  >
+</button>
+
+<dialog
+  id="search-dialog"
+  class="backdrop:bg-black/40 bg-transparent p-0 m-0 w-full max-w-[42rem] top-[8vh] fixed left-1/2 -translate-x-1/2"
+  aria-label="Search the course"
+>
+  <div class="cutout overflow-hidden mx-3">
+    <div class="flex items-center gap-3 px-4 py-3 border-b-2 border-edge">
+      <svg viewBox="0 0 20 20" class="w-5 h-5 shrink-0 text-soft" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="9" cy="9" r="6"></circle>
+        <path d="m13.5 13.5 4 4" stroke-linecap="round"></path>
+      </svg>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="Soakwells, retaining walls, kikuyu, retic…"
+        class="flex-1 bg-transparent outline-none text-lg"
+        autocomplete="off"
+        spellcheck="false"
+        aria-controls="search-results"
+      />
+      <button
+        type="button"
+        id="search-close"
+        class="font-display font-700 text-xs border-2 border-edge rounded-md px-2 py-1 text-soft hover:text-ink"
+        >ESC</button
+      >
+    </div>
+
+    <div id="search-results" class="max-h-[60vh] overflow-y-auto" role="listbox" aria-label="Results">
+      <p class="note px-4 py-5" id="search-hint">
+        Search every lesson, checklist and resource. Try a plant, a material, or a problem you have.
+      </p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const openBtn = document.getElementById('search-open') as HTMLButtonElement;
+  const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
+  const input = document.getElementById('search-input') as HTMLInputElement;
+  const results = document.getElementById('search-results') as HTMLElement;
+  const closeBtn = document.getElementById('search-close');
+
+  if (openBtn && dialog && input && results) {
+    let pagefind: any = null;
+    let loading: Promise<any> | null = null;
+    let token = 0;
+
+    // Pagefind only exists in a real build, so this is loaded lazily and its
+    // absence in `astro dev` degrades to an honest message rather than an error.
+    const loadPagefind = () => {
+      if (pagefind) return Promise.resolve(pagefind);
+      if (!loading) {
+        loading = import(/* @vite-ignore */ '/pagefind/pagefind.js')
+          .then(async (module: any) => {
+            await module.init();
+            pagefind = module;
+            return module;
+          })
+          .catch(() => null);
+      }
+      return loading;
+    };
+
+    const escape = (s: string) =>
+      s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+    const render = (items: any[], query: string) => {
+      if (!items.length) {
+        results.innerHTML = `<p class="note px-4 py-5">Nothing matches “${escape(query)}”. Try a broader word — the course covers a lot of ground under plainer names.</p>`;
+        return;
+      }
+      results.innerHTML = items
+        .map(
+          (item) => `
+          <a href="${item.url}" class="block px-4 py-3.5 border-b-2 border-edge last:border-0 hover:bg-[var(--surface-2)] transition-colors" role="option">
+            <p class="font-display font-700 text-lg leading-tight">${escape(item.meta?.title ?? 'Untitled')}</p>
+            <p class="text-[0.92rem] leading-snug text-soft mt-1 search-excerpt">${item.excerpt}</p>
+          </a>`,
+        )
+        .join('');
+    };
+
+    const run = async (query: string) => {
+      const mine = ++token;
+      if (!query.trim()) {
+        results.innerHTML = `<p class="note px-4 py-5">Search every lesson, checklist and resource. Try a plant, a material, or a problem you have.</p>`;
+        return;
+      }
+
+      const module = await loadPagefind();
+      if (mine !== token) return;
+
+      if (!module) {
+        results.innerHTML = `<p class="note px-4 py-5">Search is only available on the built site, not in local dev.</p>`;
+        return;
+      }
+
+      results.innerHTML = `<p class="note px-4 py-5">Looking…</p>`;
+      const search = await module.search(query);
+      if (mine !== token) return;
+
+      const items = await Promise.all(search.results.slice(0, 12).map((r: any) => r.data()));
+      if (mine !== token) return;
+      render(items, query);
+    };
+
+    let debounce: ReturnType<typeof setTimeout>;
+    input.addEventListener('input', () => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => run(input.value), 160);
+    });
+
+    const open = () => {
+      dialog.showModal();
+      input.focus();
+      input.select();
+      loadPagefind();
+    };
+
+    openBtn.addEventListener('click', open);
+    closeBtn?.addEventListener('click', () => dialog.close());
+
+    // Clicking the backdrop closes it; clicking the panel must not.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    addEventListener('keydown', (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        dialog.open ? dialog.close() : open();
+      }
+    });
+
+    // Arrow keys move through results without leaving the input.
+    input.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowDown' && event.key !== 'Enter') return;
+      const first = results.querySelector('a');
+      if (!first) return;
+      event.preventDefault();
+      if (event.key === 'Enter') (first as HTMLAnchorElement).click();
+      else (first as HTMLAnchorElement).focus();
+    });
+
+    results.addEventListener('keydown', (event) => {
+      const links = Array.from(results.querySelectorAll('a'));
+      const index = links.indexOf(document.activeElement as HTMLAnchorElement);
+      if (index === -1) return;
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        (links[Math.min(index + 1, links.length - 1)] as HTMLAnchorElement).focus();
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (index === 0) input.focus();
+        else (links[index - 1] as HTMLAnchorElement).focus();
+      }
+    });
+  }
+</script>
+
+<style is:global>
+  /* Pagefind wraps matched terms in <mark>. */
+  .search-excerpt mark {
+    background: color-mix(in srgb, var(--banksia) 45%, transparent);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 0.1em;
+  }
+  #search-dialog::backdrop {
+    backdrop-filter: blur(2px);
+  }
+</style>

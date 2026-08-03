@@ -1,0 +1,427 @@
+---
+/**
+ * The signature element.
+ *
+ * Progress is not a bar. Completed phases grow an illustrated Perth garden:
+ * bare sand and one seedling at the start, a full layered garden by phase 11.
+ * Every layer is tied to a real phase, so the picture encodes actual progress
+ * rather than decorating it.
+ *
+ * Entirely inline SVG — no image budget, no external requests, scales to any
+ * size, works in both themes.
+ *
+ * Composition notes: planting sits in organic bed shapes rather than a
+ * full-width band of soil, so the ground reads as a designed garden. Everything
+ * is grounded on the same ground line so nothing floats.
+ */
+
+interface Props {
+  /** How many phases are complete, 0–11. */
+  grown?: number;
+  caption?: boolean;
+  class?: string;
+}
+
+const { grown = 0, caption = true, class: className = '' } = Astro.props;
+const g = Math.max(0, Math.min(11, grown));
+
+const layers = [
+  { at: 1, name: 'the first stepping stone' },
+  { at: 2, name: 'the boundary fence' },
+  { at: 3, name: 'worked soil, at last' },
+  { at: 4, name: 'the limestone wall' },
+  { at: 5, name: 'the path' },
+  { at: 6, name: 'grevillea and saltbush' },
+  { at: 7, name: 'kangaroo paw' },
+  { at: 8, name: 'the jacaranda' },
+  { at: 9, name: 'reticulation, and a rainbow in the mist' },
+  { at: 10, name: 'a bobtail sunning itself' },
+  { at: 11, name: 'a willie wagtail on the wall' },
+];
+
+const has = (n: number) => g >= n;
+const newest = layers.filter((l) => l.at <= g).at(-1);
+
+const motes = [
+  { x: 150, y: 300, d: 0 },
+  { x: 300, y: 330, d: 4.5 },
+  { x: 470, y: 315, d: 8.5 },
+  { x: 620, y: 335, d: 2.2 },
+  { x: 735, y: 305, d: 6.4 },
+];
+---
+
+<figure class={`not-prose ${className}`}>
+  <div
+    class="relative overflow-hidden rounded-[22px] border-2 border-edge"
+    style="box-shadow: var(--shadow);"
+  >
+    <svg
+      viewBox="0 0 800 420"
+      class="w-full h-auto block"
+      role="img"
+      aria-label={`Your garden with ${g} of 11 phases complete`}
+    >
+      <defs>
+        <linearGradient id="gg-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--sky-high)"></stop>
+          <stop offset="100%" stop-color="var(--sky-low)"></stop>
+        </linearGradient>
+        <radialGradient id="gg-sun">
+          <stop offset="0%" stop-color="#FFF8E2" stop-opacity="1"></stop>
+          <stop offset="55%" stop-color="#FFEBB0" stop-opacity="0.7"></stop>
+          <stop offset="100%" stop-color="#FFEBB0" stop-opacity="0"></stop>
+        </radialGradient>
+        <!-- Warm light wash from the sun: the thing that makes it feel Ghibli -->
+        <radialGradient id="gg-light" cx="0.8" cy="0.15" r="0.95">
+          <stop offset="0%" stop-color="#FFF0C4" stop-opacity="0.55"></stop>
+          <stop offset="55%" stop-color="#FFE9B8" stop-opacity="0.12"></stop>
+          <stop offset="100%" stop-color="#FFE9B8" stop-opacity="0"></stop>
+        </radialGradient>
+        <linearGradient id="gg-lawn" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#8FC47A"></stop>
+          <stop offset="100%" stop-color="#5E9450"></stop>
+        </linearGradient>
+        <linearGradient id="gg-sand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#EFDFBC"></stop>
+          <stop offset="100%" stop-color="#DFC99C"></stop>
+        </linearGradient>
+        <clipPath id="gg-frame"><rect width="800" height="420" rx="20"></rect></clipPath>
+      </defs>
+
+      <g clip-path="url(#gg-frame)">
+        <!-- ── Sky ─────────────────────────────────────────────────── -->
+        <rect width="800" height="420" fill="url(#gg-sky)"></rect>
+        <circle cx="652" cy="76" r="92" fill="url(#gg-sun)"></circle>
+        <circle cx="652" cy="76" r="30" fill="#FFF8E2" opacity="0.95"></circle>
+
+        <g>
+          <g class="anim-drift" style="animation-duration: 130s;">
+            <g fill="#FFFFFF" opacity="0.85">
+              <ellipse cx="96" cy="70" rx="46" ry="22"></ellipse>
+              <ellipse cx="132" cy="60" rx="33" ry="25"></ellipse>
+              <ellipse cx="64" cy="64" rx="26" ry="17"></ellipse>
+            </g>
+          </g>
+          <g class="anim-drift" style="animation-duration: 190s; animation-delay: -70s;">
+            <g fill="#FFFFFF" opacity="0.6">
+              <ellipse cx="320" cy="120" rx="50" ry="19"></ellipse>
+              <ellipse cx="352" cy="112" rx="30" ry="22"></ellipse>
+            </g>
+          </g>
+        </g>
+
+        <!-- ── Receding hills ──────────────────────────────────────── -->
+        <path
+          d="M0 246 Q 120 214 230 240 T 460 232 T 680 244 T 800 228 L800 420 L0 420 Z"
+          fill="#9CC6A6"
+          opacity="0.55"></path>
+        <path
+          d="M0 278 Q 150 252 300 276 T 590 270 T 800 282 L800 420 L0 420 Z"
+          fill="#7FB183"
+          opacity="0.7"></path>
+
+        <!-- ── The block: sand until you improve it in phase 3 ─────── -->
+        <path
+          d="M0 310 Q 200 290 420 304 T 800 298 L800 420 L0 420 Z"
+          fill={has(3) ? 'url(#gg-lawn)' : 'url(#gg-sand)'}></path>
+
+        <!-- Phase 3 — worked soil, as organic garden beds, not a stripe -->
+        {
+          has(3) && (
+            <g class="anim-grow" fill="#5A4028" opacity="0.45">
+              <path d="M60 358 q 70 -22 148 -8 q 62 12 104 0 q 26 -6 38 6 q -60 26 -152 24 q -92 -2 -138 -6 z" />
+              <path d="M540 350 q 70 -20 132 -6 q 50 12 108 2 q -18 26 -108 28 q -84 2 -132 -8 z" />
+            </g>
+          )
+        }
+
+        <!-- ── Phase 2 — boundary fence ────────────────────────────── -->
+        {
+          has(2) && (
+            <g class="anim-grow" stroke="#A9865A" stroke-width="6" stroke-linecap="round">
+              <line x1="34" y1="308" x2="34" y2="258" />
+              <line x1="112" y1="306" x2="112" y2="257" />
+              <line x1="190" y1="305" x2="190" y2="256" />
+              <line x1="268" y1="306" x2="268" y2="257" />
+              <line x1="24" y1="270" x2="278" y2="271" stroke-width="5" />
+              <line x1="24" y1="292" x2="278" y2="293" stroke-width="5" />
+            </g>
+          )
+        }
+
+        <!-- ── Phase 8 — the jacaranda, properly grounded ──────────── -->
+        {
+          has(8) && (
+            <g class="anim-grow" transform="translate(-48 0)">
+              <ellipse cx="678" cy="344" rx="52" ry="10" fill="#3E5F3A" opacity="0.25" />
+              <path
+                d="M678 344 q -5 -52 2 -84"
+                stroke="#7A5C3E"
+                stroke-width="12"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <path
+                d="M680 282 q -22 -14 -34 -18 M679 268 q 22 -12 36 -14"
+                stroke="#7A5C3E"
+                stroke-width="6.5"
+                fill="none"
+                stroke-linecap="round"
+              />
+              <g class="anim-sway" style="transform-origin: 678px 276px; animation-duration: 13s;">
+                <ellipse cx="644" cy="248" rx="48" ry="34" fill="#8B72C0" />
+                <ellipse cx="712" cy="242" rx="46" ry="33" fill="#9A84C9" />
+                <ellipse cx="678" cy="216" rx="52" ry="35" fill="#A691D4" />
+                <ellipse cx="660" cy="252" rx="34" ry="24" fill="#7C64AD" opacity="0.7" />
+                <ellipse cx="700" cy="262" rx="30" ry="20" fill="#7C64AD" opacity="0.55" />
+              </g>
+              <g fill="#9A84C9" opacity="0.6">
+                <ellipse cx="640" cy="352" rx="5" ry="3" />
+                <ellipse cx="666" cy="360" rx="4" ry="2.5" />
+                <ellipse cx="700" cy="352" rx="5" ry="3" />
+                <ellipse cx="722" cy="362" rx="4" ry="2.5" />
+              </g>
+            </g>
+          )
+        }
+
+        <!-- ── Phase 4 — limestone retaining wall ──────────────────── -->
+        {
+          has(4) && (
+            <g class="anim-grow">
+              <rect x="52" y="318" width="216" height="38" rx="6" fill="#F2E7CE" />
+              <rect
+                x="52"
+                y="318"
+                width="216"
+                height="38"
+                rx="6"
+                fill="none"
+                stroke="#D6C4A0"
+                stroke-width="2"
+              />
+              <g stroke="#D6C4A0" stroke-width="2" opacity="0.85">
+                <line x1="52" y1="337" x2="268" y2="337" />
+                <line x1="112" y1="318" x2="112" y2="337" />
+                <line x1="182" y1="318" x2="182" y2="337" />
+                <line x1="240" y1="318" x2="240" y2="337" />
+                <line x1="80" y1="337" x2="80" y2="356" />
+                <line x1="148" y1="337" x2="148" y2="356" />
+                <line x1="214" y1="337" x2="214" y2="356" />
+              </g>
+            </g>
+          )
+        }
+
+        <!-- Phase 9a — the rainbow, drawn behind the path it arches over -->
+        {
+          has(9) && (
+            <g class="anim-grow" fill="none" stroke-linecap="round" opacity="0.8">
+              <path d="M352 384 a 118 118 0 0 1 216 -6" stroke="#E2542B" stroke-width="7" />
+              <path d="M356 391 a 118 118 0 0 1 208 -6" stroke="#F4A63D" stroke-width="7" />
+              <path d="M360 398 a 118 118 0 0 1 200 -6" stroke="#8FC47A" stroke-width="7" />
+              <path d="M364 405 a 118 118 0 0 1 192 -6" stroke="#7FC4E8" stroke-width="7" />
+            </g>
+          )
+        }
+
+        <!-- ── Phase 1 — the first stepping stone ──────────────────── -->
+        {
+          has(1) && (
+            <g class="anim-grow">
+              <ellipse cx="380" cy="398" rx="44" ry="15" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
+            </g>
+          )
+        }
+
+        <!-- ── Phase 5 — the path winding away ─────────────────────── -->
+        {
+          has(5) && (
+            <g class="anim-grow">
+              <ellipse cx="452" cy="382" rx="37" ry="12.5" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
+              <ellipse cx="512" cy="365" rx="31" ry="10.5" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
+              <ellipse cx="562" cy="350" rx="26" ry="9" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
+              <ellipse cx="602" cy="338" rx="21" ry="7.5" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
+            </g>
+          )
+        }
+
+        <!-- ── Phase 6 — grevillea and saltbush ────────────────────── -->
+        {
+          has(6) && (
+            <g class="anim-grow">
+              <g class="anim-sway" style="transform-origin: 300px 352px; animation-duration: 9s;">
+                <ellipse cx="300" cy="336" rx="44" ry="32" fill="#6FA860" />
+                <ellipse cx="282" cy="346" rx="29" ry="22" fill="#4E7F49" opacity="0.6" />
+                <ellipse cx="316" cy="326" rx="24" ry="18" fill="#8FC47A" opacity="0.7" />
+              </g>
+              <g class="anim-sway" style="transform-origin: 540px 356px; animation-duration: 11s;">
+                <ellipse cx="540" cy="342" rx="38" ry="27" fill="#6FA860" />
+                <ellipse cx="556" cy="350" rx="25" ry="19" fill="#4E7F49" opacity="0.55" />
+              </g>
+              <g class="anim-sway" style="transform-origin: 160px 382px; animation-duration: 8s;">
+                <ellipse cx="160" cy="376" rx="36" ry="23" fill="#7FB86C" />
+                <ellipse cx="146" cy="382" rx="22" ry="15" fill="#4E7F49" opacity="0.45" />
+              </g>
+            </g>
+          )
+        }
+
+        <!-- ── Phase 7 — kangaroo paw ──────────────────────────────── -->
+        {
+          has(7) && (
+            <g class="anim-grow">
+              {[
+                { x: 228, b: 392, h: 64 },
+                { x: 246, b: 394, h: 50 },
+                { x: 263, b: 392, h: 58 },
+                { x: 708, b: 368, h: 52 },
+                { x: 725, b: 370, h: 64 },
+                { x: 742, b: 368, h: 46 },
+              ].map((s) => (
+                <g
+                  class="anim-sway"
+                  style={`transform-origin: ${s.x}px ${s.b}px; animation-duration: 6.5s;`}
+                >
+                  <line
+                    x1={s.x}
+                    y1={s.b}
+                    x2={s.x}
+                    y2={s.b - s.h}
+                    stroke="#4E7F49"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                  />
+                  <path d={`M${s.x} ${s.b - s.h} q 10 -6 15 -16 q -13 -1 -15 16 z`} fill="#E2542B" />
+                  <path
+                    d={`M${s.x} ${s.b - s.h + 11} q -10 -6 -15 -16 q 13 -1 15 16 z`}
+                    fill="#F4703F"
+                  />
+                  <path
+                    d={`M${s.x} ${s.b - s.h + 22} q 10 -6 15 -15 q -13 -1 -15 15 z`}
+                    fill="#E2542B"
+                    opacity="0.8"
+                  />
+                </g>
+              ))}
+            </g>
+          )
+        }
+
+        <!-- ── Phase 9b — the sprinkler head itself, in front ──────── -->
+        {
+          has(9) && (
+            <g class="anim-grow">
+              <g fill="#FFFFFF" opacity="0.5">
+                <circle cx="462" cy="346" r="4.5" />
+                <circle cx="482" cy="338" r="3.2" />
+                <circle cx="444" cy="340" r="3.4" />
+                <circle cx="468" cy="328" r="2.6" />
+              </g>
+              <circle cx="462" cy="388" r="5.5" fill="#4E6F7A" />
+              <ellipse cx="462" cy="394" rx="10" ry="4" fill="#4E6F7A" opacity="0.4" />
+            </g>
+          )
+        }
+
+        <!-- ── Phase 10 — a bobtail, sunning itself on a stone ─────── -->
+        {
+          has(10) && (
+            <g class="anim-grow">
+              <ellipse cx="376" cy="393" rx="27" ry="9.5" fill="#7A6647" />
+              <ellipse cx="356" cy="391" rx="9" ry="7.5" fill="#6B5A40" />
+              <ellipse cx="401" cy="394" rx="10" ry="7" fill="#7A6647" />
+              <circle cx="351" cy="389" r="1.8" fill="#1F3A2E" />
+              <path d="M348 392 h 6" stroke="#5A4B36" stroke-width="1.6" stroke-linecap="round" />
+              <g fill="#9C8763" opacity="0.9">
+                <ellipse cx="370" cy="389" rx="5" ry="3" />
+                <ellipse cx="383" cy="391" rx="5" ry="3" />
+                <ellipse cx="394" cy="393" rx="4" ry="2.5" />
+              </g>
+            </g>
+          )
+        }
+
+        <!-- ── The seedling: there from the very first visit ────────── -->
+        <g
+          class="anim-sway"
+          style="transform-origin: 340px 400px; animation-duration: 5.5s;"
+        >
+          <line
+            x1="340"
+            y1="400"
+            x2="340"
+            y2="368"
+            stroke="#4E7F49"
+            stroke-width="4.5"
+            stroke-linecap="round"></line>
+          <path d="M340 374 q -24 -13 -28 -32 q 24 2 28 32 z" fill="#6FA860"></path>
+          <path d="M340 381 q 24 -11 29 -30 q -24 1 -29 30 z" fill="#8FC47A"></path>
+        </g>
+
+        <!-- ── Phase 11 — a willie wagtail on the wall ─────────────── -->
+        {
+          has(11) && (
+            <g class="anim-grow">
+              <g class="anim-sway" style="transform-origin: 196px 318px; animation-duration: 3.6s;">
+                <ellipse cx="196" cy="305" rx="14" ry="10.5" fill="#2A3540" />
+                <circle cx="185" cy="297" r="8" fill="#2A3540" />
+                <path d="M209 303 l 24 -13 l -7 15 z" fill="#2A3540" />
+                <circle cx="181" cy="295" r="2" fill="#FFFDF7" />
+                <path d="M178 300 h 8" stroke="#FFFDF7" stroke-width="2.2" stroke-linecap="round" />
+                <path d="M177 297 l -7 2 l 7 2.5 z" fill="#F4A63D" />
+              </g>
+            </g>
+          )
+        }
+
+        <!-- ── Foreground grass tufts ──────────────────────────────── -->
+        <g class="anim-sway" style="transform-origin: 400px 420px; animation-duration: 8.5s;">
+          <path
+            d="M0 420 q 22 -30 38 -5 q 18 -34 34 -3 q 20 -26 32 -1 L118 420 Z"
+            fill="#3E6B3C"
+            opacity="0.65"></path>
+          <path
+            d="M686 420 q 24 -34 40 -6 q 20 -30 34 -3 q 18 -24 32 0 L800 420 Z"
+            fill="#3E6B3C"
+            opacity="0.65"></path>
+        </g>
+
+        <!-- Warm light wash over everything -->
+        <rect width="800" height="420" fill="url(#gg-light)" style="pointer-events: none;"></rect>
+
+        <!-- Pollen drifting in the light -->
+        <g fill="#FFF8E2">
+          {
+            motes.map((m) => (
+              <circle
+                cx={m.x}
+                cy={m.y}
+                r="3.2"
+                opacity="0"
+                class="anim-mote"
+                style={`animation-delay: ${m.d}s;`}
+              />
+            ))
+          }
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  {
+    caption && (
+      <figcaption class="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <span class="label">Your garden</span>
+        <span class="note">
+          {g === 0
+            ? 'Bare sand and one seedling. Everything starts here.'
+            : g === 11
+              ? 'Eleven phases done. That is the whole garden — and you built it.'
+              : `${g} of 11 phases — you have just planted ${newest?.name}.`}
+        </span>
+      </figcaption>
+    )
+  }
+</figure>

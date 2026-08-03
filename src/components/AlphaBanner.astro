@@ -1,0 +1,31 @@
+---
+/**
+ * Site-wide alpha notice.
+ *
+ * Sits above everything, on every page, and does not go away. The course states
+ * Western Australian regulatory thresholds and describes structural work; a
+ * reader arriving from a search result deserves to know what they have landed
+ * on before they read a single number.
+ *
+ * Kept to one line so it informs without becoming the page.
+ */
+---
+
+<div
+  class="border-b-2"
+  style="background: color-mix(in srgb, var(--banksia) 18%, var(--surface)); border-color: var(--banksia);"
+>
+  <p
+    class="mx-auto max-w-[84rem] px-4 sm:px-6 py-2 text-[0.875rem] leading-snug flex flex-wrap items-baseline gap-x-1.5"
+  >
+    <span class="font-display font-700"><span aria-hidden="true">🚧</span> Full alpha.</span>
+    <span>Written by AI, by someone who is not a landscaping professional.</span>
+    <a href="/about/" class="underline underline-offset-2 font-display font-700 hover:text-paw">
+      What this is
+    </a>
+    <span aria-hidden="true" class="text-soft">·</span>
+    <a href="/tracker/" class="underline underline-offset-2 font-display font-700 hover:text-paw">
+      What has actually been done
+    </a>
+  </p>
+</div>

@@ -1,0 +1,193 @@
+---
+import Base from '../layouts/Base.astro';
+import { allLessons } from '../lib/curriculum';
+
+const lessons = await allLessons();
+const resourceCount = lessons.reduce((n, l) => n + l.data.resources.length, 0);
+const fieldTested = lessons.filter((l) => l.data.fieldStatus === 'field-tested').length;
+---
+
+<Base
+  title="What this actually is"
+  description="An honest account of how Setting Out was made, who made it, what it is worth, and what it definitely is not."
+>
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 68%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[46rem] px-4 sm:px-6 pt-12 pb-8">
+      <p class="label">Read this first</p>
+      <h1
+        class="mt-2 font-display font-900 leading-[1.06]"
+        style="font-size: clamp(2.1rem, 1.4rem + 3vw, 3.5rem);"
+      >
+        What this actually is
+      </h1>
+      <p class="mt-5 text-lg leading-relaxed">
+        Someone in Perth with a block of sand and no landscaping experience, learning to do it
+        properly, and building the course they wanted to exist while they do it. That is the whole
+        thing. Everything below is the detail you need in order to judge how much to trust it.
+      </p>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-[46rem] px-4 sm:px-6 pb-16">
+    <!-- ── The disclaimer that matters most ─────────────────────────── -->
+    <div class="sign sign-danger">
+      <div class="flex gap-3 items-start">
+        <span class="text-2xl shrink-0" aria-hidden="true">⚠️</span>
+        <div>
+          <p class="font-display font-700 text-xl leading-tight">
+            The person who made this is not a landscaping professional
+          </p>
+          <p class="mt-2 leading-relaxed">
+            Not a landscaper, not a landscape designer, not a builder, not a horticulturist, not an
+            irrigation technician. No trade qualification, no registration, no site experience worth
+            the name. Someone learning, in public, on their own property.
+          </p>
+          <p class="mt-2 leading-relaxed">
+            Nothing here has been reviewed by a qualified professional. Where the course states a
+            Western Australian threshold or describes structural, electrical, plumbing or drainage
+            work, treat it as a well-researched starting point for a conversation with someone who
+            is actually qualified — never as the final word.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose-garden mt-10">
+      <h2>How it was written</h2>
+      <p>
+        By current frontier AI models — Claude and GPT — working from live web research, with a
+        second, independent pass over every lesson that refetched each external link and checked
+        that the page still says what the annotation claims. Links that had died or drifted were
+        removed rather than left in place. That is how {resourceCount.toLocaleString('en-AU')}
+        resources ended up here.
+      </p>
+      <p>
+        Be clear about what that process is good at and what it is not. It is good at finding what
+        authoritative sources actually say, organising it into a sequence, and being honest about
+        where a claim came from. It is <strong>not</strong> a substitute for having built the thing. An
+        AI can tell you the first course of a limestone wall must be level. It has never felt a wall
+        go out of level at course four.
+      </p>
+
+      <h2>Almost none of it has been done yet</h2>
+      <p>
+        This is the single most important thing on this page. The writing is finished; the doing has
+        barely started. Right now <strong>{fieldTested} of {lessons.length} lessons</strong> have been
+        carried out on a real Perth block.
+      </p>
+      <p>
+        So there is a <a href="/tracker/">public tracker</a>. Every lesson carries one of three
+        states, and the lesson page shows it:
+      </p>
+      <ul>
+        <li>
+          <strong>Researched</strong> — written and its sources verified, but nobody has done it.
+          This is almost everything.
+        </li>
+        <li><strong>In progress</strong> — being carried out right now.</li>
+        <li>
+          <strong>Field-tested</strong> — actually done, with notes on what was surprising, what it
+          cost and what went wrong.
+        </li>
+      </ul>
+      <p>
+        The honest advice: follow the parts that are field-tested. Read the rest, use the
+        checklists, but verify anything that costs money or carries risk before you act on it.
+      </p>
+
+      <h2>You need a property in Perth</h2>
+      <p>
+        This is a requirement, not a suggestion. The entire method is that you play both roles —
+        the client who wants a garden and the contractor who has to deliver it — on a real block
+        with real constraints, real levels, real sand and a real council. Every phase produces a
+        document about <em>your</em> site.
+      </p>
+      <p>
+        Without a block you can still read it, and some of it will be interesting. But the course
+        will not work, because the work is the point.
+      </p>
+      <p>
+        It is also specifically <strong>Perth</strong>. Bassendean and Spearwood sands, a permanent
+        sprinkler roster, a total winter ban, retaining wall thresholds unlike any other state.
+        Someone in Melbourne would be misled by a great deal of this.
+      </p>
+
+      <h2>It will sometimes send you elsewhere, including to paid things</h2>
+      <p>
+        Where a paid course, a book, an Australian Standard or a professional assessment is
+        genuinely the best option, the course says so. It is not trying to be the only thing you
+        read — it is trying to be an honest map of what is worth your time and money, with the best
+        free alternative named beside every paid one.
+      </p>
+      <p>
+        It will also tell you to get your work professionally reviewed, and it means it. Retaining
+        walls, drainage design, anything structural, anything electrical, plumbing, gas or pool
+        barriers — get a qualified person to look at it. In Western Australia several of those are
+        not optional, and the course flags them with a warning sign you cannot scroll past.
+      </p>
+
+      <h2>Why it exists at all</h2>
+      <p>
+        Two honest reasons. Landscaping looks genuinely absorbing as a craft — at least when you are
+        doing it for yourself rather than to a deadline for someone else — and a well-made garden
+        adds real value to a house. Learning the trade properly and improving the property are the
+        same activity here.
+      </p>
+      <p>
+        But there is a second reason, and it is the one that made this worth building rather than
+        just reading a few books.
+      </p>
+
+      <h2>The experiment: course first, platform second</h2>
+      <p>
+        The person building this spent years at Moodle HQ and then four more freelancing on Moodle.
+        So the usual shape of this problem is very familiar: you take a learning platform, you
+        author a course inside it, and lately you bolt AI features on top. Platform → course → AI.
+      </p>
+      <p>
+        This went the other way round. <strong>AI → course → platform.</strong> Frontier models were
+        used to build deeply specific content for exactly <strong>one</strong> learner, in one city,
+        on one kind of soil, under one state's regulations — and only then was a small
+        learning-platform experience built around that content.
+      </p>
+      <p>
+        The point is that a course this specific could never be commissioned. Nobody is going to
+        write ninety-one lessons on landscaping the Swan Coastal Plain for an audience of one. If
+        that turns out to work, the interesting question is not "how do we add AI to an LMS" but
+        "what does a course look like when it is made for a single person and their actual
+        circumstances". That is being tested here as much as the gardening is.
+      </p>
+
+      <h2>Not commercial, and not trying to be</h2>
+      <p>
+        There is nothing to buy, no advertising, no email list, no analytics on your account. The
+        course content is CC BY-SA, the code is
+        <a href="https://github.com/mouneyrac/setting-out">MIT and public</a>. Where a paid course or
+        book is genuinely the best next step, the course says so and gains nothing from it.
+      </p>
+      <p>
+        If it turns out to work, the hope is that other people with a Perth block do it too — and
+        that it becomes something closer to a small community walking the same path than a thing
+        one person made alone. The tracker is public precisely so anyone joining can see how far
+        ahead the path has actually been walked.
+      </p>
+      <p>
+        If you <em>are</em> a WA landscaping professional and something here is wrong, please
+        <a href="https://github.com/mouneyrac/setting-out/issues">open an issue</a>. Being corrected
+        is the fastest way this gets better, and there is no ego invested in being right.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mt-10">
+      <a href="/tracker/" class="btn btn-primary">See what has actually been done</a>
+      <a href="/curriculum/" class="btn btn-ghost">The eleven phases</a>
+    </div>
+  </div>
+</Base>

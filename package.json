@@ -1,0 +1,40 @@
+{
+  "name": "learnlandscaping",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Setting Out — a free, open-source course teaching the professional landscaping process, applied to your own Perth block.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "rm -rf dist && astro build && pagefind --site dist/client && node scripts/verify-build.mjs",
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "check": "astro check",
+    "astro": "astro",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply learnlandscaping --local",
+    "db:migrate:remote": "wrangler d1 migrations apply learnlandscaping --remote",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.1.7",
+    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.1.6",
+    "better-auth": "^1.6.25",
+    "drizzle-orm": "^0.45.2",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260731.1",
+    "@types/node": "^26.1.2",
+    "drizzle-kit": "^0.31.10",
+    "pagefind": "^1.5.2",
+    "wrangler": "^4.116.0"
+  }
+}

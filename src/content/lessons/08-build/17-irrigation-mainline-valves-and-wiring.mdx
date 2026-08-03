@@ -1,0 +1,349 @@
+---
+title: "Irrigation 6 — Mainline, valves, solenoids and wiring"
+phase: 8
+order: 17
+summary: "Pipe sizing and material, the mainline route, valve boxes you can actually get to, solenoid wiring and the common wire, and backflow prevention — which is a legal requirement, not an optional extra."
+timeEstimate: "90 min"
+difficulty: advanced
+status: complete
+updated: 2026-08-02
+series: "Irrigation mini-course"
+checklist:
+  - "Mainline sized for the largest station flow with margin"
+  - "Backflow prevention appropriate to the connection"
+  - "Valve boxes accessible and not under future paving"
+  - "Wiring rated for direct burial, with waterproof joints and a spare core"
+resources:
+  - title: "Building and Plumbing Handbook — Section 4, Backflow prevention"
+    url: "https://pw-cdn.watercorporation.com.au/-/media/watercorp/documents/developing-and-building/building/building-and-plumbing-handbook.pdf"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "30 min for Section 4"
+    whyGood: "The single best document on what WA actually requires, written by the utility that enforces it. Section 4 states the Backflow Prevention Policy in full — a containment device at the boundary of every water service connection, risk ratings of high, medium or low assigned at building approval, testable devices tested at commissioning and every 12 months, and reports lodged within 5 working days. It also states plainly that installing a backflow device is plumbing work and that only licensed plumbers qualified to install, test and certify these devices may do it."
+    waRelevance: wa-specific
+    waCaveat: "Written for plumbers and builders dealing with Water Corporation, not for homeowners. Section 4 is the part that matters for irrigation; most of the rest is about water and sewer connections for new developments. It also confirms Water Corporation does not manage or accept test reports for zone or individual backflow devices — those sit under the plumbing standards and the Plumbers Licensing Board instead."
+    checkedOn: 2026-08-02
+  - title: "Installing a backflow prevention device"
+    url: "https://www.watercorporation.com.au/Developing-and-building/Building/Backflow-prevention/Installation-of-a-backflow-prevention-device"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The short version of the rule for anyone who will not read the handbook. It states that a licensed plumbing contractor must install, commission and repair all backflow prevention devices, that containment devices go as close as practicable to the point of connection and downstream of the meter, and that some backflow devices will reduce pressure and flow downstream — which is exactly why this lesson sits after you measured your available water and before you finalise station flows."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Plumbers Licensing and Plumbing Standards Regulations 2000 (WA)"
+    url: "https://www.legislation.wa.gov.au/legislation/statutes.nsf/main_mrtitle_2202_homepage.html"
+    provider: "Parliamentary Counsel's Office, Government of Western Australia"
+    type: government
+    cost: free
+    duration: "20 min for regulations 3, 4 and 9"
+    whyGood: "The primary law, free, and the only place that draws the line precisely. Regulation 4 defines water supply plumbing work as supplying water from a water supply system to a point of discharge, and defines the point of discharge for an irrigation service as including the outlet of the backflow prevention device. That one sentence tells you exactly where the licensed plumber's job ends and yours begins. Regulation 9 sets a $5,000 fine for carrying out plumbing work without a licence."
+    waRelevance: wa-specific
+    waCaveat: "Consolidated as at 1 July 2026. Read the current HTML version linked from this page, not a cached copy — these regulations were amended by SL 2026/48 and SL 2026/95 during 2026, and the plumbing standards they adopt changed on 1 May 2026."
+    checkedOn: 2026-08-02
+  - title: "Plumbing work in your home"
+    url: "https://www.wa.gov.au/organisation/building-and-energy/plumbing-work-your-home"
+    provider: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The regulator's own list of what a WA homeowner may legally do to their own plumbing, and it is five items long — shower head, tap repair, cistern washer, filter cartridge, and a plunger down a blocked waste. Everything else is a licensed plumber. Page last updated 1 July 2026. It also explains the certificate of compliance a licensed plumbing contractor must give you within five working days of major work, which is the paperwork you want for the retic cut-in."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "NCC 2025 Volume Three, Part B5 — Cross-connection control"
+    url: "https://ncc.abcb.gov.au/editions/ncc-2025/adopted/volume-three/b-water-services/part-b5-cross-connection-control"
+    provider: "Australian Building Codes Board"
+    type: standard
+    cost: free
+    duration: "25 min"
+    whyGood: "The Plumbing Code of Australia, free to read online, and the document WA plumbing standards have adopted since 1 May 2026. Table B5D7 is the one to find — it rates a Type C irrigation system as medium hazard for zone protection and a Type D system injected with fertilisers, herbicides, nematicides, insecticides or weedicides as high hazard for both individual and zone protection. If you are even considering fertigation, read that row before you buy anything."
+    waRelevance: australian
+    waCaveat: "The NCC is adopted state by state with variations. In WA the plumbing standards are set by regulation 48 of the Plumbers Licensing and Plumbing Standards Regulations 2000, which adopts Section A and Parts B1, B2, B3, B5, B6, C1 and C2 of the Plumbing Code — so not every part of Volume Three applies here."
+    checkedOn: 2026-08-02
+  - title: "Landscape Irrigation Design Manual"
+    url: "https://www.rainbird.com/sites/default/files/media/documents/2018-02/IrrigationDesignManual.pdf"
+    provider: "Rain Bird"
+    type: book
+    cost: free
+    duration: "3 h+"
+    whyGood: "140 pages, free, and the closest thing the trade has to a textbook. Step seven sizes pipe and valves on the 1.5 m/s velocity rule; step six gives the rules for locating valves, mainlines and laterals, including the flat instruction that valves installed below ground must be housed in valve boxes and not buried directly in the ground; step eight sizes solenoid wire using equivalent circuit length and explains why sizing the worst-case circuit also sizes the common. It has worked exercises with solutions, which almost no free irrigation resource does."
+    waRelevance: overseas-adapt
+    waCaveat: "American, and dual-unit. Read the metric figures in brackets and ignore the imperial ones. Substitute Australian metric poly and AS/NZS 1477 PVC pressure pipe for the US pipe schedules — the internal diameters differ, so use your supplier's tables for the actual numbers and take only the method from here. It also assumes 117 V or 230 V power and a US electrical code; in WA the 240 V side of the controller is licensed electrical work."
+    checkedOn: 2026-08-02
+  - title: "How to wire a solenoid valve to an irrigation controller"
+    url: "https://www.holmanindustries.com.au/how-to-wire-a-solenoid-valve-to-an-irrigation-controller/"
+    provider: "Holman Industries"
+    type: article
+    cost: free
+    duration: "10 min"
+    whyGood: "An Australian brand publishing the two numbers that matter in metric — a cable size guide (0.5 mm to 50 m, 1.0 mm to 100 m, 1.5 mm to 200 m, 2.0 mm to 400 m) and the field rule that when making connections in the field you only ever use gel-filled or grease-filled connectors, because most field failures are caused by poor connections. It also walks the common wire and station wire terminations step by step, which is where beginners get confused."
+    waRelevance: australian
+    waCaveat: "This is an irrigation manufacturer's own page and it is written around Holman controllers and valves. The wiring logic and the connector rule are universal; check the cable size and maximum run length against your own controller and solenoid manufacturer's data, because solenoid current draw varies between brands and a less efficient solenoid needs heavier cable for the same distance."
+    checkedOn: 2026-08-02
+  - title: "Find a Waterwise Programs Specialist"
+    url: "https://www.waterwiseprograms.com.au/find-a-water-specialist"
+    provider: "Irrigation Australia / Water Corporation"
+    type: directory
+    cost: free
+    whyGood: "Filter by Irrigation Design Shop Member to find a business that will check your mainline sizing, station flows and valve schedule before you dig, or by Garden Irrigator Member to find someone to install or commission it. Run by Irrigation Australia as the national peak body and tied to the Water Corporation programs, so it is the one filter that separates endorsed businesses from the general retic trade."
+    waRelevance: wa-specific
+    waCaveat: "Endorsement means the business has been appointed to deliver the program, not that it is the best designer or the cheapest. It also lists members outside WA, so filter by postcode. A Waterwise Garden Irrigator is not a licensed plumbing contractor — check both licences if you want one business to do the cut-in as well as the retic."
+    checkedOn: 2026-08-02
+  - title: "Irrigation Australia — training and certification"
+    url: "https://www.irrigationaustralia.com.au/"
+    provider: "Irrigation Australia"
+    type: course
+    cost: paid
+    whyGood: "The national peak body and a registered training organisation (RTO 91313) with a Perth office. It runs the Certificate III in Irrigation Technology (AHC32424), the Certified Irrigation Designer program and the Certified Irrigation Installer program, plus electrofusion and butt welding training for polyethylene pipe. If you decide partway through this mini-course that you want to design retic properly rather than once, this is where the trade actually learns it."
+    waRelevance: australian
+    waCaveat: "Course fees are quoted per course on enquiry and are not published as a single price, so ask for a current quote from the Perth office. The free alternative that covers most of the same design ground is the Rain Bird Landscape Irrigation Design Manual listed above — it will not give you a qualification, but it will teach you the method."
+    checkedOn: 2026-08-02
+  - title: "Before You Dig Australia"
+    url: "https://www.byda.com.au/"
+    provider: "Before You Dig Australia"
+    type: tool
+    cost: free
+    whyGood: "Free, and the only sensible first step before you open a mainline trench across a block you did not build. You register, draw your work area, and asset owners email you their plans. On a Perth renovation the things that hurt are the unmarked consumer mains to a shed, the gas service, and the NBN lead-in — none of which are on your title documents. Lodge it before you order pipe, not the morning you start digging."
+    waRelevance: australian
+    waCaveat: "BYDA returns plans from participating asset owners only, and the plans show approximate positions. They are not a substitute for hand-digging or vacuum excavation to expose a service before you trench across it, and they will not show private cabling installed by a previous owner."
+    checkedOn: 2026-08-02
+  - title: "Electrical licensing in Western Australia"
+    url: "https://www.wa.gov.au/organisation/service-delivery/electrical-licensing"
+    provider: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The page that settles the question of whether you may run your own solenoid cable. Under the Electricity (Licensing) Regulations 1991, electrical work is work on installations supplied at a nominal pressure exceeding 50 volts AC or 120 volts DC. A 24 volt AC solenoid circuit sits below that; the 240 volt supply feeding your controller does not. It also links the online licence search so you can check an electrical contractor's licence before you book them."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+videos:
+  - youtubeId: "yw8cI9rpMK4"
+    title: "How to: Wire and install solenoid valves to a manifold system."
+    channel: "Pope Australia"
+    whyGood: "An Australian irrigation manufacturer showing a metric manifold being assembled and wired end to end — valve orientation, the manifold layout inside the box, the common wire shared across the valves, and the individual station wires. Watching a manifold go together once makes the wiring diagrams in this lesson obvious."
+    waRelevance: australian
+    waCaveat: "A manufacturer's demonstration built on a bench, so it shows the assembly and not the site work. It does not cover the WA backflow prevention requirement, the retic cut-in, or valve box placement and drainage — take those from the body of this lesson."
+    checkedOn: 2026-08-02
+regulations:
+  - claim: "In WA, water supply plumbing work is the installation, replacement, alteration, connection, disconnection, repair, testing, commissioning or maintenance of pipes, materials or components used for the supply of water from a water supply system to a point of discharge. For an irrigation service, the point of discharge includes the outlet of the backflow prevention device that the plumbing standards require to connect that service. Everything upstream of that outlet is licensed plumbing work."
+    source: "Plumbers Licensing and Plumbing Standards Regulations 2000 (WA), regulation 4"
+    sourceUrl: "https://www.legislation.wa.gov.au/legislation/statutes.nsf/main_mrtitle_2202_homepage.html"
+    checkedOn: 2026-08-02
+  - claim: "A person must not carry out plumbing work of any kind except in accordance with a licence or permit that authorises it. The penalty is a fine of $5,000."
+    source: "Plumbers Licensing and Plumbing Standards Regulations 2000 (WA), regulation 9(1)"
+    sourceUrl: "https://www.legislation.wa.gov.au/legislation/statutes.nsf/main_mrtitle_2202_homepage.html"
+    checkedOn: 2026-08-02
+  - claim: "The only plumbing work a WA homeowner or occupier may carry out themselves is maintenance, repair or replacement of a shower head; maintenance or repair of a tap other than a thermostatic mixing tap; replacement of a cistern washer; replacement of a water filter cartridge; and clearing a blocked fixture or waste pipe with a plunger. All other water supply, sanitary and drainage plumbing work must be carried out by a licensed plumber or permit-holder. Page last updated 1 July 2026."
+    source: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    sourceUrl: "https://www.wa.gov.au/organisation/building-and-energy/plumbing-work-your-home"
+    checkedOn: 2026-08-02
+  - claim: "Water Corporation's Backflow Prevention Policy requires the installation of approved backflow prevention containment devices at the boundary of every water service connection to a property, including fire services. The requirement is supported by regulations 42 and 43 of the Water Services Regulations 2013, and Water Corporation can serve an order on an owner or occupier to install backflow devices and can restrict or disconnect a water service to protect the drinking water supply."
+    source: "Water Corporation, Building and Plumbing Handbook, sections 4.2 and 4.5"
+    sourceUrl: "https://pw-cdn.watercorporation.com.au/-/media/watercorp/documents/developing-and-building/building/building-and-plumbing-handbook.pdf"
+    checkedOn: 2026-08-02
+  - claim: "Work related to the installation of backflow devices is plumbing work covered by the Plumbing Regulations, and only licensed plumbers who are qualified to install, test and certify backflow prevention devices are permitted to carry out such works. A licensed plumbing contractor must install, commission and repair all backflow prevention devices."
+    source: "Water Corporation, Building and Plumbing Handbook section 4.4, and Installing a backflow prevention device"
+    sourceUrl: "https://www.watercorporation.com.au/Developing-and-building/Building/Backflow-prevention/Installation-of-a-backflow-prevention-device"
+    checkedOn: 2026-08-02
+  - claim: "Testable backflow prevention devices must be installed at the property boundary on high or medium risk properties. They must be tested at commissioning, after any maintenance, and every 12 months by a licensed plumbing contractor permitted to test them, with the test report submitted to Water Corporation online no later than 5 working days after the test."
+    source: "Water Corporation, Building and Plumbing Handbook, section 4.6"
+    sourceUrl: "https://pw-cdn.watercorporation.com.au/-/media/watercorp/documents/developing-and-building/building/building-and-plumbing-handbook.pdf"
+    checkedOn: 2026-08-02
+  - claim: "Installing a containment backflow prevention device at the boundary does not eliminate the need for zone and individual backflow prevention devices that may be required under plumbing standards. Water Corporation does not manage zone or individual backflow protection and does not accept test reports for those devices."
+    source: "Water Corporation, Building and Plumbing Handbook, sections 4.4 and 4.6"
+    sourceUrl: "https://pw-cdn.watercorporation.com.au/-/media/watercorp/documents/developing-and-building/building/building-and-plumbing-handbook.pdf"
+    checkedOn: 2026-08-02
+  - claim: "Under NCC 2025 Volume Three table B5D7, a Type C irrigation system is rated medium hazard for the purpose of zone protection, and a Type D irrigation system injected with fertilisers, herbicides, nematicides, insecticides or weedicides is rated high hazard for the purposes of both individual and zone protection. External hose taps with no hazards within 18 metres are rated low hazard for individual protection."
+    source: "Australian Building Codes Board, National Construction Code 2025 Volume Three, Part B5"
+    sourceUrl: "https://ncc.abcb.gov.au/editions/ncc-2025/adopted/volume-three/b-water-services/part-b5-cross-connection-control"
+    checkedOn: 2026-08-02
+  - claim: "The plumbing standards applying to plumbing work in WA are drawn from the Plumbing Code of Australia, which regulation 3(1) now defines as Volume 3 of the National Construction Code 2025. Regulation 116, inserted by SL 2026/48, confirms that the standards changed on 1 May 2026 and that work commenced but not completed before that date stays under the standards in force when it started."
+    source: "Plumbers Licensing and Plumbing Standards Regulations 2000 (WA), regulations 3(1), 48 and 116"
+    sourceUrl: "https://www.legislation.wa.gov.au/legislation/statutes.nsf/main_mrtitle_2202_homepage.html"
+    checkedOn: 2026-08-02
+  - claim: "Electrical work in WA is defined under the Electricity (Licensing) Regulations 1991 as work on an electrical installation, machine, appliance or equipment supplied at a nominal pressure exceeding 50 volts alternating current or 120 volts direct current, and may only be carried out by licensed electrical contractors and electricians. A 24 volt AC solenoid circuit falls below that threshold; a new 240 volt outdoor power point for the controller does not."
+    source: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    sourceUrl: "https://www.wa.gov.au/organisation/service-delivery/electrical-licensing"
+    checkedOn: 2026-08-02
+---
+
+Everything in the first five irrigation lessons happened on paper. This one gets
+buried. If the mainline runs where the alfresco slab is going, or the valves end
+up under 90 square metres of limestone paving, you will not find out for two
+years — and then it costs four figures to find out. A legal line also runs through
+this lesson, so it goes first: part of this work is not yours to do, and it is the
+part that protects the drinking water supply.
+
+## Where the licensed trade starts and stops
+
+Regulation 4 of the Plumbers Licensing and Plumbing Standards Regulations 2000
+defines water supply plumbing work as supplying water **from a water supply system
+to a point of discharge** — and for an irrigation service it defines that point of
+discharge as including *the outlet of the backflow prevention device* required
+under the plumbing standards. That draws the line precisely.
+
+| Task | Who |
+| --- | --- |
+| Cutting into the service line downstream of the meter | Licensed plumbing contractor |
+| Isolating valve and the backflow prevention device | Licensed plumbing contractor |
+| Mainline, valve manifolds, solenoids, wiring, laterals, heads | You |
+| A new 240 V weatherproof power point for the controller | Licensed electrical contractor |
+| Pulling 24 V solenoid cable | You |
+
+Unlicensed plumbing work carries a **$5,000 fine** under regulation 9(1), and the
+list of plumbing work a WA homeowner may legally do on their own home is five
+items long — shower head, tap repair, cistern washer, filter cartridge, plunger.
+Retic cut-ins are not on it.
+
+In Perth the trade calls this job a **retic cut-in**: the plumber exposes the
+copper service downstream of your meter, cuts in a tee, and brings up a stub
+fitted with an isolating ball valve and a dual check valve. Book it early. It
+typically sits two to three weeks out in a plumber's diary, and everything
+downstream of that stub waits on it.
+
+## Backflow prevention is two obligations, not one
+
+**Containment at the boundary.** Water Corporation's Backflow Prevention Policy
+requires an approved containment device at the boundary of every water service
+connection, backed by regulations 42 and 43 of the Water Services Regulations
+2013. Water Corporation can order you to install one and can restrict or
+disconnect your supply if you do not. Your risk rating — high, medium or low — is
+assigned at building approval. High and medium properties get a **testable**
+device: tested at commissioning, after any maintenance, and **every 12 months** by
+a licensed plumbing contractor, with the report lodged within five working days.
+
+**Protection of the irrigation service itself.** A containment device *does not*
+remove the need for zone and individual protection under the plumbing standards,
+and Water Corporation does not manage those — they sit with your plumber and the
+Plumbing Code. Under NCC 2025 table B5D7 a Type C irrigation system is **medium
+hazard** for zone protection, and a Type D system, injected with fertilisers,
+herbicides, nematicides, insecticides or weedicides, is **high hazard**.
+
+Read that last one twice. A fertiliser injector changes the hazard class of the
+whole service, and high hazard means a testable device with an annual test forever.
+Decide about fertigation now, and price both before you fall in love with the idea.
+
+Two more that quietly bite in Perth:
+
+- **Never cross-connect a bore to the scheme supply.** A bore pump running above
+  main pressure pushes bore water backwards into the drinking water supply. That
+  is backpressure backflow, exactly what the policy exists to stop. Bore and scheme
+  retic stay on separate pipework.
+- **Backflow devices eat pressure.** Water Corporation says so directly. The figure
+  you measured in [Irrigation 2](/curriculum/build/irrigation-water-source/)
+  predates the device. Re-measure at the stub once the plumber leaves and check
+  your station flows still work.
+
+## What a professional does at this stage
+
+They walk the site with the concept plan and the paving setout in hand and route
+the mainline **around** every future hard surface before a trench is opened. Not
+because pipe under paving fails more often — it does not — but because the one time
+it does, the repair is a demolition job.
+
+Then they sleeve. Every crossing of a future path, driveway, slab or wall gets an
+oversized conduit — 100 mm stormwater pipe is the usual choice — with a draw string
+in it, both ends marked with a star picket, before the base goes in. A sleeve costs
+about $15 now; retrofitting one through a finished driveway costs several hundred
+and looks like it. They over-provide on everything that cannot be added later: a
+spare sleeve, two spare cores, one spare station on the controller.
+
+## Sizing the mainline
+
+Size the mainline on **velocity**, not on whether water reaches the far end. The
+Rain Bird manual's working limit is **1.5 metres per second**. Above that you get
+friction loss you did not plan for, plus water hammer — the bang when a solenoid
+shuts and a moving column of water stops in about 50 milliseconds. Water hammer is
+what splits solvent joints and cracks valve bodies eighteen months after handover.
+
+Indicative maximum flows at 1.5 m/s, using typical internal diameters:
+
+| Nominal pipe | Approx. internal diameter | Max flow at 1.5 m/s |
+| --- | --- | --- |
+| 19 mm poly | ~16 mm | ~18 L/min |
+| 25 mm poly | ~21.5 mm | ~33 L/min |
+| 32 mm poly | ~27.5 mm | ~53 L/min |
+| 40 mm poly | ~34.5 mm | ~84 L/min |
+
+Internal diameter changes with pressure class, so confirm against your supplier's
+table. Size for your **largest station flow** from
+[Irrigation 3](/curriculum/build/irrigation-hydrozoning-and-stations/), then go up
+one size if the block is long. Oversized mainline is the cheapest insurance on the
+job; undersized mainline is a fault you cannot tune out at the controller.
+
+Metric **poly** with barbed or compression fittings is the Perth domestic default —
+flexible, forgiving of sand movement, repairable wet. **PVC pressure pipe** to
+AS/NZS 1477, solvent-welded, is stiffer and cheaper in larger sizes, but a bad
+solvent joint is a slow leak you will never find. Either way buy pressure-rated
+pipe: black poly sold for drainage is not the same product.
+
+## Valve boxes
+
+The Rain Bird manual states it flatly — valves installed below ground **must be
+housed in valve boxes and not buried directly in the ground**. A buried solenoid
+is a fault you will excavate a lawn to find.
+
+Group two to four valves on a manifold in one rectangular box, then place it:
+
+- **Not under future paving, decking, a slab or a raised bed**, and not in open
+  lawn where the mower scalps the lid. Check the setout, not what is there now.
+- Against a bed edge, beside a downpipe, in the side access — somewhere a person
+  can kneel with a spanner in ten years.
+- **Bedded on 100 mm of blue metal, never sand.** A box bedded on Perth sand fills
+  within two summers and you will be scooping it out with a jar lid to reach a
+  solenoid. Keep solenoid tops above the gravel line, and put a paver under each
+  valve so the manifold does not sink.
+
+Set the lid flush or 10 mm proud, number it with the stations inside, and coil a
+300 mm service loop of cable in the box so a solenoid can be swapped without
+stretching the wire.
+
+## Solenoid wiring
+
+Solenoids run at 24 V AC — below the 50 V AC threshold in the Electricity
+(Licensing) Regulations 1991, so pulling solenoid cable is not licensed electrical
+work in WA. The controller's 240 V supply is another matter: if there is no
+weatherproof outdoor power point already, a licensed electrical contractor
+installs it. Power and water in a garden is not where you save $250.
+
+Each valve needs two conductors — its own station wire, and the **common**, shared
+by every valve and returned to the controller. Use **multi-core direct-burial
+irrigation cable**, not figure-8, not TPS. Holman's published size guide is 0.5 mm
+to 50 m, 1.0 mm to 100 m, 1.5 mm to 200 m and 2.0 mm to 400 m; measure the cable
+route, not the straight line.
+
+Four rules separate a system that lasts from one that does not:
+
+1. **Gel-filled or grease-filled direct-burial connectors only.** Holman's own line
+   is that most field failures come from poor connections. Insulation tape is not
+   a joint. Plain twist connectors are not a joint.
+2. **Every joint lives inside a valve box** — never a splice loose in a trench.
+3. **Pull at least two spare cores** and cap them in the furthest box. A broken
+   core with no spare means trenching the whole run again.
+4. **Run the cable in the mainline trench**, beside the pipe and through the same
+   sleeves. Photograph every trench open, tape measure in shot, before backfilling.
+
+Pick a colour convention — white for common is usual — and record which colour goes
+to which station.
+
+## Digging safely on a block someone else built
+
+Lodge a free [Before You Dig Australia](https://www.byda.com.au/) enquiry before
+you open a trench. On a renovation what hurts is the unmarked consumer mains to a
+shed, the gas service and the NBN lead-in, and plans show approximate positions
+only — hand-dig to expose anything you cross.
+
+Perth's other trenching hazard is limestone. Cutting limestone, concrete or pavers
+dry releases respirable crystalline silica. Cut wet, outdoors and upwind, in a
+properly fitted P2 respirator, with everyone else clear. Never dry-cut with an
+angle grinder because it is quicker.
+
+## What this feeds into next
+
+You now have a mainline route, a pipe size, valve box positions and a cable
+schedule. The next lesson takes the station numbers off your manifolds and
+programs them into a controller that waters on your rostered days, inside the
+legal windows, and shuts down for the winter sprinkler ban.
+

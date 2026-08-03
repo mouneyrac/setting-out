@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7FC4E8"/>
+      <stop offset="100%" stop-color="#CDEBF7"/>
+    </linearGradient>
+    <radialGradient id="sun">
+      <stop offset="0%" stop-color="#FFF8E2" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FFEBB0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#sky)"/>
+
+  <!-- sun -->
+  <circle cx="392" cy="132" r="96" fill="url(#sun)"/>
+  <circle cx="392" cy="132" r="38" fill="#FFF8E2"/>
+
+  <!-- ground -->
+  <path d="M0 372 Q 128 350 256 364 T 512 356 L512 512 L0 512 Z" fill="#6FA860"/>
+  <path d="M0 412 Q 140 396 280 408 T 512 402 L512 512 L0 512 Z" fill="#4E7F49"/>
+
+  <!-- the seedling: one plant, room to grow -->
+  <path d="M256 436 V 300" stroke="#2C5240" stroke-width="20" stroke-linecap="round" fill="none"/>
+  <path d="M256 322 q -86 -44 -100 -116 q 86 8 100 116 z" fill="#6FA860"/>
+  <path d="M256 348 q 86 -38 100 -108 q -86 4 -100 108 z" fill="#8FC47A"/>
+
+  <!-- setting-out peg and string line, the thing the name refers to -->
+  <path d="M118 436 V 388" stroke="#E2542B" stroke-width="14" stroke-linecap="round"/>
+  <path d="M394 436 V 388" stroke="#E2542B" stroke-width="14" stroke-linecap="round"/>
+  <path d="M118 396 H 394" stroke="#E2542B" stroke-width="9" stroke-linecap="round"/>
+</svg>

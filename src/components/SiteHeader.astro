@@ -1,0 +1,151 @@
+---
+import SiteSearch from './SiteSearch.astro';
+
+const path = Astro.url.pathname;
+
+// Two items, deliberately. Only the course is a step in the journey; everything
+// else is a library you dip into at a moment of need, and it lives one click
+// away rather than competing for attention on the way in.
+const nav = [
+  { href: '/curriculum/', label: 'Course' },
+  { href: '/library/', label: 'Library' },
+];
+
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+
+<header class="sticky top-0 z-40 bg-surface border-b-2 border-edge">
+  <div class="mx-auto max-w-[84rem] px-4 sm:px-6">
+    <div class="flex items-center gap-3 h-16">
+      <a href="/" class="flex items-center gap-2.5 shrink-0 group">
+        <span
+          class="w-10 h-10 rounded-2xl grid place-items-center shrink-0 transition-transform duration-300 group-hover:-rotate-6"
+          style="background: linear-gradient(160deg, var(--sky-high), var(--sky-low));"
+        >
+          <svg viewBox="0 0 32 32" class="w-7 h-7" aria-hidden="true">
+            <path d="M16 27V14" stroke="var(--leaf-deep)" stroke-width="3" stroke-linecap="round" fill="none"></path>
+            <path d="M16 17c-1-6-6-8-9-8 0 6 4 9 9 8z" fill="var(--leaf)"></path>
+            <path d="M16 20c1-5 5-7 8-7 0 5-3 8-8 7z" fill="var(--leaf)"></path>
+          </svg>
+        </span>
+        <span class="font-display font-900 text-xl leading-none tracking-tight">
+          Setting <span class="text-paw">Out</span>
+        </span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-1 ml-3" aria-label="Main">
+        {
+          nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'font-display font-700 text-[0.95rem] px-3.5 py-2 rounded-full transition-colors',
+                isActive(item.href)
+                  ? 'bg-[color-mix(in_srgb,var(--leaf)_20%,transparent)] text-leaf'
+                  : 'text-soft hover:text-ink hover:bg-surface-2',
+              ]}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="ml-auto flex items-center gap-2">
+        <SiteSearch />
+
+        {/*
+          Signed out, "My garden" is a dead end — it bounces you to a sign-in
+          wall from prime header space, on a site whose whole premise is that
+          no account is needed to read a word of it. So the slot matches the
+          value it can actually deliver right now: a quiet "Sign in" until
+          there is a garden to show, and a button once there is.
+        */}
+        <a
+          href="/sign-in/"
+          id="account-link"
+          class="text-sm text-soft hover:text-paw transition-colors px-2 hidden sm:inline"
+        >
+          Sign in
+        </a>
+        <button
+          id="theme-toggle"
+          type="button"
+          class="w-10 h-10 grid place-items-center rounded-full border-2 border-edge bg-surface hover:border-[var(--leaf)] transition-colors"
+          aria-label="Switch between day and night"
+        >
+          <svg viewBox="0 0 20 20" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="10" cy="10" r="3.6"></circle>
+            <path d="M10 1.6v1.8M10 16.6v1.8M1.6 10h1.8M16.6 10h1.8M4.1 4.1l1.3 1.3M14.6 14.6l1.3 1.3M15.9 4.1l-1.3 1.3M5.4 14.6l-1.3 1.3"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <nav class="md:hidden flex gap-1.5 -mx-1 px-1 pb-2.5 overflow-x-auto scroll-x" aria-label="Main, mobile">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class:list={[
+              'font-display font-700 text-sm px-3 py-1.5 rounded-full whitespace-nowrap border-2',
+              isActive(item.href)
+                ? 'border-[var(--leaf)] text-leaf'
+                : 'border-edge text-soft',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href="/sign-in/"
+        id="account-link-mobile"
+        class="font-display font-700 text-sm px-3 py-1.5 rounded-full whitespace-nowrap border-2 border-edge text-soft sm:hidden"
+      >
+        Sign in
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Flip the account slot to "My garden" once there is a garden to show.
+  //
+  // Cached in sessionStorage so this costs one request per tab, not one per
+  // page — and every page here is prerendered, so the header cannot know the
+  // answer at build time.
+  const links = [
+    document.getElementById('account-link'),
+    document.getElementById('account-link-mobile'),
+  ].filter(Boolean) as HTMLAnchorElement[];
+
+  if (links.length) {
+    const show = (signedIn: boolean) => {
+      if (!signedIn) return;
+      for (const link of links) {
+        link.href = '/my/';
+        link.textContent = 'My garden';
+        // Signed in, it earns the button treatment on desktop.
+        if (link.id === 'account-link') {
+          link.className = 'btn btn-ghost text-sm py-2 px-4 hidden sm:inline-flex';
+        }
+      }
+    };
+
+    const cached = sessionStorage.getItem('signed-in');
+    if (cached !== null) {
+      show(cached === '1');
+    } else {
+      fetch('/api/me')
+        .then((r) => r.json())
+        .then((me) => {
+          sessionStorage.setItem('signed-in', me.signedIn ? '1' : '0');
+          show(Boolean(me.signedIn));
+        })
+        .catch(() => undefined);
+    }
+  }
+</script>

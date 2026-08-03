@@ -1,0 +1,330 @@
+---
+import { eq } from 'drizzle-orm';
+import Base from '../../layouts/Base.astro';
+import GrowingGarden from '../../components/GrowingGarden.astro';
+import { getDb, getUser } from '../../lib/server';
+import { lessonProgress, propertyProfile } from '../../db/schema';
+import { lessonsByPhase, lessonUrl } from '../../lib/curriculum';
+
+export const prerender = false;
+
+const user = await getUser(Astro.request);
+if (!user) return Astro.redirect('/sign-in/');
+
+const db = getDb();
+const [progressRows, profileRows] = await Promise.all([
+  db
+    .select({ lessonId: lessonProgress.lessonId })
+    .from(lessonProgress)
+    .where(eq(lessonProgress.userId, user.id)),
+  db.select().from(propertyProfile).where(eq(propertyProfile.userId, user.id)).limit(1),
+]);
+
+const doneIds = new Set(progressRows.map((r) => r.lessonId));
+const profile = profileRows[0] ?? null;
+const groups = await lessonsByPhase();
+
+// A phase counts as grown once every lesson in it is ticked off.
+const phaseState = groups.map(({ phase, lessons }) => {
+  const done = lessons.filter((l) => doneIds.has(l.id)).length;
+  return { phase, lessons, done, total: lessons.length, complete: done === lessons.length };
+});
+
+const grownPhases = phaseState.filter((p) => p.complete).length;
+const totalDone = doneIds.size;
+const totalLessons = groups.reduce((n, g) => n + g.lessons.length, 0);
+
+// Where to pick up: first unfinished lesson in course order.
+const nextLesson = groups.flatMap((g) => g.lessons).find((l) => !doneIds.has(l.id));
+
+const firstName = (user.name ?? '').split(' ')[0] || 'there';
+
+const soilLabels: Record<string, string> = {
+  bassendean: 'Bassendean grey sand',
+  spearwood: 'Spearwood yellow sand',
+  karrakatta: 'Karrakatta — sand over limestone',
+  quindalup: 'Quindalup coastal calcareous sand',
+  unknown: 'Not identified yet',
+};
+---
+
+<Base title="My garden" description="Your progress, your block and your project workbook.">
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 72%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[84rem] px-4 sm:px-6 pt-10 pb-8">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="label">Welcome back</p>
+          <h1
+            class="mt-1.5 font-display font-900 leading-[1.08]"
+            style="font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);"
+          >
+            {firstName}'s garden
+          </h1>
+        </div>
+        <button type="button" id="sign-out" class="btn btn-ghost text-sm py-2 px-4">
+          Sign out
+        </button>
+      </div>
+
+      <div class="mt-7 grid gap-8 lg:grid-cols-[1fr_20rem] lg:gap-10 items-start">
+        <GrowingGarden grown={grownPhases} />
+
+        <div class="grid gap-3">
+          <div class="cutout p-5">
+            <p class="label">Lessons finished</p>
+            <p class="font-display font-900 text-5xl leading-none mt-1 text-leaf">
+              {totalDone}<span class="text-2xl text-soft">/{totalLessons}</span>
+            </p>
+            <div
+              class="mt-3 h-2.5 rounded-full overflow-hidden"
+              style="background: var(--surface-2);"
+              role="progressbar"
+              aria-valuenow={totalDone}
+              aria-valuemin="0"
+              aria-valuemax={totalLessons}
+            >
+              <div
+                class="h-full rounded-full"
+                style={`width: ${Math.round((totalDone / totalLessons) * 100)}%; background: var(--leaf);`}
+              >
+              </div>
+            </div>
+            <p class="note mt-2">
+              {grownPhases} of {groups.length} phases fully grown.
+            </p>
+          </div>
+
+          {
+            nextLesson ? (
+              <a href={lessonUrl(nextLesson)} class="cutout cutout-lift p-5">
+                <p class="label">Pick up where you left off</p>
+                <p class="font-display font-700 text-lg leading-tight mt-1.5">
+                  {nextLesson.data.title}
+                </p>
+                <p class="note mt-1">{nextLesson.data.timeEstimate}</p>
+              </a>
+            ) : (
+              <div class="cutout p-5">
+                <p class="label">Finished</p>
+                <p class="font-display font-700 text-lg leading-tight mt-1.5">
+                  Every lesson ticked off. Go and look at your actual garden.
+                </p>
+              </div>
+            )
+          }
+
+          <a href="/my/workbook/" class="cutout cutout-lift p-5">
+            <p class="label">Your project workbook</p>
+            <p class="font-display font-700 text-lg leading-tight mt-1.5">
+              The documents you have written so far
+            </p>
+            <p class="note mt-1">Assembles into one design package →</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Your block ──────────────────────────────────────────────────── -->
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 py-8">
+    <h2 class="font-display font-900 text-2xl sm:text-3xl">Your block</h2>
+    <p class="note mt-1 max-w-[64ch]">
+      Phase 3 asks for most of this on site. Recording it once means the rest of the course can talk
+      about your actual conditions instead of a generic Perth garden.
+    </p>
+
+    <form id="property-form" class="cutout p-5 sm:p-6 mt-4 grid gap-4 sm:grid-cols-2 max-w-[56rem]">
+      <div>
+        <label class="label block mb-1" for="suburb">Suburb</label>
+        <input
+          id="suburb"
+          name="suburb"
+          type="text"
+          value={profile?.suburb ?? ''}
+          class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+        />
+      </div>
+
+      <div>
+        <label class="label block mb-1" for="blockSizeM2">Block size (m²)</label>
+        <input
+          id="blockSizeM2"
+          name="blockSizeM2"
+          type="number"
+          min="0"
+          value={profile?.blockSizeM2 ?? ''}
+          class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+        />
+      </div>
+
+      <div>
+        <label class="label block mb-1" for="soilType">Soil type</label>
+        <select
+          id="soilType"
+          name="soilType"
+          class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+        >
+          {
+            Object.entries(soilLabels).map(([value, label]) => (
+              <option value={value} selected={(profile?.soilType ?? 'unknown') === value}>
+                {label}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="label block mb-1" for="gardenState">What is there now</label>
+        <select
+          id="gardenState"
+          name="gardenState"
+          class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+        >
+          {
+            [
+              ['renovating', 'An existing garden I am renovating'],
+              ['bare', 'Bare sand / new build'],
+              ['established', 'Established and mostly staying'],
+            ].map(([value, label]) => (
+              <option value={value} selected={(profile?.gardenState ?? 'renovating') === value}>
+                {label}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="label block mb-1" for="waterSource">Water source</label>
+        <select
+          id="waterSource"
+          name="waterSource"
+          class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+        >
+          {
+            [
+              ['scheme', 'Scheme water'],
+              ['bore', 'Garden bore'],
+              ['both', 'Both'],
+              ['none', 'No irrigation'],
+            ].map(([value, label]) => (
+              <option value={value} selected={(profile?.waterSource ?? 'scheme') === value}>
+                {label}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="label block mb-1" for="houseNumberLastDigit">
+          Last digit of your house number
+        </label>
+        <input
+          id="houseNumberLastDigit"
+          name="houseNumberLastDigit"
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          value={profile?.houseNumberLastDigit ?? ''}
+          class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+        />
+        <p class="note mt-1">This is what sets your rostered watering days.</p>
+      </div>
+
+      <div class="sm:col-span-2">
+        <label class="label block mb-1" for="notes">Anything else worth remembering</label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows="3"
+          class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5">{profile?.notes ?? ''}</textarea
+        >
+      </div>
+
+      <div class="sm:col-span-2 flex items-center gap-3">
+        <button type="submit" class="btn btn-primary text-sm py-2.5 px-5">Save my block</button>
+        <span class="note" id="property-status"></span>
+      </div>
+    </form>
+  </section>
+
+  <!-- ── Phase progress ──────────────────────────────────────────────── -->
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 py-8 pb-16">
+    <h2 class="font-display font-900 text-2xl sm:text-3xl">Phase by phase</h2>
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+      {
+        phaseState.map(({ phase, done, total, complete }) => (
+          <li class="list-none">
+            <a href={`/curriculum/${phase.slug}/`} class="cutout cutout-lift p-4 block h-full">
+              <div class="flex items-center gap-3">
+                <span
+                  class="w-10 h-10 rounded-full grid place-items-center font-display font-900 text-sm shrink-0 border-2"
+                  style={
+                    complete
+                      ? 'background: var(--leaf); border-color: var(--leaf); color: #FFFDF7;'
+                      : 'background: var(--surface); border-color: var(--edge-strong); color: var(--ink-soft);'
+                  }
+                >
+                  {complete ? '✓' : String(phase.number).padStart(2, '0')}
+                </span>
+                <span class="font-display font-700 leading-tight">{phase.title}</span>
+              </div>
+              <div
+                class="mt-3 h-2 rounded-full overflow-hidden"
+                style="background: var(--surface-2);"
+              >
+                <div
+                  class="h-full rounded-full"
+                  style={`width: ${Math.round((done / total) * 100)}%; background: var(--leaf);`}
+                />
+              </div>
+              <p class="note mt-1.5">
+                {done} of {total} lessons
+              </p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <script>
+    document.getElementById('sign-out')?.addEventListener('click', async () => {
+      await fetch('/api/auth/sign-out', { method: 'POST' });
+      // Or the header keeps offering "My garden" to someone who just left.
+      try {
+        sessionStorage.removeItem('signed-in');
+      } catch {
+        /* No storage. The header re-checks on the next new tab anyway. */
+      }
+      window.location.href = '/';
+    });
+
+    const form = document.getElementById('property-form') as HTMLFormElement;
+    const status = document.getElementById('property-status') as HTMLElement;
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      status.textContent = 'Saving…';
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      const response = await fetch('/api/property', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      status.textContent = response.ok ? 'Saved.' : 'Could not save — please try again.';
+      if (response.ok) setTimeout(() => (status.textContent = ''), 2500);
+    });
+  </script>
+</Base>

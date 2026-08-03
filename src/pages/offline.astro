@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="No signal"
+  description="You are offline. Pages you have already opened are still readable."
+>
+  <section class="mx-auto max-w-[46rem] px-4 sm:px-6 py-20 text-center">
+    <span class="text-6xl" aria-hidden="true">🌥️</span>
+    <h1
+      class="mt-5 font-display font-900 leading-[1.08]"
+      style="font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem);"
+    >
+      No signal out here
+    </h1>
+    <p class="mt-4 leading-relaxed text-soft">
+      This page has not been opened on this device yet, so there is no copy saved. Anything you have
+      already read is still available offline — including the checklists, which are the part you
+      actually need while standing in the garden.
+    </p>
+
+    <div class="flex flex-wrap gap-3 justify-center mt-7">
+      <button type="button" class="btn btn-primary" onclick="location.reload()">Try again</button>
+      <a href="/curriculum/" class="btn btn-ghost">Back to the path</a>
+    </div>
+
+    <p class="note mt-7">
+      Tip: open the phase you are working on while you still have signal, and it stays readable out
+      there.
+    </p>
+  </section>
+</Base>

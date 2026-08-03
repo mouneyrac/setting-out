@@ -1,0 +1,55 @@
+{
+  "name": "Setting Out — learn landscaping in Perth",
+  "short_name": "Setting Out",
+  "description": "The professional landscaping process, applied to your own Perth block. Free and open source.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FBF3E4",
+  "theme_color": "#7FC4E8",
+  "lang": "en-AU",
+  "dir": "ltr",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Can I water today?",
+      "short_name": "Watering days",
+      "url": "/reference/sprinkler-roster/",
+      "description": "Your rostered days, the legal windows, and the winter ban"
+    },
+    {
+      "name": "The course",
+      "short_name": "Course",
+      "url": "/curriculum/",
+      "description": "All eleven phases"
+    },
+    {
+      "name": "My garden",
+      "short_name": "My garden",
+      "url": "/my/",
+      "description": "Your progress and workbook"
+    }
+  ]
+}

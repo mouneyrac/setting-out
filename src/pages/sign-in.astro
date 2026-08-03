@@ -1,0 +1,230 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Sign in"
+  description="Sign in to track your progress, grow your garden and keep your project workbook. Everything on this site is readable without an account."
+>
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 70%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[40rem] px-4 sm:px-6 pt-12 pb-16">
+      <p class="label">Your garden</p>
+      <h1
+        class="mt-2 font-display font-900 leading-[1.08]"
+        style="font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem);"
+      >
+        Keep your progress and your workbook
+      </h1>
+      <p class="mt-4 leading-relaxed text-soft">
+        An account does three things: it grows your garden as you finish phases, it saves the
+        documents you write for each deliverable, and it remembers your block. Nothing on this site
+        is hidden behind it — every lesson is readable signed out.
+      </p>
+
+      <div class="cutout p-5 sm:p-7 mt-7">
+        <div class="flex gap-2 mb-5" role="tablist">
+          <button
+            type="button"
+            id="tab-signin"
+            role="tab"
+            aria-selected="true"
+            class="btn btn-primary text-sm py-2 px-4"
+          >
+            Sign in
+          </button>
+          <button
+            type="button"
+            id="tab-signup"
+            role="tab"
+            aria-selected="false"
+            class="btn btn-ghost text-sm py-2 px-4"
+          >
+            Create an account
+          </button>
+        </div>
+
+        <form id="auth-form" class="grid gap-4" novalidate>
+          <div id="name-field" hidden>
+            <label class="label block mb-1" for="name">What should we call you?</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+            />
+          </div>
+
+          <div>
+            <label class="label block mb-1" for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+            />
+          </div>
+
+          <div>
+            <label class="label block mb-1" for="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              minlength="10"
+              autocomplete="current-password"
+              class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+            />
+            <p class="note mt-1" id="pw-hint">At least 10 characters.</p>
+          </div>
+
+          <p
+            id="auth-error"
+            class="rounded-xl px-3.5 py-2.5 leading-snug"
+            style="background: color-mix(in srgb, var(--paw) 12%, var(--surface)); border: 2px solid var(--paw);"
+            hidden
+            role="alert"
+          >
+          </p>
+
+          <button type="submit" class="btn btn-primary justify-center" id="auth-submit">
+            <span id="auth-submit-label">Sign in</span>
+          </button>
+
+          <p class="note text-center" id="forgot-link" hidden>
+            <a href="/forgot-password/" class="underline underline-offset-2 hover:text-paw">
+              Forgotten your password?
+            </a>
+          </p>
+        </form>
+      </div>
+
+      <p class="note mt-5">
+        Your email is used to sign you in and nothing else. There is no mailing list, no analytics
+        on your account, and the whole thing is open source if you want to check.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('auth-form') as HTMLFormElement;
+    const tabIn = document.getElementById('tab-signin') as HTMLButtonElement;
+    const tabUp = document.getElementById('tab-signup') as HTMLButtonElement;
+    const nameField = document.getElementById('name-field') as HTMLElement;
+    const nameInput = document.getElementById('name') as HTMLInputElement;
+    const password = document.getElementById('password') as HTMLInputElement;
+    const pwHint = document.getElementById('pw-hint') as HTMLElement;
+    const errorBox = document.getElementById('auth-error') as HTMLElement;
+    const submitLabel = document.getElementById('auth-submit-label') as HTMLElement;
+    const submit = document.getElementById('auth-submit') as HTMLButtonElement;
+
+    let mode: 'signin' | 'signup' = 'signin';
+
+    // Only offer the reset link when a reset email can actually be sent.
+    fetch('/api/auth-config')
+      .then((r) => r.json())
+      .then((config) => {
+        if (config.passwordReset) {
+          const link = document.getElementById('forgot-link');
+          if (link) link.hidden = false;
+        }
+      })
+      .catch(() => undefined);
+
+    if (new URLSearchParams(location.search).get('reset') === '1') {
+      errorBox.textContent = 'Password changed. Sign in with your new one.';
+      errorBox.hidden = false;
+      errorBox.style.background = 'color-mix(in srgb, var(--leaf) 14%, var(--surface))';
+      errorBox.style.borderColor = 'var(--leaf)';
+    }
+
+    const setMode = (next: 'signin' | 'signup') => {
+      mode = next;
+      const up = next === 'signup';
+      nameField.hidden = !up;
+      nameInput.required = up;
+      password.autocomplete = up ? 'new-password' : 'current-password';
+      pwHint.hidden = !up;
+      submitLabel.textContent = up ? 'Create account' : 'Sign in';
+      tabIn.className = `btn text-sm py-2 px-4 ${up ? 'btn-ghost' : 'btn-primary'}`;
+      tabUp.className = `btn text-sm py-2 px-4 ${up ? 'btn-primary' : 'btn-ghost'}`;
+      tabIn.setAttribute('aria-selected', String(!up));
+      tabUp.setAttribute('aria-selected', String(up));
+      errorBox.hidden = true;
+    };
+
+    tabIn.addEventListener('click', () => setMode('signin'));
+    tabUp.addEventListener('click', () => setMode('signup'));
+
+    const fail = (message: string) => {
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+      submit.disabled = false;
+      submitLabel.textContent = mode === 'signup' ? 'Create account' : 'Sign in';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorBox.hidden = true;
+      submit.disabled = true;
+      submitLabel.textContent = 'Just a moment…';
+
+      const email = (document.getElementById('email') as HTMLInputElement).value.trim();
+      const pw = password.value;
+
+      if (mode === 'signup' && pw.length < 10) {
+        fail('Passwords need to be at least 10 characters.');
+        return;
+      }
+
+      const endpoint = mode === 'signup' ? '/api/auth/sign-up/email' : '/api/auth/sign-in/email';
+      const body =
+        mode === 'signup'
+          ? { email, password: pw, name: nameInput.value.trim() || email.split('@')[0] }
+          : { email, password: pw };
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        if (response.ok) {
+          // So the header shows "My garden" straight away rather than after a
+          // stale cached "signed out" expires with the tab.
+          try {
+            sessionStorage.setItem('signed-in', '1');
+          } catch {
+            /* No storage. The header will ask the server instead. */
+          }
+          window.location.href = '/my/';
+          return;
+        }
+
+        const data = await response.json().catch(() => ({}) as Record<string, unknown>);
+        const message = typeof data.message === 'string' ? data.message : '';
+
+        if (response.status === 401 || /invalid/i.test(message)) {
+          fail('That email and password do not match an account.');
+        } else if (/exists|already/i.test(message)) {
+          fail('There is already an account with that email — try signing in instead.');
+        } else {
+          fail(message || 'That did not work. Please try again.');
+        }
+      } catch {
+        fail('Could not reach the server. Check your connection and try again.');
+      }
+    });
+  </script>
+</Base>

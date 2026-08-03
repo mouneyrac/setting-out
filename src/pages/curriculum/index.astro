@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import GardenPath from '../../components/GardenPath.astro';
+import { lessonsByPhase, estimateHours } from '../../lib/curriculum';
+
+const groups = await lessonsByPhase();
+const counts = new Map(groups.map((g) => [g.phase.number, g.lessons.length]));
+const totalLessons = groups.reduce((n, g) => n + g.lessons.length, 0);
+const totalHours = groups.reduce((n, g) => n + estimateHours(g.lessons), 0);
+---
+
+<Base
+  title="The path"
+  description="Eleven phases and 91 lessons covering the full professional landscaping process for Perth and Western Australian conditions — from the first client call through to long-term maintenance."
+>
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 78%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[84rem] px-4 sm:px-6 pt-10 pb-6">
+      <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+        <h1 class="font-display font-900 leading-tight" style="font-size: clamp(1.9rem, 1.4rem + 1.9vw, 2.75rem);">
+          The course
+        </h1>
+        <p class="label">
+          {groups.length} phases · {totalLessons} lessons · ≈{totalHours} hours
+        </p>
+      </div>
+
+      <p class="mt-3 max-w-[64ch] leading-relaxed text-soft">
+        Each phase produces something real — a brief, a survey, a plan, a price, a built garden, a
+        maintenance calendar. Walk them in order on your own block and the documents stack up into a
+        professional design package for your property.
+      </p>
+
+      <div class="sign mt-5 max-w-[76ch]">
+        <p class="text-[0.98rem] leading-relaxed">
+          <strong class="font-display">Do not skip ahead to the pretty drawings.</strong>
+          Phases 3 and 4 — site analysis and approvals — are where the expensive surprises live: the
+          sewer you cannot build over, the retaining wall the council will make you take out, the
+          watertable under your new tree. They are dull and they save projects.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[54rem] px-4 sm:px-6 pb-16">
+    <GardenPath counts={counts} />
+  </section>
+</Base>

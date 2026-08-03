@@ -1,0 +1,171 @@
+---
+import { eq } from 'drizzle-orm';
+import Base from '../../layouts/Base.astro';
+import { getDb, getUser } from '../../lib/server';
+import { workbookEntry } from '../../db/schema';
+import { allLessons, lessonUrl } from '../../lib/curriculum';
+import { getPhase } from '../../data/phases';
+
+export const prerender = false;
+
+const user = await getUser(Astro.request);
+if (!user) return Astro.redirect('/sign-in/');
+
+const rows = await getDb()
+  .select({
+    workbookKey: workbookEntry.workbookKey,
+    content: workbookEntry.content,
+    updatedAt: workbookEntry.updatedAt,
+  })
+  .from(workbookEntry)
+  .where(eq(workbookEntry.userId, user.id));
+
+const byKey = new Map(rows.map((r) => [r.workbookKey, r]));
+const lessons = await allLessons();
+
+/** Every deliverable in course order, with whatever has been written for it. */
+const sections = lessons
+  .filter((l) => l.data.deliverable)
+  .map((lesson) => {
+    const deliverable = lesson.data.deliverable!;
+    const entry = byKey.get(deliverable.workbookKey);
+    const content = entry?.content?.trim() ?? '';
+    return {
+      lesson,
+      phase: getPhase(lesson.data.phase),
+      deliverable,
+      content,
+      written: content.length > 0,
+      updatedAt: entry?.updatedAt ?? null,
+    };
+  });
+
+const writtenCount = sections.filter((s) => s.written).length;
+---
+
+<Base
+  title="Project workbook"
+  description="Every document you have written for your own property, assembled in order."
+>
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 70%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[60rem] px-4 sm:px-6 pt-10 pb-8">
+      <nav class="label flex items-center gap-2" aria-label="Breadcrumb">
+        <a href="/my/" class="hover:text-paw transition-colors">My garden</a>
+        <span aria-hidden="true">›</span>
+        <span>Workbook</span>
+      </nav>
+
+      <h1
+        class="mt-4 font-display font-900 leading-[1.08]"
+        style="font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);"
+      >
+        Your project workbook
+      </h1>
+      <p class="mt-4 leading-relaxed text-soft max-w-[64ch]">
+        Every deliverable in the course, in the order you produce them. Filled in, these are a
+        professional landscape design package for your own property — the thing you would otherwise
+        have paid a designer for, except you understand every page of it.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-3 mt-6">
+        <span class="cutout px-4 py-1.5 text-sm font-display font-700">
+          {writtenCount} of {sections.length} written
+        </span>
+        <button type="button" id="download" class="btn btn-primary text-sm py-2.5 px-5">
+          Download as Markdown
+        </button>
+        <button type="button" id="print" class="btn btn-ghost text-sm py-2.5 px-5">Print</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[60rem] px-4 sm:px-6 pb-16">
+    <ol class="grid gap-4">
+      {
+        sections.map((s, i) => (
+          <li class="list-none">
+            <article
+              class:list={['cutout p-5 sm:p-6', !s.written && 'opacity-70']}
+              id={s.deliverable.workbookKey}
+            >
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span class="phase-badge">{String(i + 1).padStart(2, '0')}</span>
+                <div class="min-w-0 flex-1">
+                  <p class="label">
+                    Phase {String(s.phase.number).padStart(2, '0')} — {s.phase.title}
+                  </p>
+                  <h2 class="font-display font-700 text-xl sm:text-2xl leading-tight mt-0.5">
+                    {s.deliverable.title}
+                  </h2>
+                </div>
+              </div>
+
+              {s.written ? (
+                <>
+                  <p class="mt-4 leading-relaxed whitespace-pre-wrap">{s.content}</p>
+                  <p class="note mt-3">
+                    Last edited{' '}
+                    {s.updatedAt?.toLocaleDateString('en-AU', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                    })}{' '}
+                    ·{' '}
+                    <a
+                      href={lessonUrl(s.lesson)}
+                      class="underline underline-offset-2 hover:text-paw transition-colors"
+                    >
+                      edit in the lesson
+                    </a>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p class="mt-3 font-hand text-[1.05rem] leading-relaxed text-soft">
+                    {s.deliverable.prompt}
+                  </p>
+                  <a href={lessonUrl(s.lesson)} class="btn btn-ghost text-sm py-2 px-4 mt-4">
+                    Write this one →
+                  </a>
+                </>
+              )}
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <script is:inline define:vars={{ sections: sections.map((s) => ({ phase: s.phase.number, phaseTitle: s.phase.title, title: s.deliverable.title, prompt: s.deliverable.prompt, content: s.content })) }}>
+    document.getElementById('print')?.addEventListener('click', () => window.print());
+
+    document.getElementById('download')?.addEventListener('click', () => {
+      const lines = ['# Landscape project workbook', ''];
+      let phase = null;
+
+      for (const s of sections) {
+        if (s.phase !== phase) {
+          phase = s.phase;
+          lines.push(`## Phase ${String(s.phase).padStart(2, '0')} — ${s.phaseTitle}`, '');
+        }
+        lines.push(`### ${s.title}`, '');
+        lines.push(s.content ? s.content : `_Not written yet._\n\n> ${s.prompt}`, '');
+      }
+
+      const blob = new Blob([lines.join('\n')], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'landscape-project-workbook.md';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</Base>

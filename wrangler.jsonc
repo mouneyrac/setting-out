@@ -1,0 +1,40 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "learnlandscaping",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Unified entrypoint provided by @astrojs/cloudflare — works for both
+  // `astro dev` and the deployed Worker, so there is no build-order problem.
+  "main": "@astrojs/cloudflare/entrypoints/server",
+
+  // With the Astro Cloudflare adapter the build splits into dist/client
+  // (static assets) and dist/server (the Worker). Assets come from client.
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // Without this, `not_found_handling: 404-page` can answer a request that
+    // matches no static asset before the Worker ever runs — which is exactly
+    // what the account routes are. Force them to the Worker.
+    "run_worker_first": ["/my/*", "/api/*"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "learnlandscaping",
+      "database_id": "e353181c-b62d-4e66-981c-462408f16547",
+      "migrations_dir": "drizzle"
+    }
+  ],
+
+  // The Worker id stays "learnlandscaping" — renaming it would create a new
+  // Worker and orphan the D1 binding and the auth secret. Users only ever see
+  // the custom domain below.
+  "routes": [{ "pattern": "settingout.mouneyrac.com", "custom_domain": true }],
+
+  "observability": {
+    "enabled": true
+  }
+}

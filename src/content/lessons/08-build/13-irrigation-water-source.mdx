@@ -1,0 +1,321 @@
+---
+title: "Irrigation 2 — Measuring your water: scheme supply versus bore"
+phase: 8
+order: 13
+summary: "Everything downstream depends on how much water you actually have. Measure your available flow and pressure properly, and understand what a bore changes — including that the roster still applies."
+timeEstimate: "60 min"
+difficulty: advanced
+status: complete
+updated: 2026-08-02
+series: "Irrigation mini-course"
+deliverable:
+  title: "Available water measurement"
+  prompt: "Measure and record your static pressure, your flow rate at the tap (bucket test), your service and meter size, and your working pressure with the flow running. If you have a bore, record its pump specification, output and any licensing."
+  workbookKey: "water-measurement"
+checklist:
+  - "Static pressure measured with a gauge"
+  - "Flow measured by timed bucket test, repeated"
+  - "Working pressure measured under flow, not at rest"
+  - "Design flow set below the measured maximum with a safety margin"
+resources:
+  - title: "No or low water pressure in your house"
+    url: "https://www.watercorporation.com.au/help-and-advice/water-issues/water-pressure/low-water-pressure"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "Two things you need on one page. First, the supplier's own commitment — \"We aim to provide 20 litres of water per minute at your water meter\" — which is the floor your design must survive, not the number you will actually get. Second, Water Corporation's meter-based flow test: all taps off, read the meter, run the front garden tap for 60 seconds, read again. It also notes that flow at the tap is lower than at the meter, and carries the form to request a free pressure and flow test at your meter if your readings look wrong."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Changes in water pressure"
+    url: "https://www.watercorporation.com.au/help-and-advice/water-issues/water-pressure/changes-in-water-pressure"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The single most useful page in this lesson, because it publishes the licensed pressure band and then explains why your reading moves. Water Corporation delivers \"within a standard range of 15 to 100 metres head (mH) in the metropolitan area, and 13 to 100mH in regional areas\" — roughly 150 to 1,000 kPa, a range far too wide to design from. It also states that pressure is lower during peak periods between 6am–9am and 6pm–9pm, which is exactly your legal watering window, and warns that replacing an old meter can reduce pressure."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Flow rate — standard level of service"
+    url: "https://www.watercorporation.com.au/help-and-advice/non-standard-water-service/water-conditions/flow-rate"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "5 min"
+    whyGood: "The formal statement that \"the minimum flow rate for a standard level of service in Perth Metropolitan or Country Urban Areas is 20 litres per minute\", and the warning that flow can be physically restricted at the service to stop one customer taking a large share. Read it before you assume the 35 litres per minute you measured on a quiet Tuesday is permanent — it is a measurement, not an entitlement."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "How to read your water meter"
+    url: "https://www.watercorporation.com.au/help-and-advice/bill-and-account/water-meters/how-to-read-your-meter"
+    provider: "Water Corporation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "Needed to run the meter-based version of the flow test properly: black and white digits are kilolitres, red and white digits are litres. It then works through each meter model Water Corporation installs — EDMI WP-20, Sensus iPERL, Iota SCL-61H, Landis+Gyr W350 — including how to wake the screen and scroll it. The digital models display live litres per hour, and the Iota also shows pressure, which turns a smart meter into a free flow and leak instrument."
+    waRelevance: wa-specific
+    waCaveat: "Most Perth properties still have a mechanical meter. The Perth smart water meter program is a trial of up to 16,000 properties running 2023 to 2026, so do not plan around a live L/h display until you have opened your meter box and looked."
+    checkedOn: 2026-08-02
+  - title: "Perth Groundwater Map"
+    url: "https://maps.water.wa.gov.au/#/webmap/gwm"
+    provider: "Department of Water and Environmental Regulation"
+    type: tool
+    cost: free
+    duration: "10 min for your address"
+    whyGood: "Type in your address and it returns whether the area is suitable for a bore in the superficial aquifer, the estimated depth to the watertable, the estimated depth to the base of that aquifer — which is the maximum bore depth allowed for non-commercial use without a groundwater licence — and an indication of salinity at the site. It is the free, official first check before anyone quotes you for a bore, and the salinity indication is what tells you whether the water will suit your plant list."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Garden bore regulation"
+    url: "https://begroundwaterwise.wa.gov.au/garden-bore-regulation/"
+    provider: "Be Groundwater Wise, Department of Water and Environmental Regulation"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The regulator's own plain-English statement of what a garden bore may and may not do. It confirms the licence trigger — a licence is needed in a proclaimed groundwater area if you irrigate 0.2 hectares (2,000 square metres) or more, or use the water commercially — and states the rules people most often assume do not apply to them: two rostered days a week in Perth and Mandurah, watering only before 9am or after 6pm, and no sprinklers at all from 1 June to 31 August."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Understanding your garden bore (factsheet)"
+    url: "https://begroundwaterwise.wa.gov.au/wp-content/uploads/2022/12/BGW_Understanding_your_garden_bore_factsheet_141222.pdf"
+    provider: "Be Groundwater Wise, Department of Water and Environmental Regulation"
+    type: article
+    cost: free
+    duration: "10 min"
+    whyGood: "The best two pages in print for someone who has inherited a Perth garden. It gives the diagnostic test for whether the retic runs off a bore at all — shut the scheme water off at the meter, then start the controller — and notes that power cables running from the irrigation box into the ground indicate a mains-powered bore pump. It then draws both bore types component by component: the older well bore with cone lid, foot valve, suction pipe and manual switch, and the newer submersible in a flush in-ground box. About one in four Perth households water from a bore, and there are roughly 180,000 across Perth and Mandurah."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "Find a Driller / Member"
+    url: "https://www.adia.com.au/maps"
+    provider: "Australian Drilling Industry Association"
+    type: directory
+    cost: free
+    whyGood: "The Department of Water and Environmental Regulation's own advice is that garden bores be constructed by an experienced, accredited driller licensed by the Australian Drilling Industry Association, and this is that association's searchable member map. Use it before you take a flyer off the letterbox — an accredited driller works to the Minimum Construction Requirements for Water Bores in Australia and gives you a bore log recording depth, soil profile, yield and pump make and model."
+    waRelevance: australian
+    waCaveat: "Accreditation is a trade association membership, not a state permit. Ask specifically for experience in your suburb's aquifer conditions, and ask for the bore log in writing as part of the price."
+    checkedOn: 2026-08-02
+videos:
+  - youtubeId: "zmApMgPzuUQ"
+    title: "Be Groundwater Wise - How to be a responsible bore owner"
+    channel: "Department of Water and Environmental Regulation"
+    duration: "1 min"
+    whyGood: "The state regulator's own one-minute summary of what it expects from a garden bore owner. Worth a minute because the rules on bores are the part Perth owners most reliably get wrong, and this is the agency that issues the infringements saying it in its own words."
+    waRelevance: wa-specific
+    waCaveat: "A public information clip, not technical instruction. The numbers and the method are in the Be Groundwater Wise factsheets, not the video."
+    checkedOn: 2026-08-02
+  - youtubeId: "qNOL249WEhA"
+    title: "Be Groundwater Wise - Garden bore maintenance"
+    channel: "Department of Water and Environmental Regulation"
+    duration: "1 min"
+    whyGood: "A one-minute companion clip on keeping a garden bore serviceable, from the department that regulates them. Useful as an orientation before you open a bore box you have never looked inside, then follow it with the written maintenance factsheet, which carries the twelve-point checklist."
+    waRelevance: wa-specific
+    waCaveat: "Very short and high level. Treat it as a prompt to inspect, not as a maintenance procedure."
+    checkedOn: 2026-08-02
+regulations:
+  - claim: "Under its Water Services Licence, Water Corporation delivers water pressure within a standard range of 15 to 100 metres head in the metropolitan area, and 13 to 100 metres head in regional areas. Pressure is assessed in the vicinity of the water meter, and is typically lower during peak periods between 6am and 9am and between 6pm and 9pm."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/water-issues/water-pressure/changes-in-water-pressure"
+    checkedOn: 2026-08-02
+  - claim: "The minimum flow rate for a standard level of service in Perth Metropolitan or Country Urban Areas is 20 litres per minute at the water meter. Water Corporation may physically restrict the flow rate at a service to what that service was designed for."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/non-standard-water-service/water-conditions/flow-rate"
+    checkedOn: 2026-08-02
+  - claim: "No licence is required to construct a well or take groundwater from the watertable (non-artesian) aquifer where the water is used for domestic and ordinary use, or for watering an area of lawn or garden less than 0.2 hectares. Irrigating 0.2 hectares or more, or any commercial use, requires a licence from the Department of Water and Environmental Regulation."
+    source: "Department of Water and Environmental Regulation"
+    sourceUrl: "https://www.wa.gov.au/service/building-utilities-and-essential-services/integrated-essential-services/water-licensing-exemptions"
+    checkedOn: 2026-08-02
+  - claim: "Garden bore water users in Perth and Mandurah have the same watering rosters and times as scheme water users — two rostered days a week, once a day, before 9am or after 6pm. Breaches attract $100 on-the-spot fines, and bore breaches are referred to the Department of Water and Environmental Regulation, which may issue the infringement."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/check-your-watering-days"
+    checkedOn: 2026-08-02
+  - claim: "The Sprinkler Switch-off runs from 1 June until 31 August every year and has been permanent since 2010. Anyone in the switch-off area using sprinklers in that period risks a $100 fine. It applies to scheme and bore water users but not to irrigation supplied from rainwater tanks. A watering exemption must be applied for to establish a new lawn or garden during the switch-off, with a fine of up to $500 for breaching its conditions, and the property owner is responsible rather than the installer."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/sprinkler-switch-off"
+    checkedOn: 2026-08-02
+  - claim: "Irrigation may be run for no longer than two minutes per station for testing purposes, on rostered watering days, before 9am or after 6pm. The same two-minute limit applies to bore users. Testing outside those windows requires a Waterwise Garden Irrigator, who holds an automatic exemption."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/testing-your-irrigation"
+    checkedOn: 2026-08-02
+  - claim: "Water Corporation's Backflow Prevention Policy requires an approved backflow prevention containment device to be installed at the boundary of every water service connection to a property."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/developing-and-building/building/backflow-prevention"
+    checkedOn: 2026-08-02
+  - claim: "A Western Australian home must have at least two RCD safety switches protecting all power point and lighting circuits, and installing an RCD or fixing a fault found during testing must be done by a licensed electrical contractor."
+    source: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    sourceUrl: "https://www.wa.gov.au/government/multi-step-guides/electrical-safety-home/rcd-safety-switches"
+    checkedOn: 2026-08-02
+---
+
+[The last lesson](/curriculum/build/irrigation-hydraulics/) gave you the physics.
+This one gives you the four numbers you feed into it. Every decision from here —
+how many sprinklers fit on a station, what size the mainline is, whether the
+design fits inside your legal watering window — comes from measurements you take
+this afternoon with a pressure gauge, a bucket and a stopwatch.
+
+The temptation is to skip it. Most retic on this coastal plain was installed by
+someone who assumed Perth mains water is plentiful. If your existing system mists
+in the middle and dribbles at the end, you are looking at the result.
+
+Two things before you start. First, if you are renovating you may not know what
+your garden actually runs on — roughly one in four Perth households water from a
+garden bore, and plenty of owners have never been told. Second, everything in
+this lesson is measurement, which you may do yourself, but two jobs it points at
+are licensed trade work in WA and always will be: the connection to scheme water
+including the backflow device is a plumber's, and anything touching bore pump
+wiring is a licensed electrical contractor's.
+
+## What a professional does at this stage
+
+An irrigation designer will not quote a system off an address. They turn up with
+a gauge and measure, because the supplier's published numbers are useless as a
+design input.
+
+Water Corporation's commitment is [20 litres per minute at your meter](https://www.watercorporation.com.au/help-and-advice/non-standard-water-service/water-conditions/flow-rate),
+and its licensed pressure band in the metro area is
+[15 to 100 metres head](https://www.watercorporation.com.au/help-and-advice/water-issues/water-pressure/changes-in-water-pressure) —
+roughly 150 to 1,000 kPa. Design to the bottom of that and you build a trickle
+system; design to the top and you build one that fails every February.
+
+The second thing a professional does is measure at the right time. Water
+Corporation states that pressure drops during peak demand between 6am and 9am and
+between 6pm and 9pm. Those are precisely the hours your retic is legally allowed
+to run. A reading taken at 2pm on a Sunday measures water you will never be
+permitted to use.
+
+## The four measurements
+
+| Measurement | How | What it decides |
+| --- | --- | --- |
+| **Static pressure** | Gauge on the tap nearest the meter, everything else off | Which nozzles and emitters can work at all |
+| **Flow rate** | Timed bucket test, repeated three times | How many heads fit on one station |
+| **Working pressure** | Gauge reading while that flow is running | Your real headroom, and pipe sizing |
+| **Service and meter size** | Read the meter body and the service pipe | The ceiling nothing downstream can beat |
+
+### Static pressure
+
+Buy a hose-thread pressure gauge — any retic shop carries them. Screw it onto the
+tap closest to the meter, turn everything else in the house off, open the tap
+fully and read it. Take the reading twice, once at about 6.30pm and once at about
+6.30am, and design to the lower one.
+
+Two Perth-specific corrections. Every metre your garden sits above the meter costs
+about 10 kPa, which matters on a stepped block or in the foothills. And if your
+meter was recently replaced your pressure may have *dropped* — Water Corporation
+notes that an old meter with a failed internal valve or filter was sometimes
+flattering you.
+
+### Flow rate
+
+Use a bucket you have actually measured; nominal 9-litre buckets are routinely not
+9 litres. Open the tap fully, time the fill with a stopwatch, and repeat three
+times. Discard any outlier, average the rest, then:
+
+**litres per minute = litres ÷ seconds × 60**
+
+Cross-check it against Water Corporation's own method: everything off, read the
+meter, run the tap for exactly 60 seconds, read the meter again — on a mechanical
+meter the red digits are litres. Newer digital meters display live litres per
+hour, which beats both. If the methods disagree badly, request a free pressure and
+flow test at your meter through the
+[low water pressure page](https://www.watercorporation.com.au/help-and-advice/water-issues/water-pressure/low-water-pressure).
+
+### Working pressure
+
+This is the measurement almost every DIY system skips, and the one that explains
+its failures. Static pressure is water standing still. The moment water moves,
+friction in the
+service, the meter, the backflow device and your own pipework eats into it. Read
+the gauge *while* the design flow is running — a gauge with a pass-through hose
+outlet is the easy way, otherwise gauge one tap while another runs at a measured
+rate.
+
+The gap between the two is your loss before the mainline even begins: static
+480 kPa falling to 300 kPa at 25 litres per minute means 180 kPa has already gone.
+Nozzle charts assume pressure at the head, not at the meter.
+
+### Set a design flow, not a maximum
+
+Never design to the number you measured. That was a good day, on a system a year
+younger than it will be, with nobody else in the house using water. The working
+rule in the trade is to design each station to no more than about three-quarters
+of your measured available flow. Write that reduced figure into your workbook and
+label it clearly — it is the number
+[Lesson 3](/curriculum/build/irrigation-hydrozoning-and-stations/) tests every
+station against.
+
+### Service and meter size
+
+Open the meter box and note the size stamped on the meter body, plus the size and
+material of the service pipe to the house. Nothing downstream can outperform that.
+On older Perth homes watch for galvanised service pipe: it corrodes inward, and a
+nominal 20 mm pipe laid in 1965 may have half its bore left.
+
+Water Corporation's [Backflow Prevention Policy](https://www.watercorporation.com.au/developing-and-building/building/backflow-prevention)
+requires an approved backflow prevention containment device at the boundary of
+every water service connection. Retic sits in fertilised soil and dog waste; the
+device is what stops that reaching the main.
+
+## If you have a bore — or might have one
+
+**Find out.** Turn the scheme water off at the meter, then start the controller.
+If the sprinklers still run, you have a bore. Power cables running from the
+irrigation box into the ground point the same way. Add the answer to your
+[existing garden audit](/curriculum/site-analysis/auditing-an-existing-garden/).
+
+You will have one of two types. An older **well bore** has a metal cone-like lid,
+a suction pipe with a foot valve, a surface pump and often a manual on/off switch
+— which is exactly how gardens get left running for two days. A newer
+**submersible bore** sits in a flush in-ground box with the pump down the hole,
+and is more energy efficient.
+
+Record these, and keep them with your house plans:
+
+- Bore depth and the aquifer it draws from
+- Pump make, model and rating, and whether it is submersible or surface
+- Measured output — run the same timed bucket test at the bore outlet
+- Standing water level, and salinity and pH from a water sample
+- Any bore log from the driller
+
+### The three legal points that catch people
+
+**The roster applies to bores.** Garden bore users in Perth and Mandurah have the
+same two rostered days, the same before-9am-or-after-6pm window, and the same
+$100 fine. Water Corporation inspectors refer bore breaches to the Department of
+Water and Environmental Regulation, which issues the infringement.
+
+**The winter switch-off applies to bores.** No sprinklers from 1 June to 31 August.
+You may run the system to the minimum extent necessary to keep the pump
+serviceable, and testing is capped at two minutes per station.
+
+**Licensing.** No licence is needed to take groundwater from the watertable
+aquifer for domestic use or to water less than 0.2 hectares. At 2,000 square
+metres or more, or any commercial use, you need a licence from DWER. Check the
+[Perth Groundwater Map](https://maps.water.wa.gov.au/#/webmap/gwm) for your
+maximum unlicensed bore depth before anyone drills.
+
+### Safety and quality
+
+Bore pump wiring is electrical work around water. Engage a licensed electrical
+contractor and confirm the circuit is RCD protected — a WA home must have at least
+two RCDs, and only a licensed contractor may install or repair them. Do not lift or
+re-wire a submersible pump on your own on a Sunday afternoon.
+
+Test the water before you design around it. Iron shows up as orange staining on
+limestone and paving and progressively blocks drip emitters, which can rule out
+dripline without treatment. Salinity constrains your plant palette harder than
+soil type does. Both feed straight into
+[emitter selection](/curriculum/build/irrigation-emitters/).
+
+### The direction of travel
+
+Perth's groundwater is being wound back, not expanded. The bore roster was cut
+from three days to two on 1 September 2022, and under the state's
+[rebalancing programme](https://www.wa.gov.au/service/natural-resources/water-resources/rebalancing-our-groundwater)
+licensed entitlements fall 10 per cent and Water Corporation abstraction falls
+27 per cent from 1 July 2028. In May 2026 Water Corporation asked households to
+switch off a week early. Do not design a garden that only survives if the rules
+loosen.
+
+## What happens to this next
+
+You now have a design flow, a design pressure, and a source with known
+constraints. The next lesson divides the garden into hydrozones and turns them
+into stations — and every station gets checked against the flow figure you just
+wrote down, and against the run time your legal watering window allows.

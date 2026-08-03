@@ -1,0 +1,127 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import LessonRow from '../../../components/LessonRow.astro';
+import { phases } from '../../../data/phases';
+import { lessonsByPhase, estimateHours, phaseUrl } from '../../../lib/curriculum';
+
+export const getStaticPaths = (async () => {
+  const groups = await lessonsByPhase();
+  return groups.map(({ phase, lessons }) => ({
+    params: { phase: phase.slug },
+    props: { phase, lessons },
+  }));
+}) satisfies GetStaticPaths;
+
+const { phase, lessons } = Astro.props;
+const prev = phases.find((p) => p.number === phase.number - 1);
+const next = phases.find((p) => p.number === phase.number + 1);
+const deliverables = lessons.filter((l) => l.data.deliverable);
+const written = lessons.filter((l) => l.data.status !== 'stub').length;
+---
+
+<Base title={phase.title} description={phase.description}>
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 80%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[84rem] px-4 sm:px-6 pt-8 pb-8">
+      <nav class="label flex items-center gap-2" aria-label="Breadcrumb">
+        <a href="/curriculum/" class="hover:text-paw transition-colors">The path</a>
+        <span aria-hidden="true">›</span>
+        <span>Phase {String(phase.number).padStart(2, '0')}</span>
+      </nav>
+
+      <div class="mt-5 flex items-start gap-4 sm:gap-6">
+        <span
+          class="shrink-0 w-16 h-16 sm:w-24 sm:h-24 rounded-full grid place-items-center font-display font-900 text-2xl sm:text-4xl border-[3px]"
+          style="background: var(--surface); border-color: var(--edge-strong);"
+          aria-hidden="true"
+        >
+          {String(phase.number).padStart(2, '0')}
+        </span>
+        <div class="min-w-0">
+          <h1
+            class="font-display font-900 leading-[1.05]"
+            style="font-size: clamp(2rem, 1.3rem + 3.2vw, 3.75rem);"
+          >
+            {phase.title}
+          </h1>
+          <p class="note mt-1.5 text-lg">{phase.tagline}</p>
+        </div>
+      </div>
+
+      <div class="mt-7 grid gap-6 lg:grid-cols-[minmax(0,38rem)_1fr] lg:gap-12">
+        <p class="text-lg leading-relaxed">{phase.description}</p>
+
+        <div class="cutout p-5">
+          <p class="label">You end up with</p>
+          <p class="mt-1.5 leading-snug text-[1.05rem]">{phase.outcome}</p>
+          <div class="flex flex-wrap gap-x-4 gap-y-1 mt-3.5">
+            <span class="label">{lessons.length} lessons</span>
+            <span class="label">≈{estimateHours(lessons)} hours</span>
+            <span class="label">{deliverables.length} documents</span>
+            <span class="label">{written} written</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    deliverables.length > 0 && (
+      <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-8">
+        <h2 class="font-display font-900 text-2xl sm:text-3xl">What you produce in this phase</h2>
+        <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+          {deliverables.map((lesson) => (
+            <li
+              class="rounded-[18px] border-2 p-4 list-none"
+              style="border-color: var(--paw); background: color-mix(in srgb, var(--paw) 6%, var(--surface));"
+            >
+              <p class="font-display font-700 text-lg leading-tight text-paw">
+                {lesson.data.deliverable!.title}
+              </p>
+              <p class="text-[0.92rem] text-soft mt-1.5 leading-snug">
+                {lesson.data.deliverable!.prompt}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-12">
+    <h2 class="font-display font-900 text-2xl sm:text-3xl">Lessons</h2>
+    <ol class="grid gap-3 mt-4">
+      {lessons.map((lesson) => <LessonRow lesson={lesson} />)}
+    </ol>
+  </section>
+
+  <nav class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-16 grid gap-3 sm:grid-cols-2">
+    {
+      prev ? (
+        <a href={phaseUrl(prev)} class="cutout cutout-lift p-5">
+          <p class="label">← Previous phase</p>
+          <p class="font-display font-700 text-xl mt-1 leading-tight">{prev.title}</p>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      next ? (
+        <a href={phaseUrl(next)} class="cutout cutout-lift p-5 sm:text-right">
+          <p class="label">Next phase →</p>
+          <p class="font-display font-700 text-xl mt-1 leading-tight">{next.title}</p>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+  </nav>
+</Base>

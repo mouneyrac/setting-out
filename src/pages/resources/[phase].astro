@@ -1,0 +1,221 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import ResourceCard from '../../components/ResourceCard.astro';
+import { allLessons, lessonUrl } from '../../lib/curriculum';
+import { phases, getPhase } from '../../data/phases';
+
+export const getStaticPaths = (async () => {
+  const lessons = await allLessons();
+  return phases.map((phase) => ({
+    params: { phase: phase.slug },
+    props: {
+      phase,
+      entries: lessons
+        .filter((l) => l.data.phase === phase.number)
+        .flatMap((lesson) =>
+          lesson.data.resources.map((resource) => ({
+            resource,
+            lessonTitle: lesson.data.title,
+            lessonUrl: lessonUrl(lesson),
+          })),
+        ),
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { phase, entries } = Astro.props;
+
+const prev = phases.find((p) => p.number === phase.number - 1);
+const next = phases.find((p) => p.number === phase.number + 1);
+
+const free = entries.filter((e) => e.resource.cost === 'free').length;
+const waSpecific = entries.filter((e) => e.resource.waRelevance === 'wa-specific').length;
+const types = [...new Set(entries.map((e) => e.resource.type))].sort();
+---
+
+<Base
+  title={`${phase.title} — resources`}
+  description={`Every verified course, video, book, standard, tool and government source for ${phase.title.toLowerCase()}, written for Perth and Western Australian conditions.`}
+>
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pt-8 pb-6">
+    <nav class="label flex items-center gap-2 flex-wrap" aria-label="Breadcrumb">
+      <a href="/resources/" class="hover:text-paw transition-colors">Resources</a>
+      <span aria-hidden="true">›</span>
+      <span>Phase {String(phase.number).padStart(2, '0')}</span>
+    </nav>
+
+    <h1
+      class="mt-4 font-display font-900 leading-[1.08]"
+      style="font-size: clamp(1.9rem, 1.4rem + 2.4vw, 3rem);"
+    >
+      {phase.title}
+    </h1>
+    <p class="note mt-1">{phase.tagline}</p>
+
+    <div class="flex flex-wrap gap-2 mt-4">
+      <span class="cutout px-3.5 py-1.5 text-sm font-display font-700">
+        {entries.length} resources
+      </span>
+      <span class="cutout px-3.5 py-1.5 text-sm font-display font-700 text-leaf">{free} free</span>
+      <span class="cutout px-3.5 py-1.5 text-sm font-display font-700 text-jac">
+        {waSpecific} Perth / WA
+      </span>
+      <a href={`/curriculum/${phase.slug}/`} class="btn btn-ghost text-sm py-1.5 px-4">
+        The lessons →
+      </a>
+    </div>
+
+    {
+      entries.length > 0 && (
+        <div class="cutout p-4 mt-5" id="filters">
+          <p class="label mb-2">Narrow it down</p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="filter-chip is-on" data-filter="all">
+              Everything
+            </button>
+            <button type="button" class="filter-chip" data-filter="free">
+              Free only
+            </button>
+            <button type="button" class="filter-chip" data-filter="wa">
+              Perth / WA only
+            </button>
+            {types.map((type) => (
+              <button type="button" class="filter-chip" data-filter={`type:${type}`}>
+                {type}
+              </button>
+            ))}
+          </div>
+          <p class="note mt-2.5" id="filter-count" aria-live="polite" />
+        </div>
+      )
+    }
+  </section>
+
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-12">
+    {
+      entries.length === 0 ? (
+        <div class="cutout p-6 max-w-[60ch]">
+          <p class="label text-banksia">Nothing here yet</p>
+          <h2 class="font-display font-700 text-2xl mt-2 leading-tight">
+            This phase has no external resources listed
+          </h2>
+          <p class="mt-3 leading-relaxed text-soft">
+            Either the lessons are not written yet, or the material is genuinely covered in the
+            lessons themselves and padding the list with weaker links would not help you.
+          </p>
+          <a href={`/curriculum/${phase.slug}/`} class="btn btn-primary text-sm py-2.5 px-5 mt-4">
+            Read the lessons
+          </a>
+        </div>
+      ) : (
+        <ul class="grid gap-3" id="resource-list">
+          {entries.map((e) => (
+            <ResourceCard
+              resource={e.resource}
+              context={e.lessonTitle}
+              contextUrl={e.lessonUrl}
+            />
+          ))}
+        </ul>
+      )
+    }
+  </section>
+
+  <nav class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-16 grid gap-3 sm:grid-cols-2">
+    {
+      prev ? (
+        <a href={`/resources/${prev.slug}/`} class="cutout cutout-lift p-5">
+          <p class="label">← Previous phase</p>
+          <p class="font-display font-700 text-xl mt-1 leading-tight">{prev.title}</p>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      next ? (
+        <a href={`/resources/${next.slug}/`} class="cutout cutout-lift p-5 sm:text-right">
+          <p class="label">Next phase →</p>
+          <p class="font-display font-700 text-xl mt-1 leading-tight">{next.title}</p>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+  </nav>
+
+  <style is:global>
+    .filter-chip {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.8rem;
+      border: 2px solid var(--edge);
+      background: var(--surface);
+      color: var(--ink-soft);
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+      transition:
+        border-color 160ms ease,
+        color 160ms ease,
+        background-color 160ms ease;
+    }
+    .filter-chip:hover {
+      border-color: var(--leaf);
+      color: var(--ink);
+    }
+    .filter-chip.is-on {
+      background: var(--leaf);
+      border-color: var(--leaf);
+      color: #fffdf7;
+    }
+  </style>
+
+  <script>
+    // Filtering is pure DOM toggling — the resources are already on the page,
+    // so there is nothing to fetch and it works offline.
+    const list = document.getElementById('resource-list');
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-chip'));
+    const count = document.getElementById('filter-count');
+
+    if (list && chips.length) {
+      const items = Array.from(list.children) as HTMLElement[];
+
+      // Read each card's facets straight off its rendered text once, up front.
+      const facets = items.map((item) => {
+        const text = item.textContent ?? '';
+        const labels = Array.from(item.querySelectorAll('.label')).map((n) => n.textContent ?? '');
+        return {
+          free: /^\s*Free\b/m.test(item.querySelector('span')?.textContent ?? ''),
+          wa: text.includes('Perth / WA'),
+          type: labels[0]?.trim().toLowerCase() ?? '',
+        };
+      });
+
+      const apply = (filter: string) => {
+        let shown = 0;
+        items.forEach((item, i) => {
+          const f = facets[i];
+          const match =
+            filter === 'all' ||
+            (filter === 'free' && f.free) ||
+            (filter === 'wa' && f.wa) ||
+            (filter.startsWith('type:') && f.type === filter.slice(5));
+          item.hidden = !match;
+          if (match) shown++;
+        });
+        if (count) {
+          count.textContent =
+            filter === 'all' ? '' : `Showing ${shown} of ${items.length} resources.`;
+        }
+      };
+
+      for (const chip of chips) {
+        chip.addEventListener('click', () => {
+          for (const other of chips) other.classList.toggle('is-on', other === chip);
+          apply(chip.dataset.filter ?? 'all');
+        });
+      }
+    }
+  </script>
+</Base>

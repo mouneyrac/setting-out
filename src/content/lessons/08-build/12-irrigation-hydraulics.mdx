@@ -1,0 +1,314 @@
+---
+title: "Irrigation 1 — Hydraulics: flow, pressure and friction loss"
+phase: 8
+order: 12
+summary: "The physics that decides how many sprinklers you can run at once. Flow rate, static and dynamic pressure, friction loss through pipe and fittings, and why the last sprinkler on a long run barely turns."
+timeEstimate: "90 min"
+difficulty: advanced
+status: complete
+updated: 2026-08-02
+series: "Irrigation mini-course"
+checklist:
+  - "Explain the difference between pressure and flow"
+  - "Calculate friction loss for a given pipe size, length and flow"
+  - "Understand velocity limits and why oversized pipe is cheap insurance"
+resources:
+  - title: "Landscape Irrigation Design Manual"
+    url: "https://www.rainbird.com/sites/default/files/media/documents/2018-02/IrrigationDesignManual.pdf"
+    provider: "Rain Bird"
+    type: book
+    cost: free
+    duration: "2 hours for Steps 1, 4 and 7"
+    whyGood: "The best free teaching text on irrigation hydraulics anywhere, and the source most of the trade was taught from. Step one covers static and dynamic pressure, friction loss and velocity; step four gives the three rules for working out how much flow a meter can actually deliver; step seven teaches pipe sizing by the velocity method, working backwards from the last sprinkler on the lateral. It states the industry limit plainly: \"The industry has established 5 ft/s (1,5 m/s) as an acceptable maximum velocity\", and it tells you to add 10% of all pipe losses as an estimate for fittings."
+    waRelevance: overseas-adapt
+    waCaveat: "American document, US units first. Every chart is repeated in SI on pages 107 to 119, so read those. Ignore the pipe types entirely — Schedule 40, Class 200 and Type K copper are not what Perth retic shops sell. Substitute the Australian pipe data in the Vinidex and Iplex resources below, and treat its \"water purveyor\" advice as pointing at Water Corporation."
+    checkedOn: 2026-08-02
+  - title: "Pipe Flow Calculator — Rural and Irrigation Pipe Systems (WA only)"
+    url: "https://www.vinidex.com.au/app/uploads/pdf/VIN059B-Pipe-Flow-Calculator_WA-Only.pdf"
+    provider: "Vinidex"
+    type: calculator
+    cost: free
+    duration: "10 min"
+    whyGood: "A one-page printable chart published by an Australian pipe manufacturer specifically for the Western Australian market, covering 13 mm to 50 mm polyethylene. For a given head (10 to 90 metres, shown in both metres and kPa) and pipeline length it gives you the flow velocity in metres per second and the discharge in litres per minute. It is the fastest sanity check available on whether the pipe you were about to buy is big enough, and it uses the units a Perth pressure gauge actually reads."
+    waRelevance: wa-specific
+    waCaveat: "Built for rural pipelines, so the shortest length in the table is 100 metres and the shortest garden run you will design is more like 30. Reading a 100 metre row for a 30 metre run is conservative in your favour. It also models an open-ended pipeline with one outlet, not a lateral with six sprinklers on it, so use it for mainlines and single runs rather than for sizing laterals."
+    checkedOn: 2026-08-02
+  - title: "Rural Plus PE Pipe Technical Datasheet (VINTECH050)"
+    url: "https://www.vinidex.com.au/app/uploads/pdf/VINTECH050-Vinidex-Rural-Plus-PE-Pipe-Technical-Datasheet-1.pdf"
+    provider: "Vinidex"
+    type: supplier
+    cost: free
+    duration: "5 min"
+    whyGood: "Two pages, and it contains the number every friction loss calculation depends on: the real internal diameter of the black-with-green-stripes rural poly sold across Perth. 19 mm nominal is 19.0 mm inside and 22.4 mm outside; 25 mm is 25.3 inside; 32 mm is 31.6; 40 mm is 38.0; 50 mm is 50.8. All of it is PE100 rated PN8, meaning an 800 kPa nominal working pressure, which is the other number you need before you put a pump anywhere near it."
+    waRelevance: australian
+    checkedOn: 2026-08-02
+  - title: "PVC Pipe Sizing and Dimensions Guide"
+    url: "https://www.iplex.com.au/resources-and-tools/resources/pvc-pipe-size-dimension-guide/"
+    provider: "Iplex Australia"
+    type: article
+    cost: free
+    duration: "10 min"
+    whyGood: "The equivalent table for PVC pressure pipe, which is what most Perth mainlines are made of, and it makes the point this lesson turns on: \"A higher pressure rating requires a thicker wall, which reduces the ID.\" DN25 is 30.5 mm inside at PN9, 29.8 at PN12 and 28.1 at PN18 — same fitting, same trench, three different hydraulic answers. Free, no registration, and it covers DN20 through the large sizes."
+    waRelevance: australian
+    checkedOn: 2026-08-02
+  - title: "Landscape Sprinkler System Design Tutorial"
+    url: "https://www.irrigationtutorials.com/landscape-sprinkler-system-design-tutorial/"
+    provider: "Jess Stryker, Irrigation Tutorials"
+    type: course
+    cost: free
+    duration: "3 hours"
+    whyGood: "Written by a licensed landscape architect and free in full, this is the most patient plain-English explanation of the same material Rain Bird covers more formally — measuring supply, working out pressure loss, and sizing pipe. Its companion pressure loss tables and free spreadsheets let you check a hand calculation without buying software. Read it alongside the Rain Bird manual rather than instead of it; where they disagree on a rule of thumb, Rain Bird is the more conservative."
+    waRelevance: overseas-adapt
+    waCaveat: "Californian, in psi and gallons per minute, and its pipe tables are US pipe. Convert: 1 psi is 6.9 kPa, 1 US gallon per minute is 3.79 litres per minute, and 5 ft/s is 1.5 m/s. Its watering advice assumes no roster at all, which is not your situation in Perth."
+    checkedOn: 2026-08-02
+  - title: "Find a Waterwise Irrigation Design Shop"
+    url: "https://www.waterwiseprograms.com.au/find-a-water-specialist"
+    provider: "Irrigation Australia / Water Corporation"
+    type: directory
+    cost: free
+    whyGood: "If your sums say the design does not fit inside your available flow, this is where you take the numbers rather than guessing. Filter for Waterwise Irrigation Design Shop members — businesses trained by Irrigation Australia in water-efficient design for domestic systems — as distinct from Waterwise Garden Irrigators, who service and repair. Turning up with a measured flow, a measured working pressure and a station list gets you a far better answer than turning up with a photo."
+    waRelevance: wa-specific
+    waCaveat: "Endorsement means the business has been appointed to deliver the Water Corporation program, not that it is the cheapest or the best designer. The directory also lists interstate members, so filter by state."
+    checkedOn: 2026-08-02
+  - title: "Certified Irrigation Designer (CID) Program"
+    url: "https://www.irrigationaustralia.com.au/training-courses-certified-irrigation-designer"
+    provider: "Irrigation Australia"
+    type: course
+    cost: paid
+    price: "AUD $200 application (member) or $300 (non-member), plus $440/$670 per exam"
+    whyGood: "The formal Australian path, run by the national peak body and registered training organisation, if you decide hydraulics is something you want to be assessed on rather than merely competent at. The pre-qualification exam covers pipes, fittings and hydraulics; the general exam covers hydraulic design, filtration, pumping and controls. Prices as published today: $200 member or $300 non-member application, $440 or $670 for each of the two exams, $500 or $730 for the expert-led design component, and $195 or $420 annual renewal."
+    waRelevance: australian
+    waCaveat: "Aimed at people already in the trade — it recommends two to three years' irrigation experience or a Certificate III. If you are designing one suburban block, the free Rain Bird manual above teaches the same hydraulics and costs nothing."
+    checkedOn: 2026-08-02
+videos: []
+regulations:
+  - claim: "In Western Australia all water supply, sanitary and drainage plumbing work must be carried out by a licensed plumber or permit-holder. The homeowner exemptions are narrow — shower heads, tap maintenance or repair, cistern washers, filter cartridges and plunging a blocked waste."
+    source: "Building and Energy, Department of Energy, Mines, Industry Regulation and Safety"
+    sourceUrl: "https://www.wa.gov.au/organisation/building-and-energy/plumbing-work-your-home"
+    checkedOn: 2026-08-02
+  - claim: "Water Corporation policy requires the installation of an approved backflow prevention containment device at the boundary of every water service connection to a property."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/developing-and-building/building/backflow-prevention"
+    checkedOn: 2026-08-02
+  - claim: "In Perth and Mandurah you may only water once before 9am or after 6pm on your rostered watering days. Garden bore water users have the same watering rosters and times as scheme users, and $100 on-the-spot fines are issued for breaches of watering rosters."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/check-your-watering-days"
+    checkedOn: 2026-08-02
+  - claim: "The Sprinkler Switch-off runs from 1 June until 31 August every year, and both businesses and households are included. Anyone in the Sprinkler Switch-off area spotted using their sprinklers in that period risks a $100 fine."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/waterwise/watering-days/winter-sprinkler-switch-off"
+    checkedOn: 2026-08-02
+  - claim: "Irrigation systems may only be tested on rostered watering days, before 9am or after 6pm, and for no longer than two minutes per station."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/help-and-advice/waterwise/sprinklers-and-irrigation/testing-your-irrigation"
+    checkedOn: 2026-08-02
+---
+
+Everything else in this mini-course sits downstream of two numbers: how many litres per
+minute arrive at your tap, and at what pressure. Get those wrong and no amount of good
+equipment rescues the job. A rotor that turns slowly at the end of a long run, heads that
+mist instead of throw, a dry crescent on one side of the lawn — those are hydraulic faults,
+and you cannot tune a hydraulic fault out at the controller.
+
+This is the only lesson in the series with real arithmetic in it. It is worth the time,
+because the sums take about twenty minutes and they decide the pipe you buy — and pipe is
+the one part of the system you cannot change later without digging up everything you built
+on top of it.
+
+If you are renovating, someone already sized this system by eye. Your
+[garden audit](/curriculum/site-analysis/auditing-an-existing-garden/) almost certainly
+found the evidence.
+
+## What a professional does at this stage
+
+A designer writes a **pressure budget** before drawing a single sprinkler.
+
+It is a subtraction sum. Start with the working pressure measured at the tap while water is
+actually flowing, subtract every loss between there and the furthest sprinkler on the worst
+station, and check what is left against what that sprinkler needs. If the answer is positive
+with margin, the design works. If it is negative, something has to change — fewer heads per
+station, bigger pipe, a shorter run, or a different emitter.
+
+Amateurs do this the other way around: they lay out the sprinklers they want, connect them,
+and find out. On Perth sand that failure is quiet. Everything runs, nothing looks broken, and
+the garden simply declines for two years on the dry side of each zone.
+
+The second thing a professional does is **design for the worst case, not the good case**.
+Rain Bird's manual is blunt about this: design for the pressure you will have on a hot
+weekend when the whole street is irrigating, not the pressure you measured on a quiet
+Tuesday afternoon. In Perth the worst case is doubly relevant, because
+[the legal watering window](https://www.watercorporation.com.au/waterwise/watering-days/check-your-watering-days) —
+once before 9am or after 6pm on your rostered days — falls squarely inside the network's
+peak demand hours.
+
+## Flow and pressure are not the same thing
+
+They get used interchangeably in conversation and they are unrelated properties.
+
+- **Flow** is quantity per unit time: litres per minute. It is what fills a bucket. It sets
+  **how many sprinklers you can run at once**.
+- **Pressure** is force per unit area: kilopascals. It is what makes a sprinkler throw its
+  rated distance and atomise properly. It sets **how well each sprinkler works**.
+
+You can have plenty of one and not enough of the other. A tap at 500 kPa through a
+half-blocked 1965 galvanised service delivers beautiful pressure and useless flow. The two
+are linked only through the pipe: **moving flow through pipe costs pressure**, and that cost
+is what the rest of this lesson calculates.
+
+Useful conversions, because Perth gauges and manufacturer charts disagree on units:
+100 kPa = 1 bar = 10 metres of head ≈ 14.5 psi. And **one metre of height costs about
+10 kPa**, up or down, regardless of how much water is moving.
+
+## Static pressure, working pressure, and the gap between them
+
+**Static pressure** is the reading with nothing flowing. It is easy to measure and it flatters
+you.
+
+**Working pressure** — Rain Bird calls it dynamic pressure — is the reading at a given point
+in the system *while a given flow is passing that point*. It is lower, sometimes much lower,
+and it is the only figure a design can be built on. The difference is consumed by the service
+pipe, the meter, the backflow device, your own pipework and every fitting in it.
+
+A typical Perth measurement: 480 kPa static at the tap, 380 kPa with 25 litres per minute
+running. That 100 kPa has already gone before your mainline starts. The
+[next lesson](/curriculum/build/irrigation-water-source/) is entirely about measuring these
+two properly.
+
+## Friction loss: the calculation
+
+Friction loss depends on four things: the **flow**, the **internal diameter** of the pipe,
+the **length**, and the pipe's internal **roughness**. For the smooth plastic pipe used in
+domestic retic the roughness is effectively fixed, so three variables matter.
+
+Two relationships are worth memorising, because they explain most bad retic:
+
+- Friction loss rises with flow to roughly the **1.85 power**. Double the flow through a pipe
+  and you multiply the loss by about 3.6.
+- Friction loss falls with internal diameter to the **4.87 power**. Halve the internal
+  diameter and you multiply the loss by about 29.
+
+Diameter is the lever. Everything else is noise.
+
+The table below gives the loss in kilopascals for **each 10 metres of pipe**, at the flows a
+suburban station actually runs, using the verified internal diameters of the pipe sold here.
+Shaded meaning: any figure marked † is above the 1.5 metre-per-second velocity limit and
+should not be built.
+
+| Flow | 19 mm rural poly (ID 19.0) | 25 mm rural poly (ID 25.3) | 32 mm rural poly (ID 31.6) | PVC DN25 PN12 (ID 29.8) |
+| --- | --- | --- | --- | --- |
+| 15 L/min | 5.0 kPa | 1.2 kPa | 0.4 kPa | 0.6 kPa |
+| 20 L/min | 8.6 kPa | 2.1 kPa | 0.7 kPa | 1.0 kPa |
+| 25 L/min | 12.9 kPa | 3.2 kPa | 1.1 kPa | 1.4 kPa |
+| 30 L/min | 18.1 kPa † | 4.5 kPa | 1.5 kPa | 2.0 kPa |
+| 40 L/min | 30.9 kPa † | 7.7 kPa | 2.6 kPa | 3.5 kPa |
+
+Calculated with the Hazen–Williams equation at C = 150 for plastic pipe, using internal
+diameters from the [Vinidex Rural Plus datasheet](https://www.vinidex.com.au/app/uploads/pdf/VINTECH050-Vinidex-Rural-Plus-PE-Pipe-Technical-Datasheet-1.pdf)
+and the [Iplex PVC dimension guide](https://www.iplex.com.au/resources-and-tools/resources/pvc-pipe-size-dimension-guide/).
+These figures reproduce Rain Bird's published charts and Vinidex's own WA pipe flow
+calculator to within a few per cent. If your pipe is a different class or brand, look up its
+internal diameter and redo it — do not assume.
+
+### A worked pressure budget
+
+One station: six spray heads, design flow 25 L/min, 32 metres of 25 mm rural poly from the
+tap to the valve box, then 18 metres of 19 mm poly out to the last head, rising 1.2 metres to
+a raised bed at the back.
+
+| Line | Pressure |
+| --- | --- |
+| Working pressure at the tap at 25 L/min | **380 kPa** |
+| 32 m of 25 mm poly mainline, at 3.2 kPa per 10 m | −10 kPa |
+| Solenoid valve, read off the valve's own chart | −30 kPa |
+| 18 m of 19 mm poly lateral, at 12.9 kPa per 10 m | −23 kPa |
+| Fittings, estimated at 10% of all pipe losses | −3 kPa |
+| Elevation rise of 1.2 m | −12 kPa |
+| **Pressure at the last sprinkler** | **302 kPa** |
+
+That is comfortable for spray heads and rotors alike, which is the answer you want. The 10%
+fittings allowance is Rain Bird's own shortcut and it is close enough at garden scale.
+
+Two refinements a professional would add. First, the lateral does not carry the full 25 L/min
+along its whole length — flow drops at every head — so sizing each reach for the flow it
+actually carries, working backwards from the last sprinkler, gives a smaller number. Treating
+the whole lateral as full-flow is conservative, and conservative is free. Second, elevation
+is a *net* figure: a 1.2 metre rise costs 12 kPa whether the pipe climbs it in one go or
+undulates the whole way.
+
+## The velocity limit is the real design rule
+
+Rain Bird states the industry position directly: **1.5 metres per second is the accepted
+maximum velocity**, because faster water causes damaging surge pressures and because friction
+loss climbs steeply beyond it.
+
+Surge — water hammer — is the bang when a solenoid closes and a moving column of water stops
+in about fifty milliseconds. It is what splits solvent joints and cracks valve bodies a year
+or two after handover, long after anyone connects the failure to the pipe size.
+
+Converted into something you can use at the retic shop, here is the **maximum flow each pipe
+size may carry**:
+
+| Pipe | Internal diameter | Max flow at 1.5 m/s |
+| --- | --- | --- |
+| 19 mm rural poly | 19.0 mm | 26 L/min |
+| 25 mm metric poly, DN25 PN12.5 | 21.0 mm | 31 L/min |
+| 25 mm rural poly | 25.3 mm | 45 L/min |
+| 32 mm metric poly, DN32 PN12.5 | 27.0 mm | 52 L/min |
+| PVC DN25 PN12 | 29.8 mm | 63 L/min |
+| 32 mm rural poly | 31.6 mm | 71 L/min |
+| PVC DN32 PN12 | 37.5 mm | 99 L/min |
+
+Note what that table exposes. **Nominal size is not internal diameter, and two pipes both
+called "25 mm" differ by 4 mm inside and 14 L/min in capacity.** Rural poly is sized by its
+approximate bore; metric PE pipe to AS/NZS 4130 is sized by its *outside* diameter, so DN25
+metric poly is a smaller pipe than 25 mm rural poly. Raising the pressure class shrinks it
+further, because the wall gets thicker and the outside stays the same. Always look up the
+number.
+
+## Oversized pipe is the cheapest insurance on the job
+
+Run the money. A 50 metre coil of Vinidex Rural Plus at Bunnings today is
+[$81.90 in ¾ inch (19 mm)](https://www.bunnings.com.au/vinidex-rural-plus-x-50m-poly-pipe_p0135009)
+and [$89.90 in 1 inch (25 mm)](https://www.bunnings.com.au/vinidex-rural-plus-1-x-50m-poly-pipe_p0135010).
+Eight dollars.
+
+For that eight dollars, on the 32 metre mainline in the worked example above, you go from
+41 kPa of loss to 10 kPa, and from 1.47 m/s — right on the limit — to 0.83 m/s. Thirty-one
+kilopascals is the difference between a rotor performing to its chart and a rotor that
+throws two metres short into your neighbour's fence.
+
+Now price the alternative. Undersized pipe is discovered after the trenches are backfilled,
+the paving is down and the turf is laid. The fix is excavation, not adjustment.
+
+The rule the trade works to: **size for your largest station flow, then go one size up if the
+run is long, if the block rises, or if you might ever add a station.** Buy pressure-rated
+pipe while you are at it — black poly sold for drainage is a different product and is not
+rated for it.
+
+## Where this becomes a safety and legal question
+
+Two boundaries on this work in WA, and neither is negotiable.
+
+**Plumbing.** [Building and Energy](https://www.wa.gov.au/organisation/building-and-energy/plumbing-work-your-home)
+states that all water supply, sanitary and drainage plumbing work must be carried out by a
+licensed plumber or permit-holder. The exemptions for a homeowner are tiny — shower heads,
+tap repairs, a cistern washer, a filter cartridge, plunging a blocked waste. Connecting your
+retic to the scheme supply, and installing the
+[backflow prevention containment device Water Corporation requires at the boundary of every water service connection](https://www.watercorporation.com.au/developing-and-building/building/backflow-prevention),
+is a plumber's job. Retic sits in fertilised soil; the device is what keeps that out of the
+main.
+
+**Electrical.** Anything touching bore pump wiring or mains power is a licensed electrical
+contractor's work. Water and 240 volts in wet sand is the one mistake on this job that kills
+people.
+
+And a physical hazard worth naming: a poly coil under pressure with a fitting that lets go is
+a whip. Pressure-test with the trench open and stand clear of the ends, not over them.
+
+## What happens next
+
+Your pressure budget is only as good as the number at the top of it. The
+[next lesson](/curriculum/build/irrigation-water-source/) has you measure static pressure,
+flow and working pressure properly with a gauge, a bucket and a stopwatch, and set the design
+flow every station will be tested against in
+[Irrigation 3](/curriculum/build/irrigation-hydrozoning-and-stations/).

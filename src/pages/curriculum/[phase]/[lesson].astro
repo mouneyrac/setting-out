@@ -1,0 +1,442 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import ResourceCard from '../../../components/ResourceCard.astro';
+import VideoCard from '../../../components/VideoCard.astro';
+import { getPhase } from '../../../data/phases';
+import {
+  allLessons,
+  lessonSlug,
+  lessonUrl,
+  neighbours,
+  difficultyLabel,
+} from '../../../lib/curriculum';
+
+export const getStaticPaths = (async () => {
+  const lessons = await allLessons();
+  return lessons.map((lesson) => ({
+    params: { phase: getPhase(lesson.data.phase).slug, lesson: lessonSlug(lesson) },
+    props: { lesson, lessons },
+  }));
+}) satisfies GetStaticPaths;
+
+const { lesson, lessons } = Astro.props;
+const d = lesson.data;
+const phase = getPhase(d.phase);
+const { prev, next } = neighbours(lessons, lesson);
+const { Content } = await render(lesson);
+
+const freeCount = d.resources.filter((r) => r.cost === 'free').length;
+const phaseLessons = lessons.filter((l) => l.data.phase === d.phase);
+---
+
+<Base title={d.title} description={d.summary}>
+  <article class="mx-auto max-w-[84rem] px-4 sm:px-6" data-pagefind-body data-lesson-id={lesson.id}>
+    <!-- ── Header ────────────────────────────────────────────────── -->
+    <header class="pt-8 pb-8">
+      <nav class="label flex items-center gap-2 flex-wrap" aria-label="Breadcrumb">
+        <a href="/curriculum/" class="hover:text-paw transition-colors">The path</a>
+        <span aria-hidden="true">›</span>
+        <a href={`/curriculum/${phase.slug}/`} class="hover:text-paw transition-colors">
+          {String(d.phase).padStart(2, '0')} — {phase.title}
+        </a>
+      </nav>
+
+      <h1
+        class="mt-4 font-display font-900 leading-[1.08] max-w-[24ch]"
+        style="font-size: clamp(1.9rem, 1.25rem + 2.9vw, 3.4rem);"
+      >
+        {d.title}
+      </h1>
+
+      <p class="mt-4 text-lg sm:text-xl leading-relaxed max-w-[66ch] text-soft">{d.summary}</p>
+
+      <div class="mt-5 flex flex-wrap gap-2">
+        <span class="cutout px-3 py-1 text-sm font-display font-700">⏱ {d.timeEstimate}</span>
+        <span class="cutout px-3 py-1 text-sm font-display font-700">
+          {difficultyLabel[d.difficulty]}
+        </span>
+        {
+          d.series && (
+            <span class="cutout px-3 py-1 text-sm font-display font-700 text-jac">
+              💧 {d.series}
+            </span>
+          )
+        }
+        {
+          d.resources.length > 0 && (
+            <span class="cutout px-3 py-1 text-sm font-display font-700">
+              🔗 {d.resources.length} resources ({freeCount} free)
+            </span>
+          )
+        }
+        {
+          d.status === 'stub' && (
+            <span
+              class="px-3 py-1 text-sm font-display font-700 rounded-2xl border-2"
+              style="border-color: var(--banksia); color: var(--banksia);"
+            >
+              Not written yet
+            </span>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-12 pb-4">
+      <!-- ── Main column ─────────────────────────────────────────── -->
+      <div class="min-w-0">
+        {/* The honest state of the DOING, which is not the state of the writing. */}
+        {
+          d.fieldStatus === 'field-tested' ? (
+            <aside
+              class="mb-6 rounded-[14px] border-[3px] p-4"
+              style="border-color: var(--leaf); background: color-mix(in srgb, var(--leaf) 12%, var(--surface));"
+            >
+              <p class="font-display font-700 leading-tight">
+                <span aria-hidden="true">✅</span> Field-tested — this has actually been done
+              </p>
+              {d.fieldNotes && <p class="mt-2 leading-relaxed">{d.fieldNotes}</p>}
+              {d.fieldTestedOn && (
+                <p class="label mt-2">
+                  Carried out{' '}
+                  {d.fieldTestedOn.toLocaleDateString('en-AU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </p>
+              )}
+            </aside>
+          ) : (
+            /* One line, not a panel. This appears on all 91 lessons; repeated at
+               full length it stops being read and just costs a screenful. The
+               explanation lives on /tracker/ and /about/. */
+            <p class="mb-6 flex flex-wrap items-baseline gap-x-2 text-[0.95rem] leading-snug">
+              <span aria-hidden="true">{d.fieldStatus === 'in-progress' ? '🚧' : '📖'}</span>
+              <span class="font-display font-700">
+                {d.fieldStatus === 'in-progress' ? 'Being done right now' : 'Researched, not yet done'}
+              </span>
+              <span class="text-soft">— sources checked, but nobody has built this yet.</span>
+              <a href="/tracker/" class="underline underline-offset-2 hover:text-paw">
+                What that means
+              </a>
+            </p>
+          )
+        }
+
+        {
+          d.licensedTrade && (
+            <aside class="sign sign-danger mb-8">
+              <div class="flex gap-3 items-start">
+                <span class="text-2xl shrink-0" aria-hidden="true">
+                  ⚠️
+                </span>
+                <div>
+                  <p class="font-display font-700 text-lg leading-tight">
+                    This work needs a licensed trade in WA
+                  </p>
+                  <p class="mt-1.5 leading-relaxed">{d.licensedTrade}</p>
+                </div>
+              </div>
+            </aside>
+          )
+        }
+
+        {
+          d.status === 'stub' ? (
+            <div class="cutout p-5 sm:p-7">
+              <span class="text-3xl" aria-hidden="true">
+                🌱
+              </span>
+              <h2 class="font-display font-900 text-2xl sm:text-3xl mt-2.5 leading-tight">
+                Not planted yet — but the plan for it is final
+              </h2>
+              <p class="mt-3 leading-relaxed text-soft max-w-[62ch]">
+                The practical task and the checklist below are exactly what this lesson will teach.
+                What is missing is the written explanation and the curated links, each one fetched
+                and verified before it ships.
+              </p>
+              <p class="mt-3 leading-relaxed text-soft max-w-[62ch]">
+                In the meantime the checklist is genuinely usable on its own. Take it outside.
+              </p>
+            </div>
+          ) : (
+            <div class="prose-garden">
+              <Content />
+            </div>
+          )
+        }
+
+        {
+          d.deliverable && (
+            <section class="mt-10">
+              <h2 class="font-display font-900 text-2xl sm:text-3xl">Do this on your own block</h2>
+              <div
+                class="mt-4 rounded-[18px] border-2 p-5 sm:p-6"
+                style="border-color: var(--paw); background: color-mix(in srgb, var(--paw) 7%, var(--surface));"
+              >
+                <p class="label">Field journal entry</p>
+                <h3 class="font-display font-700 text-xl sm:text-2xl leading-tight mt-1 text-paw">
+                  {d.deliverable.title}
+                </h3>
+                <p class="mt-3 leading-relaxed max-w-[62ch] font-hand text-[1.05rem]">
+                  {d.deliverable.prompt}
+                </p>
+
+                <div data-workbook={d.deliverable.workbookKey} class="mt-4" hidden>
+                  <textarea
+                    class="w-full min-h-[9rem] rounded-xl border-2 border-edge bg-surface p-3 leading-relaxed"
+                    placeholder="Write your answer here — it saves to your workbook automatically."
+                  ></textarea>
+                  <p class="label mt-1.5" data-workbook-status>Saved to your workbook</p>
+                </div>
+                <p class="note mt-3" data-workbook-signin>
+                  <a href="/my/" class="underline underline-offset-2 hover:text-paw">
+                    Sign in
+                  </a>{' '}
+                  to write this straight into your project workbook — or just keep it in a notebook.
+                </p>
+              </div>
+            </section>
+          )
+        }
+
+        {
+          d.checklist.length > 0 && (
+            <section class="mt-10">
+              <h2 class="font-display font-900 text-2xl sm:text-3xl">Checklist</h2>
+              <ul class="mt-4 grid gap-2">
+                {d.checklist.map((item, i) => (
+                  <li class="marker flex gap-3 p-3.5 items-start">
+                    <span
+                      class="w-6 h-6 rounded-md border-2 border-edge shrink-0 mt-0.5 grid place-items-center text-xs font-display font-700"
+                      style="color: var(--ink-soft);"
+                      aria-hidden="true"
+                    >
+                      {i + 1}
+                    </span>
+                    <span class="leading-snug">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          d.videos.length > 0 && (
+            <section class="mt-10">
+              <h2 class="font-display font-900 text-2xl sm:text-3xl">Watch</h2>
+              <div class="grid gap-4 sm:grid-cols-2 mt-4">
+                {d.videos.map((v) => (
+                  <VideoCard video={v} />
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        {
+          d.resources.length > 0 && (
+            <section class="mt-10">
+              <h2 class="font-display font-900 text-2xl sm:text-3xl">Where to go deeper</h2>
+              <p class="note mt-1">
+                Every link below was fetched and checked before it shipped. Nothing here is a guess.
+              </p>
+              <ul class="grid gap-3 mt-4">
+                {d.resources.map((r) => (
+                  <ResourceCard resource={r} />
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          d.regulations.length > 0 && (
+            <section class="mt-10">
+              <h2 class="font-display font-900 text-2xl sm:text-3xl">The rules, with sources</h2>
+              <p class="note mt-1">
+                WA regulation changes. Each point below names its primary source and the date it was
+                last checked — always confirm with your own council before you build.
+              </p>
+              <ul class="grid gap-3 mt-4">
+                {d.regulations.map((reg) => (
+                  <li class="sign list-none">
+                    <p class="leading-relaxed">{reg.claim}</p>
+                    <p class="label mt-2">
+                      <a
+                        href={reg.sourceUrl}
+                        class="underline underline-offset-2 hover:text-paw transition-colors"
+                      >
+                        {reg.source} ↗
+                      </a>
+                      {' · checked '}
+                      {reg.checkedOn.toLocaleDateString('en-AU', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </div>
+
+      <!-- ── Side rail ───────────────────────────────────────────── -->
+      <aside class="lg:sticky lg:top-24 lg:self-start">
+        <div class="cutout overflow-hidden">
+          <p class="label px-4 pt-3.5 pb-2">
+            Phase {String(d.phase).padStart(2, '0')} — {phase.title}
+          </p>
+          <ol class="max-h-[58vh] overflow-y-auto pb-1">
+            {
+              phaseLessons.map((l) => {
+                const current = l.id === lesson.id;
+                return (
+                  <li>
+                    <a
+                      href={lessonUrl(l)}
+                      aria-current={current ? 'page' : undefined}
+                      class:list={[
+                        'flex gap-2.5 px-4 py-2.5 text-[0.92rem] leading-snug border-l-4 transition-colors',
+                        current
+                          ? 'border-[var(--paw)] text-paw font-500'
+                          : 'border-transparent text-soft hover:text-ink hover:bg-surface-2',
+                      ]}
+                    >
+                      <span class="font-display font-700 text-xs pt-0.5 shrink-0 opacity-70">
+                        {String(l.data.order).padStart(2, '0')}
+                      </span>
+                      <span>{l.data.title}</span>
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ol>
+        </div>
+
+        <button
+          type="button"
+          data-mark-done
+          class="btn btn-ghost w-full justify-center mt-3 text-[0.95rem]"
+          hidden
+        >
+          <span data-mark-label>Mark this lesson done</span>
+        </button>
+      </aside>
+    </div>
+
+    <!-- ── Prev / next ───────────────────────────────────────────── -->
+    <nav class="mt-12 mb-16 grid gap-3 sm:grid-cols-2">
+      {
+        prev ? (
+          <a href={lessonUrl(prev)} class="cutout cutout-lift p-4 sm:p-5">
+            <p class="label">← Previous</p>
+            <p class="font-display font-700 text-lg mt-1 leading-tight">{prev.data.title}</p>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a href={lessonUrl(next)} class="cutout cutout-lift p-4 sm:p-5 sm:text-right">
+            <p class="label">Next →</p>
+            <p class="font-display font-700 text-lg mt-1 leading-tight">{next.data.title}</p>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </article>
+
+  <script>
+    // Lesson pages are prerendered for speed, so anything account-specific is
+    // filled in here after load.
+    const article = document.querySelector<HTMLElement>('[data-lesson-id]');
+    const lessonId = article?.dataset.lessonId ?? '';
+
+    // Remember where you got to, so the home page can offer to resume even when
+    // you are signed out.
+    try {
+      localStorage.setItem(
+        'last-lesson',
+        JSON.stringify({
+          href: location.pathname,
+          title: document.querySelector('h1')?.textContent?.trim() ?? '',
+          id: lessonId,
+        }),
+      );
+    } catch {
+      /* Storage blocked. Nothing here depends on it. */
+    }
+
+    const markBtn = document.querySelector<HTMLButtonElement>('[data-mark-done]');
+    const markLabel = document.querySelector<HTMLElement>('[data-mark-label]');
+    const workbook = document.querySelector<HTMLElement>('[data-workbook]');
+    const workbookArea = workbook?.querySelector('textarea');
+    const workbookStatus = document.querySelector<HTMLElement>('[data-workbook-status]');
+    const workbookSignin = document.querySelector<HTMLElement>('[data-workbook-signin]');
+
+    let done = false;
+    const paint = () => {
+      if (!markLabel) return;
+      markLabel.textContent = done ? '✓ Done — tap to undo' : 'Mark this lesson done';
+      markBtn?.classList.toggle('btn-primary', done);
+      markBtn?.classList.toggle('btn-ghost', !done);
+    };
+
+    fetch('/api/me')
+      .then((r) => r.json())
+      .then((me) => {
+        if (!me.signedIn) return;
+
+        if (markBtn) {
+          markBtn.hidden = false;
+          done = Boolean(me.progress?.[lessonId]);
+          paint();
+          markBtn.addEventListener('click', async () => {
+            done = !done;
+            paint();
+            await fetch('/api/progress', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ lessonId, done }),
+            });
+          });
+        }
+
+        if (workbook && workbookArea) {
+          const key = workbook.dataset.workbook ?? '';
+          workbook.hidden = false;
+          if (workbookSignin) workbookSignin.hidden = true;
+          workbookArea.value = me.workbook?.[key] ?? '';
+
+          let timer: ReturnType<typeof setTimeout>;
+          workbookArea.addEventListener('input', () => {
+            if (workbookStatus) workbookStatus.textContent = 'Saving…';
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+              await fetch('/api/workbook', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ workbookKey: key, lessonId, content: workbookArea.value }),
+              });
+              if (workbookStatus) workbookStatus.textContent = 'Saved to your workbook';
+            }, 700);
+          });
+        }
+      })
+      .catch(() => {
+        /* Signed out or offline — the page works fine without any of this. */
+      });
+  </script>
+</Base>

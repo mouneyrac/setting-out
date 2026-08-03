@@ -1,0 +1,364 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import { templates } from '../../data/templates';
+import { getPhase } from '../../data/phases';
+
+export const getStaticPaths = (() =>
+  templates.map((template) => ({
+    params: { template: template.slug },
+    props: { template },
+  }))) satisfies GetStaticPaths;
+
+const { template } = Astro.props;
+const phase = getPhase(template.phase);
+---
+
+<Base title={template.title} description={template.summary}>
+  <div class="mx-auto max-w-[62rem] px-4 sm:px-6 pt-8 pb-16">
+    <!-- Screen-only chrome. The print stylesheet drops all of this. -->
+    <div class="no-print">
+      <nav class="label flex items-center gap-2" aria-label="Breadcrumb">
+        <a href="/toolkit/" class="hover:text-paw transition-colors">Toolkit</a>
+        <span aria-hidden="true">›</span>
+        <span>{template.title}</span>
+      </nav>
+
+      <h1
+        class="mt-4 font-display font-900 leading-[1.08]"
+        style="font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem);"
+      >
+        {template.title}
+      </h1>
+      <p class="mt-3 leading-relaxed text-soft max-w-[64ch]">{template.summary}</p>
+
+      <div class="cutout p-4 sm:p-5 mt-5">
+        <p class="leading-relaxed">{template.intro}</p>
+        <p class="note mt-3">
+          Fill it in here and it stays in this browser, or print it and take it outside. Nothing is
+          sent anywhere.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-4">
+          <button type="button" class="btn btn-primary text-sm py-2.5 px-5" id="print">
+            Print or save as PDF
+          </button>
+          <button type="button" class="btn btn-ghost text-sm py-2.5 px-5" id="clear">
+            Clear this form
+          </button>
+          {
+            template.lessonPath && (
+              <a href={template.lessonPath} class="btn btn-ghost text-sm py-2.5 px-5">
+                Read the lesson →
+              </a>
+            )
+          }
+        </div>
+        <p class="note mt-3" id="save-status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- The sheet itself -->
+    <article class="print-sheet mt-8" data-template={template.slug}>
+      <header class="print-header">
+        <h2 class="font-display font-900 text-2xl">{template.title}</h2>
+        <p class="label mt-1">
+          Setting Out · Phase {String(phase.number).padStart(2, '0')} — {phase.title}
+        </p>
+        <div class="grid grid-cols-2 gap-4 mt-4">
+          <label class="block">
+            <span class="label block mb-1">Property</span>
+            <input type="text" class="line-field" data-field="meta-property" />
+          </label>
+          <label class="block">
+            <span class="label block mb-1">Date</span>
+            <input type="text" class="line-field" data-field="meta-date" />
+          </label>
+        </div>
+      </header>
+
+      {
+        template.sections.map((section, si) => (
+          <section class="mt-8 break-inside-avoid">
+            <h3 class="font-display font-700 text-xl">{section.title}</h3>
+            {section.hint && <p class="note mt-0.5">{section.hint}</p>}
+
+            {section.kind === 'fields' && (
+              <div class="grid gap-3.5 mt-3">
+                {section.fields.map((field, fi) => (
+                  <label class="block">
+                    <span class="label block mb-1">{field.label}</span>
+                    {field.hint && <span class="note block mb-1 -mt-1">{field.hint}</span>}
+                    {field.lines && field.lines > 1 ? (
+                      <textarea rows={field.lines} class="box-field" data-field={`s${si}-f${fi}`} />
+                    ) : (
+                      <input type="text" class="line-field" data-field={`s${si}-f${fi}`} />
+                    )}
+                  </label>
+                ))}
+              </div>
+            )}
+
+            {section.kind === 'table' && (
+              <div class="scroll-x mt-3">
+                <table class="template-table">
+                  <thead>
+                    <tr>
+                      {section.columns.map((column) => (
+                        <th>{column}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Array.from({ length: section.rows }).map((_, ri) => (
+                      <tr>
+                        {section.columns.map((_column, ci) => (
+                          <td>
+                            <input type="text" class="cell-field" data-field={`s${si}-r${ri}-c${ci}`} />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {section.kind === 'checklist' && (
+              <ul class="grid gap-2 mt-3">
+                {section.items.map((item, ii) => (
+                  <li class="marker flex gap-3 p-3 items-start">
+                    <input
+                      type="checkbox"
+                      class="w-5 h-5 mt-0.5 shrink-0 accent-[var(--leaf)]"
+                      data-field={`s${si}-c${ii}`}
+                    />
+                    <span class="leading-snug">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {section.kind === 'notes' && (
+              <textarea rows={section.lines} class="box-field mt-3" data-field={`s${si}-notes`} />
+            )}
+          </section>
+        ))
+      }
+
+      <footer class="print-footer">
+        <p class="label">
+          settingout.mouneyrac.com — educational material, not professional advice. Confirm
+          regulatory detail with your local council before you build, dig or spend.
+        </p>
+      </footer>
+    </article>
+  </div>
+
+  <style is:global>
+    .line-field {
+      width: 100%;
+      border: 0;
+      border-bottom: 2px solid var(--edge);
+      background: transparent;
+      padding: 0.35rem 0.15rem;
+      font: inherit;
+      color: inherit;
+      border-radius: 0;
+    }
+    .line-field:focus {
+      outline: none;
+      border-bottom-color: var(--leaf);
+    }
+    .box-field {
+      width: 100%;
+      border: 2px solid var(--edge);
+      border-radius: 12px;
+      background: var(--surface);
+      padding: 0.6rem 0.75rem;
+      font: inherit;
+      color: inherit;
+      resize: vertical;
+    }
+    .box-field:focus {
+      outline: none;
+      border-color: var(--leaf);
+    }
+    .template-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .template-table th {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 0.45rem 0.5rem;
+      background: var(--surface-2);
+      border: 1px solid var(--edge-strong);
+      white-space: nowrap;
+    }
+    .template-table td {
+      border: 1px solid var(--edge);
+      padding: 0;
+    }
+    .cell-field {
+      width: 100%;
+      min-width: 6rem;
+      border: 0;
+      background: transparent;
+      padding: 0.5rem;
+      font: inherit;
+      font-size: 0.9rem;
+      color: inherit;
+    }
+    .cell-field:focus {
+      outline: 2px solid var(--leaf);
+      outline-offset: -2px;
+    }
+    .print-header,
+    .print-footer {
+      display: none;
+    }
+
+    /* ── Print: an A4 form, not a web page ───────────────────────────── */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm;
+      }
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 10.5pt;
+        line-height: 1.4;
+      }
+      header[class*='sticky'],
+      footer,
+      .no-print,
+      #update-pill,
+      #search-dialog {
+        display: none !important;
+      }
+      .print-header,
+      .print-footer {
+        display: block;
+      }
+      .print-header {
+        border-bottom: 2px solid #000;
+        padding-bottom: 8px;
+        margin-bottom: 4px;
+      }
+      .print-footer {
+        border-top: 1px solid #999;
+        margin-top: 18px;
+        padding-top: 6px;
+      }
+      .print-sheet {
+        margin: 0 !important;
+        max-width: none;
+      }
+      .break-inside-avoid {
+        break-inside: avoid;
+      }
+      .line-field,
+      .box-field {
+        border-color: #999 !important;
+        background: transparent !important;
+      }
+      .template-table th {
+        background: #eee !important;
+        border-color: #666 !important;
+        color: #000 !important;
+      }
+      .template-table td {
+        border-color: #999 !important;
+      }
+      .scroll-x {
+        overflow: visible !important;
+      }
+      .note,
+      .label {
+        color: #444 !important;
+      }
+      .marker {
+        border-color: #999 !important;
+        background: transparent !important;
+      }
+      a[href]::after {
+        content: '';
+      }
+    }
+  </style>
+
+  <script>
+    // Entries stay in this browser. Nothing is sent anywhere, which is the
+    // honest thing for a form that may hold your address and your budget.
+    const sheet = document.querySelector<HTMLElement>('[data-template]');
+    const key = `template:${sheet?.dataset.template ?? ''}`;
+    const status = document.getElementById('save-status');
+    const fields = Array.from(
+      document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-field]'),
+    );
+
+    const load = () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem(key) ?? '{}');
+        let restored = 0;
+        for (const field of fields) {
+          const value = saved[field.dataset.field!];
+          if (value === undefined) continue;
+          if (field instanceof HTMLInputElement && field.type === 'checkbox') field.checked = !!value;
+          else field.value = String(value);
+          restored++;
+        }
+        if (restored && status) status.textContent = 'Restored what you had already filled in.';
+      } catch {
+        /* Nothing saved, or storage unavailable. */
+      }
+    };
+
+    let timer: ReturnType<typeof setTimeout>;
+    const save = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const data: Record<string, string | boolean> = {};
+        for (const field of fields) {
+          const name = field.dataset.field!;
+          if (field instanceof HTMLInputElement && field.type === 'checkbox') {
+            if (field.checked) data[name] = true;
+          } else if (field.value.trim()) {
+            data[name] = field.value;
+          }
+        }
+        try {
+          localStorage.setItem(key, JSON.stringify(data));
+          if (status) status.textContent = 'Saved in this browser.';
+        } catch {
+          if (status) status.textContent = 'Could not save — storage is full or blocked.';
+        }
+      }, 400);
+    };
+
+    for (const field of fields) {
+      field.addEventListener('input', save);
+      field.addEventListener('change', save);
+    }
+
+    load();
+
+    document.getElementById('print')?.addEventListener('click', () => window.print());
+
+    document.getElementById('clear')?.addEventListener('click', () => {
+      if (!confirm('Clear everything you have typed into this form?')) return;
+      for (const field of fields) {
+        if (field instanceof HTMLInputElement && field.type === 'checkbox') field.checked = false;
+        else field.value = '';
+      }
+      localStorage.removeItem(key);
+      if (status) status.textContent = 'Cleared.';
+    });
+  </script>
+</Base>

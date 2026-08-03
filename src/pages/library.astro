@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import { allLessons } from '../lib/curriculum';
+import { getCollection } from 'astro:content';
+import { templates } from '../data/templates';
+
+const lessons = await allLessons();
+const reference = await getCollection('reference');
+
+// Reference pages carry resources too, so counting only lessons under-reports.
+const everyResource = [
+  ...lessons.flatMap((l) => l.data.resources),
+  ...reference.flatMap((r) => r.data.resources),
+];
+const resourceCount = everyResource.length;
+const freeCount = everyResource.filter((r) => r.cost === 'free').length;
+const videoCount = lessons.reduce((n, l) => n + l.data.videos.length, 0);
+const regulationCount =
+  lessons.reduce((n, l) => n + l.data.regulations.length, 0) +
+  reference.reduce((n, r) => n + r.data.regulations.length, 0);
+const fieldTested = lessons.filter((l) => l.data.fieldStatus === 'field-tested').length;
+
+/**
+ * Everything that is not the course itself.
+ *
+ * This page does double duty on purpose: it is where a learner grabs a template
+ * mid-job, and it is where someone deciding whether to trust this at all can see
+ * what the course is actually made of before committing.
+ */
+const shelves = [
+  {
+    href: '/resources/',
+    emoji: '🔗',
+    title: 'Resources',
+    stat: resourceCount.toLocaleString('en-AU'),
+    statLabel: `verified links · ${freeCount.toLocaleString('en-AU')} free`,
+    body: 'Every course, video, book, standard, tool and government source the lessons point at. Each fetched, then independently re-checked, and annotated with what it costs and why it beat the alternatives.',
+  },
+  {
+    href: '/reference/',
+    emoji: '📍',
+    title: 'WA guide',
+    stat: String(reference.length),
+    statLabel: 'reference pages',
+    body: 'The facts that date fastest, kept in one place with a source and a check date: the sprinkler roster, permit thresholds, Perth soils, plant selection, suppliers, and the Noongar six seasons.',
+  },
+  {
+    href: '/toolkit/',
+    emoji: '🖨️',
+    title: 'Toolkit',
+    stat: String(templates.length),
+    statLabel: 'printable templates',
+    body: 'Brief, site analysis, garden audit, plant schedule, cost plan, retic audit, maintenance calendar. Fill them in on screen or print them to A4 — nothing you type leaves your browser.',
+  },
+  {
+    href: '/tracker/',
+    emoji: '🚧',
+    title: 'Tracker',
+    stat: `${fieldTested}/${lessons.length}`,
+    statLabel: 'actually done',
+    body: 'Written is not the same as done. This is the public record of how far ahead the path has really been walked — read it before you follow anything that costs money or carries risk.',
+  },
+  {
+    href: '/about/',
+    emoji: '📖',
+    title: 'What this is',
+    stat: '',
+    statLabel: 'Read this first',
+    body: 'Written by AI, by someone who is not a landscaping professional, on their own Perth block. How it was made, why it is free, and the course-first-platform-second experiment behind it.',
+  },
+];
+---
+
+<Base
+  title="Library"
+  description="Everything beside the course itself: 1,556 verified resources, the WA reference pages, printable templates, the public tracker, and an honest account of what this is."
+>
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 70%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[84rem] px-4 sm:px-6 pt-12 pb-8">
+      <h1
+        class="font-display font-900 leading-[1.06] max-w-[16ch]"
+        style="font-size: clamp(2.1rem, 1.4rem + 3vw, 3.5rem);"
+      >
+        Everything except the course
+      </h1>
+      <p class="mt-4 max-w-[62ch] text-lg leading-relaxed text-soft">
+        The lessons link to all of this at the moment you need it, so you should rarely have to come
+        here on purpose. It is also the honest answer to "what is this course actually made of?"
+      </p>
+
+      <p class="note mt-4 max-w-[62ch]">
+        {resourceCount.toLocaleString('en-AU')} external resources, {videoCount} videos and
+        {' '}{regulationCount} regulatory claims — every one fetched, then refetched by a second
+        pass that checked the page still said what the annotation claimed.
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-16">
+    <ul class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      {
+        shelves.map((shelf) => (
+          <li class="list-none">
+            <a href={shelf.href} class="cutout cutout-lift p-5 sm:p-6 block h-full">
+              <span class="text-3xl" aria-hidden="true">
+                {shelf.emoji}
+              </span>
+              <h2 class="font-display font-700 text-2xl leading-tight mt-3">{shelf.title}</h2>
+              <p class="mt-1.5">
+                {shelf.stat && (
+                  <span class="font-display font-900 text-3xl leading-none text-leaf tabular-nums">
+                    {shelf.stat}
+                  </span>
+                )}
+                <span class="label ml-1.5">{shelf.statLabel}</span>
+              </p>
+              <p class="text-[0.95rem] leading-relaxed text-soft mt-3">{shelf.body}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>

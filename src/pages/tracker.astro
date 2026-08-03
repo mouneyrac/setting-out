@@ -1,0 +1,164 @@
+---
+import Base from '../layouts/Base.astro';
+import { lessonsByPhase, lessonUrl } from '../lib/curriculum';
+
+const groups = await lessonsByPhase();
+const all = groups.flatMap((g) => g.lessons);
+
+const counts = {
+  'field-tested': all.filter((l) => l.data.fieldStatus === 'field-tested').length,
+  'in-progress': all.filter((l) => l.data.fieldStatus === 'in-progress').length,
+  researched: all.filter((l) => l.data.fieldStatus === 'researched').length,
+};
+
+const meta = {
+  'field-tested': { label: 'Field-tested', emoji: '✅', colour: 'var(--leaf)' },
+  'in-progress': { label: 'In progress', emoji: '🚧', colour: 'var(--banksia)' },
+  researched: { label: 'Researched only', emoji: '📖', colour: 'var(--ink-soft)' },
+} as const;
+
+const done = all.filter((l) => l.data.fieldStatus === 'field-tested');
+---
+
+<Base
+  title="Tracker"
+  description="Exactly how much of this course has actually been carried out on a real Perth block, lesson by lesson. Follow the parts that are field-tested; verify the rest."
+>
+  <section class="relative overflow-hidden">
+    <div
+      class="absolute inset-0 -z-10"
+      style="background: linear-gradient(180deg, var(--sky-low) 0%, var(--paper) 72%);"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="mx-auto max-w-[84rem] px-4 sm:px-6 pt-12 pb-8">
+      <p class="label">Public tracker</p>
+      <h1
+        class="mt-2 font-display font-900 leading-[1.06] max-w-[20ch]"
+        style="font-size: clamp(2.1rem, 1.4rem + 3vw, 3.75rem);"
+      >
+        How much of this has actually been done
+      </h1>
+      <p class="mt-5 max-w-[64ch] text-lg leading-relaxed text-soft">
+        Written is not the same as done. This page is the difference, kept in public so you can see
+        exactly how far ahead the path has really been walked before you follow it.
+      </p>
+
+      <dl class="mt-7 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {
+          (['field-tested', 'in-progress', 'researched'] as const).map((key) => (
+            <div class="cutout p-5">
+              <dt class="label">
+                <span aria-hidden="true">{meta[key].emoji}</span> {meta[key].label}
+              </dt>
+              <dd
+                class="font-display font-900 text-5xl mt-1.5 leading-none tabular-nums"
+                style={`color: ${meta[key].colour}`}
+              >
+                {counts[key]}
+              </dd>
+              <dd class="text-sm text-soft mt-1.5 leading-snug">
+                {key === 'field-tested' && 'Carried out on a real block, with notes'}
+                {key === 'in-progress' && 'Being done right now'}
+                {key === 'researched' && 'Written and sources verified — but unproven'}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="sign mt-6 max-w-[76ch]">
+        <p class="leading-relaxed">
+          <strong class="font-display">How to use this honestly.</strong>
+          Follow the field-tested lessons. For everything else, the research is real and every link
+          was checked — but nobody has felt what happens when it goes wrong. Verify anything that
+          costs real money or carries real risk before you commit to it, and get a qualified person
+          to look at structural, drainage and electrical work regardless.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {
+    done.length > 0 && (
+      <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-10">
+        <h2 class="font-display font-900 text-2xl sm:text-3xl">What has been done, and what it taught</h2>
+        <ul class="grid gap-3 mt-4">
+          {done.map((lesson) => (
+            <li class="cutout p-5 list-none">
+              <div class="flex flex-wrap items-baseline gap-x-3">
+                <h3 class="font-display font-700 text-xl leading-tight">
+                  <a href={lessonUrl(lesson)} class="hover:text-paw transition-colors">
+                    {lesson.data.title}
+                  </a>
+                </h3>
+                {lesson.data.fieldTestedOn && (
+                  <span class="label">
+                    {lesson.data.fieldTestedOn.toLocaleDateString('en-AU', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                    })}
+                  </span>
+                )}
+              </div>
+              {lesson.data.fieldNotes && (
+                <p class="mt-2 leading-relaxed font-hand text-[1.05rem]">{lesson.data.fieldNotes}</p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <!-- ── Full course status ───────────────────────────────────────────── -->
+  <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-16">
+    <h2 class="font-display font-900 text-2xl sm:text-3xl">Every lesson</h2>
+
+    <div class="grid gap-4 mt-5">
+      {
+        groups.map(({ phase, lessons }) => {
+          const tested = lessons.filter((l) => l.data.fieldStatus === 'field-tested').length;
+          return (
+            <article class="cutout p-4 sm:p-5">
+              <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h3 class="font-display font-700 text-xl leading-tight">
+                  <a href={`/curriculum/${phase.slug}/`} class="hover:text-paw transition-colors">
+                    {String(phase.number).padStart(2, '0')} — {phase.title}
+                  </a>
+                </h3>
+                <span class="label">
+                  {tested} of {lessons.length} done
+                </span>
+              </div>
+
+              <ul class="grid gap-1.5 mt-3">
+                {lessons.map((lesson) => {
+                  const m = meta[lesson.data.fieldStatus];
+                  return (
+                    <li class="flex items-start gap-2.5 text-[0.95rem] leading-snug list-none">
+                      <span class="shrink-0" aria-label={m.label} title={m.label}>
+                        {m.emoji}
+                      </span>
+                      <a
+                        href={lessonUrl(lesson)}
+                        class:list={[
+                          'hover:text-paw transition-colors',
+                          lesson.data.fieldStatus === 'researched' && 'text-soft',
+                        ]}
+                      >
+                        {lesson.data.title}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+</Base>

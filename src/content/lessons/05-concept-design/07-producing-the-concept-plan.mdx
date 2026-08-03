@@ -1,0 +1,272 @@
+---
+title: "Producing the concept plan with free tools"
+phase: 5
+order: 7
+summary: "Hand drawing, SketchUp Free, QGIS, Inkscape or plain graph paper — the professional output is the same: a scaled, labelled plan that shows the layout and reads at a glance. What to draw, at what scale, and what to leave off."
+timeEstimate: "3–6 h"
+difficulty: intermediate
+status: complete
+updated: 2026-08-02
+deliverable:
+  title: "Concept plan"
+  prompt: "Produce a scaled concept plan of your property showing all zones, surfaces, structures, planting masses, levels changes and circulation, with a title block, scale, north point and date. It should answer the brief and respect the constraints plan."
+  workbookKey: "concept-plan"
+checklist:
+  - "Drawn to a stated scale with a north point and date"
+  - "Every zone from the zoning diagram is resolved into real shapes"
+  - "Level changes and steps are shown"
+  - "It can be understood without you standing there explaining it"
+resources:
+  - title: "Josh's House plans"
+    url: "https://joshshouse.com.au/resources/plans/"
+    provider: "Josh Byrne & Associates / Curtin University"
+    type: directory
+    cost: free
+    whyGood: "The only openly published, professionally drawn landscape documentation for a real Perth block that this course has found. The page offers a Landscape Concept PDF showing the key features of the garden at overview level, and a separate Landscape Design PDF carrying the plant palette — which is exactly the split this lesson asks you to make between concept and documentation. Open the Landscape Concept and study how much is shown, how little is labelled, and where the title block, scale and north point sit."
+    waRelevance: wa-specific
+    waCaveat: "It is a demonstration project on a small Fremantle-area lot, so the block shape and the water systems are not typical. Copy the sheet structure and the level of resolution, not the content."
+    checkedOn: 2026-08-02
+  - title: "Extension Gardener Handbook, Chapter 19: Landscape Design"
+    url: "https://content.ces.ncsu.edu/extension-gardener-handbook/19-landscape-design"
+    provider: "NC State Extension"
+    type: article
+    cost: free
+    duration: "60 min"
+    whyGood: "The clearest free step-by-step on the actual drawing process: build a base map to scale with property lines, utilities, existing features, windows and doors, add a north arrow, then work in tracing paper overlays for site analysis, use areas and bubble diagrams before committing to a final plan. It also covers plant symbols and how to choose a drawing scale. Written for homeowners, illustrated, and free of any product to sell."
+    waRelevance: overseas-adapt
+    waCaveat: "American and imperial — it recommends scales like 1 inch equals 10 feet. Ignore that and use the metric scales in this lesson (1:50, 1:100, 1:200). The plant material, hardiness zones and turf advice do not apply on the Swan Coastal Plain; the drawing method does."
+    checkedOn: 2026-08-02
+  - title: "Landgate Map Viewer Plus"
+    url: "https://www.landgate.wa.gov.au/location-data-and-services/maps/online-maps/map-viewer-plus/"
+    provider: "Landgate"
+    type: tool
+    cost: freemium
+    price: "Viewer free to use; imagery extracts are charged — the page listed $29.30 for a JPEG extract and $95.50 for a georeferenced extract, plus $0.64 per MB, when checked on 2 August 2026"
+    whyGood: "The official WA source for property and administrative boundaries, cadastral data, geodetic marks and aerial imagery, viewable free in a browser. Use it to sanity-check the lot shape and orientation on your base plan and to see your block in its street context before you draw. It is the state's own cadastre, not a third-party approximation of it."
+    waRelevance: wa-specific
+    waCaveat: "The on-screen cadastre is a data layer, not a survey. Do not scale a boundary position off it, and do not pay for an imagery extract for a garden concept — the free view is enough for context, and your dimensions must come from your own measure-up."
+    checkedOn: 2026-08-02
+  - title: "Cadastral surveying in Western Australia"
+    url: "https://www.landgate.wa.gov.au/location-data-and-services/surveying/cadastral/"
+    provider: "Landgate"
+    type: government
+    cost: free
+    duration: "10 min"
+    whyGood: "The page that tells you where your own tape and your own drawing have to stop. Landgate states that any person carrying out the practice of land surveying must be registered with, and hold a current Practising Certificate issued by, the Land Surveyors Licensing Board of Western Australia under the Licensed Surveyors Act 1909. Read it before you draw anything hard up against a boundary, because a wall in the wrong place is the single most expensive line you can put on a concept plan."
+    waRelevance: wa-specific
+    checkedOn: 2026-08-02
+  - title: "QCAD Community Edition"
+    url: "https://www.qcad.org/en/qcad-downloads-trial"
+    provider: "QCAD.org"
+    type: tool
+    cost: freemium
+    price: "Community Edition free and open source (GPLv3); the QCAD Professional add-on is paid"
+    whyGood: "The best free route to a drawing that is genuinely to scale, with real dimension entities, layers and printing at a stated scale — which is what separates a plan from a picture. The page lists 3.32.9 as the current release and confirms the Community Edition is released under GPLv3, and explains the slightly awkward path to the free version: download the trial for your platform, then remove the QCAD Professional add-on from the Trial widget, or compile from source. Runs on Windows, macOS (including Apple Silicon) and Linux."
+    waRelevance: universal
+    waCaveat: "Nothing Perth-specific — CAD geometry is identical everywhere. Set your drawing units to millimetres before the first line, because every dimension in this course is in millimetres."
+    checkedOn: 2026-08-02
+  - title: "Inkscape"
+    url: "https://inkscape.org/release/"
+    provider: "Inkscape Project"
+    type: tool
+    cost: free
+    whyGood: "A mature free vector drawing program — version 1.4.4, released 6 May 2026, for Linux, Windows and macOS, with the source released under the GNU General Public License v2 or later. It is the right free tool if you want a concept plan that looks designed rather than drafted: proper line weights, transparent fills for planting masses, and clean text. Set the document to A3 in millimetres and draw at 1:100 by treating every 10 mm as a metre."
+    waRelevance: universal
+    waCaveat: "Inkscape is a graphics program, not CAD. It has no dimension entities and will happily let you draw something that is not to scale, so build a scale bar into the sheet early and check it against a known distance before you trust anything you have drawn."
+    checkedOn: 2026-08-02
+  - title: "QGIS"
+    url: "https://qgis.org/download/"
+    provider: "QGIS.org"
+    type: tool
+    cost: free
+    whyGood: "Free and open-source GIS under the GNU General Public License, for Windows, macOS and Linux. The current release is 4.2.0 'Belém do Pará' (3 July 2026) with 3.44.12 as the long-term release, which is the one to install if you are new. Worth the effort only if you want your plan sitting on real aerial imagery and real cadastre — its print layout can output a PDF at a fixed, stated map scale, which most drawing apps cannot."
+    waRelevance: universal
+    waCaveat: "Heavy machinery for a suburban block, and it will not draw a garden for you. Nothing you trace off aerial imagery in QGIS is a set-out dimension; the imagery is orthorectified to a tolerance, not to your fence line."
+    checkedOn: 2026-08-02
+  - title: "SketchUp Free"
+    url: "https://sketchup.trimble.com/en/plans-and-pricing/sketchup-free"
+    provider: "Trimble"
+    type: tool
+    cost: free
+    whyGood: "Free browser-based 3D modelling with 10 GB of Trimble Connect storage, importing SKP, JPG and PNG and exporting SKP, PNG and STL. The one job it does better than anything else free is showing you whether a level change, a run of steps, a screen or a pergola actually works at eye level — the thing a plan view always lies about. Model the retaining and the roof lines only; do not try to model the planting."
+    waRelevance: universal
+    waCaveat: "It is a sanity-check tool, not the deliverable. The free tier exports SKP, PNG and STL, so there is no route out of it to a printed, dimensioned sheet at a stated scale. It also needs a live connection."
+    checkedOn: 2026-08-02
+  - title: "Excalidraw"
+    url: "https://github.com/excalidraw/excalidraw"
+    provider: "Excalidraw"
+    type: tool
+    cost: free
+    whyGood: "An open-source (MIT licence) hand-drawn-style whiteboard that runs free in a browser at excalidraw.com with no sign-up, saves to the browser, works offline as a progressive web app, and supports end-to-end encrypted real-time collaboration. That last part is the use case: two people arguing about where the alfresco goes from different rooms, on the same canvas."
+    waRelevance: universal
+    waCaveat: "It has no concept of scale. Use it for option sketching and for the bubble diagram stage, never for the concept plan itself — a scribble that gets treated as a plan is how gardens end up 600 mm short of a bin store."
+    checkedOn: 2026-08-02
+  - title: "Free printable graph paper (A4, ruled in millimetres)"
+    url: "https://incompetech.com/graphpaper/"
+    provider: "Incompetech"
+    type: tool
+    cost: free
+    whyGood: "A generator that produces printable PDF grids including A4 ruled in millimetres with 10 mm and 2 mm squares, released into the public domain so you can print as many as you like. A4 at 10 mm squares is a ready-made 1:100 grid where every square is one square metre — the cheapest scaled drawing surface there is, and the fastest way to start."
+    waRelevance: universal
+    waCaveat: "Print at 100 per cent, not 'fit to page', or the grid comes out at 96 per cent and every square quietly stops being a metre."
+    checkedOn: 2026-08-02
+videos: []
+regulations:
+  - claim: "In Western Australia, any person carrying out the practice of land surveying must be registered with, and hold a current Practising Certificate issued by, the Land Surveyors Licensing Board of Western Australia under the Licensed Surveyors Act 1909. Landgate does not provide cadastral surveying services."
+    source: "Landgate"
+    sourceUrl: "https://www.landgate.wa.gov.au/location-data-and-services/surveying/cadastral/"
+    checkedOn: 2026-08-02
+  - claim: "Before building on a residential property you should determine the location of any Water Corporation assets on the property. Horizontal clearances differ for structures with and without piles, easements are registered on the title deed and may restrict what can be built, and where piling is required a pile detail and a site plan showing pile positions and spacing must be provided, signed by a structural engineer."
+    source: "Water Corporation"
+    sourceUrl: "https://www.watercorporation.com.au/developing-and-building/working-near-assets/building-on-a-residential-property"
+    checkedOn: 2026-08-02
+  - claim: "The current Residential Design Codes Volume 1 is the April 2026 version, which came into effect on 10 April 2026. Any concept plan should be checked against this version, not an earlier one."
+    source: "Department of Planning, Lands and Heritage"
+    sourceUrl: "https://www.wa.gov.au/government/document-collections/residential-design-codes-volume-1-including-medium-density"
+    checkedOn: 2026-08-02
+---
+
+Everything so far has been private. The zoning diagram was for you, the material
+board was for you, the hydrozones were a coloured overlay nobody else has seen.
+The concept plan is the first document in this course that leaves your head and
+starts making other people act: a landscaper prices from it, a neighbour reacts to
+it, a partner agrees or does not agree to it.
+
+That changes what it has to be. Not prettier — clearer. A concept plan has one
+job: to show what goes where, at what size, so that a competent stranger can
+understand the garden without you standing beside them talking.
+
+On a renovation you already own most of the hard part. Your
+[measure-up](/curriculum/site-analysis/measuring-up/) gave you the boundaries and
+the house, your [audit](/curriculum/site-analysis/auditing-an-existing-garden/)
+gave you the KEEP items, and your
+[constraints plan](/curriculum/site-analysis/constraints-and-opportunities-plan/)
+gave you the no-go areas. This lesson is about drawing over the top of that
+without wrecking it.
+
+## What a professional does at this stage
+
+Four habits, and none of them are about software.
+
+**They separate the base from the design.** The base plan — boundaries, house
+footprint, doors and windows, levels, KEEP trees, soakwells, easements — is drawn
+once, accurately, and never redrawn. Every design idea goes on a layer or a sheet
+of tracing paper over the top. Base plan sacred, design disposable. That one
+discipline is why a designer can produce a fourth option in twenty minutes while
+an amateur is redrawing the house for the fourth time.
+
+**They fix the scale before the first line.** Not "roughly a metre a square" — a
+stated scale, chosen for the block and the sheet, printed on the drawing.
+
+**They match the resolution to the decision.** A concept plan does not carry
+species names, paving joint patterns, dimensions or construction build-ups. Those
+are Phase 6. Putting them in now is not thoroughness, it is committing to detail
+you will have to unpick when the layout moves 400 mm.
+
+**They title-block it.** Address, drawing title, scale, sheet size, north point,
+date, revision letter, and the words **CONCEPT ONLY — NOT FOR CONSTRUCTION**. The
+drawing will outlive the conversation that produced it, and in six months nobody
+will remember which of the three versions on the kitchen bench was the current
+one.
+
+## Pick the scale, then the sheet
+
+Metric scale is simple arithmetic. At 1:100, one metre on the ground is 10 mm on
+paper. At 1:50 it is 20 mm; at 1:200 it is 5 mm.
+
+| Site | Scale | Sheet | 1 m on the ground |
+| --- | --- | --- | --- |
+| Courtyard or small rear garden, up to about 10 × 15 m | 1:50 | A3 | 20 mm |
+| Typical Perth green-title block, 10–18 m frontage | **1:100** | A3 | 10 mm |
+| Large block, or whole site including the verge, over about 20 × 40 m | 1:200 | A3 | 5 mm |
+| A single element — steps, a seat, a planter | 1:20 | A4 | 50 mm |
+
+Work it out for your block before you print anything. A 12.5 × 36 m lot at 1:100
+is 125 × 360 mm, which sits on A3 (297 × 420 mm) with room for a title block. A
+20 × 45 m lot at 1:100 is 200 × 450 mm and does not fit — so it is 1:200 on A3, or
+1:100 on A2.
+
+Two rules that save you later. Put a **graphic scale bar** on the sheet as well as
+the written scale, because the written "1:100" is a lie the moment someone prints
+it on A4 and the bar is not. And when you print, choose **100 per cent** or "actual
+size", never "fit to page" — the default shrink is around 96 per cent, which is
+enough to make every measurement you scale off the drawing wrong by 400 mm over a
+10 m run.
+
+## Choosing your route
+
+All of these are free. The bottleneck is decisions, not software.
+
+| Route | Draws to scale? | Best at | Worst at |
+| --- | --- | --- | --- |
+| **Tracing paper over a printed base plan** | Yes, if the base is | Speed, iteration, curves, thinking with your hand | Tidy output; you will end up photographing it |
+| **Graph paper, 10 mm squares** | Yes — one square = 1 m at 1:100 | Starting in the next five minutes, no setup | Curves, revisions, anything organic |
+| **[Inkscape](https://inkscape.org/release/)** | Only if you enforce it | A concept plan that looks designed — line weights, transparent planting masses | No dimensions, no scale awareness, will let you cheat |
+| **[QCAD Community](https://www.qcad.org/en/qcad-downloads-trial)** | Yes, properly | Real dimensions, layers, printing at a stated scale | Learning curve; ugly by default |
+| **[QGIS](https://qgis.org/download/)** | Yes, in a print layout | Sitting the plan on real cadastre and aerial imagery | Everything else; it is a GIS, not a pen |
+| **[SketchUp Free](https://sketchup.trimble.com/en/plans-and-pricing/sketchup-free)** | In 3D, not on paper | Checking level changes and screens at eye level | It cannot export a scaled printed sheet |
+| **Excalidraw** | No | Two people sketching options together, live | Being mistaken for a plan |
+
+The honest recommendation: print your base plan at 1:100 on A3, tape tracing paper
+over it, and draw. Do the whole design that way, then redraw the resolved version
+in Inkscape or QCAD only if you need something you can email. Anyone who spends
+the first evening learning CAD instead of deciding where the paving goes has
+optimised the wrong thing.
+
+## Drawing it
+
+1. **Print three or four copies of the base plan** at your chosen scale. Never
+   draw on the original.
+2. **Tape tracing paper over one** and trace the fixed geometry in a fine pen:
+   boundaries, house wall, every door and window (they govern sightlines and
+   access), KEEP trees at canopy spread, soakwell lids, easements, meter box,
+   crossover.
+3. **Convert bubbles to edges.** Take each zone from your
+   [zoning diagram](/curriculum/concept-design/functional-zoning/) and give it a
+   real, measurable shape. This is the step people skip. A bubble labelled
+   "dining" becomes a 4.2 × 3.6 m rectangle of paving, or it does not exist.
+4. **Draw circulation next, with widths.** The working conventions: about
+   1200 mm for a main path two people can walk side by side, 900 mm for a
+   comfortable single path, 600 mm for service access only. See
+   [circulation and sightlines](/curriculum/concept-design/circulation-and-sightlines/).
+5. **Show every level change.** A step, a wall, a ramp, a mounded bed. Mark the top
+   and bottom levels against the datum you established in
+   [levels, falls and datum](/curriculum/site-analysis/levels-falls-and-datum/).
+   A level change drawn as a single thin line is how a 900 mm drop with no barrier
+   gets built.
+6. **Tone the surfaces.** Three or four hatches — paving, deck, lawn, mulch bed,
+   gravel — and a legend. Keep it to what you settled in
+   [style and materials](/curriculum/concept-design/style-and-materials/).
+7. **Mass the planting, do not name it.** Draw canopies at roughly 70 per cent of
+   mature spread and label by role and size: "screen, 3 m", "groundcover mass",
+   "feature tree". Species lists belong in Phase 6.
+8. **Title block, north point, date, revision letter.** True north, not "up".
+
+## The checks before you call it finished
+
+- Every zone from the zoning diagram appears as a real shape with real dimensions.
+- Nothing is drawn over a soakwell lid, an inspection opening, an easement, or
+  inside a Water Corporation clearance zone. Easements are on your title deed, and
+  building near assets can trigger clearance requirements and engineer-signed pile
+  details — check
+  [approvals](/curriculum/approvals/structures-and-building-permits/) before you
+  commit.
+- The outdoor living area, the tree planting area and the street setback still
+  satisfy the R-Codes minimums from
+  [design fundamentals](/curriculum/concept-design/design-fundamentals/). Check
+  which version applies against
+  [the R-Codes Volume 1 collection](https://www.wa.gov.au/government/document-collections/residential-design-codes-volume-1-including-medium-density)
+  — the current one at the time of writing is April 2026.
+- No boundary position has been scaled off aerial imagery. Cadastre layers and
+  photography are indicative; only a surveyor registered with the Land Surveyors
+  Licensing Board can fix a boundary, and anything you build hard against one is
+  riding on that distinction.
+- Hand it to someone who has not heard the argument. If they ask "what is this
+  bit?", the drawing has failed, not them.
+
+Then write **CONCEPT ONLY — NOT FOR CONSTRUCTION** across the title block and mean
+it. This drawing is for deciding and pricing, not for setting out.
+
+The next lesson takes this sheet and turns it into something you can put in front
+of a person — what to say, what to show first, and how to run the conversation
+that comes back with changes.
