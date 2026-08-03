@@ -33,6 +33,20 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
         </span>
       </a>
 
+      {/*
+        Permanent, and deliberately not dismissable. The banner above can be
+        acknowledged and goes away; this stays, so the site never stops saying
+        what it is even to someone who dismissed the bar months ago.
+      */}
+      <a
+        href="/about/"
+        class="font-display font-700 text-[0.6rem] tracking-[0.1em] rounded-full border-2 px-1.5 py-0.5 leading-none shrink-0 -ml-1 transition-colors hover:text-paw"
+        style="border-color: var(--banksia); color: var(--banksia);"
+        title="Full alpha — written by AI, by someone who is not a landscaping professional"
+      >
+        ALPHA
+      </a>
+
       <nav class="hidden md:flex items-center gap-1 ml-3" aria-label="Main">
         {
           nav.map((item) => (

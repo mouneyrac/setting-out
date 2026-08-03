@@ -1,22 +1,37 @@
 ---
 /**
- * Site-wide alpha notice.
+ * The alpha notice, layered so it informs without becoming wallpaper.
  *
- * Sits above everything, on every page, and does not go away. The course states
- * Western Australian regulatory thresholds and describes structural work; a
- * reader arriving from a search result deserves to know what they have landed
- * on before they read a single number.
+ * The reasoning, because it is easy to get this backwards: a permanent
+ * undismissable banner looks more protective and is actually less. By the fifth
+ * identical bar nobody reads it, and you lose both the experience and the
+ * notice. A banner someone actively dismisses is stronger evidence they saw it
+ * than one that sat there unread.
  *
- * Kept to one line so it informs without becoming the page.
+ * What makes dismissal safe is that the real protection is elsewhere and never
+ * dismissable:
+ *
+ *   - the field-status line on every lesson
+ *   - the licensed-trade signs, which appear at the moment of actual risk
+ *   - the sourced `regulations` blocks
+ *   - the footer disclaimer
+ *   - a permanent ALPHA chip in the header
+ *
+ * This bar only has to reach a first-time reader before they act on anything.
+ * It returns after 90 days, because someone coming back months later has
+ * effectively forgotten, and in alpha the content will have moved under them.
  */
+const DISMISS_DAYS = 90;
 ---
 
 <div
+  id="alpha-banner"
   class="border-b-2"
   style="background: color-mix(in srgb, var(--banksia) 18%, var(--surface)); border-color: var(--banksia);"
+  data-dismiss-days={DISMISS_DAYS}
 >
-  <p
-    class="mx-auto max-w-[84rem] px-4 sm:px-6 py-2 text-[0.875rem] leading-snug flex flex-wrap items-baseline gap-x-1.5"
+  <div
+    class="mx-auto max-w-[84rem] px-4 sm:px-6 py-2 flex flex-wrap items-baseline gap-x-1.5 gap-y-1 text-[0.875rem] leading-snug"
   >
     <span class="font-display font-700"><span aria-hidden="true">🚧</span> Full alpha.</span>
     <span>Written by AI, by someone who is not a landscaping professional.</span>
@@ -27,5 +42,59 @@
     <a href="/tracker/" class="underline underline-offset-2 font-display font-700 hover:text-paw">
       What has actually been done
     </a>
-  </p>
+
+    <button
+      type="button"
+      id="alpha-dismiss"
+      class="ml-auto font-display font-700 text-xs rounded-full border-2 px-3 py-1 whitespace-nowrap transition-colors hover:text-paw"
+      style="border-color: var(--banksia);"
+    >
+      I understand
+    </button>
+  </div>
 </div>
+
+<script is:inline>
+  // Runs before paint so a returning reader never sees the bar flash away.
+  (() => {
+    const banner = document.getElementById('alpha-banner');
+    if (!banner) return;
+
+    const KEY = 'alpha-ack';
+    const days = Number(banner.dataset.dismissDays ?? 90);
+
+    const acknowledged = () => {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return false;
+        const { at } = JSON.parse(raw);
+        if (!at) return false;
+        return Date.now() - new Date(at).getTime() < days * 86400000;
+      } catch {
+        return false;
+      }
+    };
+
+    if (acknowledged()) {
+      banner.remove();
+      return;
+    }
+
+    document.getElementById('alpha-dismiss')?.addEventListener('click', () => {
+      try {
+        // The date is what expires it; the build is recorded so it is possible
+        // to tell later which version of the site was acknowledged.
+        localStorage.setItem(
+          KEY,
+          JSON.stringify({
+            at: new Date().toISOString(),
+            build: document.querySelector('meta[name="build-id"]')?.content ?? null,
+          }),
+        );
+      } catch {
+        /* Storage blocked — the bar simply stays, which is the safe failure. */
+      }
+      banner.remove();
+    });
+  })();
+</script>
