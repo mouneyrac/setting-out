@@ -9,8 +9,36 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Services plan"
-  prompt: "Lodge a Before You Dig Australia enquiry for your address, then mark every located service on your base plan: sewer line and access chambers, water main and meter, power (overhead and underground), gas, comms, and every existing retic line and valve you can find."
   workbookKey: "services-plan"
+  intro: "The enquiry is free and takes ten minutes. Do it before you draw a line you might have to erase."
+  questions:
+    - key: "plan"
+      label: "Upload your marked-up services plan"
+      hint: "Show the sewer line and access chambers, the water main and meter, power, gas, comms and every retic line and valve, with the depths you potholed."
+      type: "file"
+    - key: "byda-enquiry"
+      label: "Your BYDA enquiry sequence number and the date you lodged it"
+      hint: "Plans come from each asset owner, not from BYDA. Allow up to two business days, and lodge again if the scope changes or the validity dates expire."
+      type: "text"
+    - key: "services-located"
+      label: "Every service you located"
+      hint: "A row each for the sewer line, the water main and meter, overhead power, underground power, gas and comms. Depth is what you measured when you potholed, not what the plan implies."
+      type: "table"
+      columns: ["Service", "Where it runs", "Depth (mm)", "How you located it"]
+    - key: "sewer-chambers"
+      label: "Sewer access chambers and inspection openings"
+      hint: "Where each one is and what it constrains. They must stay accessible and at finished level, so they set your paving levels as well as your plan."
+      type: "list"
+    - key: "existing-retic"
+      label: "Existing retic — lines and valves"
+      hint: "One row per station. No asset owner has a plan for this, so run each station off the controller and trace the wire to the solenoid."
+      type: "table"
+      columns: ["Station", "What it waters", "Valve location", "Mainline route"]
+    - key: "plan-record"
+      label: "Your marked-up services plan — scale, date, where the file lives, and what marking it up revealed"
+      hint: "Name the thing that surprised you. That is usually the constraint Phase 5 has to design around."
+      type: "prose"
+      rows: 5
 checklist:
   - "Lodge a free Before You Dig Australia enquiry at least one business day ahead"
   - "Locate the sewer line and any access chamber — you cannot build over it"

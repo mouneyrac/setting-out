@@ -9,8 +9,34 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Project review"
-  prompt: "Score the finished garden against every point of your original brief. Record the final cost against the budget, the actual duration against the estimate, what you would do differently, and the three things you got genuinely right."
   workbookKey: "project-review"
+  intro: "Score it the way you would score someone you were paying. The victory lap and the guilt spiral both produce nothing you can use on the next job."
+  questions:
+    - key: "brief-scores"
+      label: "Score the finished garden against every point of your original brief"
+      hint: "One row per requirement, in the order you wrote them in Phase 2. Score 2 met, 1 partly, 0 not met, B the brief was wrong. Evidence you could show someone, not an opinion."
+      type: "table"
+      columns: ["Brief requirement", "Score (2 / 1 / 0 / B)", "Evidence"]
+    - key: "final-cost"
+      label: "Final cost, everything in"
+      hint: "Tools bought and hired, skip bins and tip fees, permit fees, delivery, the plants that died and were replaced, fuel, and your own labour at a notional rate. Then work the variance against the charter budget as a percentage."
+      type: "number"
+      prefix: "$"
+    - key: "actual-duration"
+      label: "Actual duration against the estimate"
+      hint: "Elapsed weeks from the first demolition day to the closed defect list, not weeks you felt busy. Put the Phase 1 estimate beside it and state the variance."
+      type: "number"
+      suffix: "weeks"
+    - key: "differently"
+      label: "What you would do differently"
+      hint: "Code each gap to one dominant cause — scope, site investigation, take-off, approvals, sequencing, supply, capability — and say where the lesson belongs."
+      type: "prose"
+      rows: 6
+    - key: "got-right"
+      label: "The three things you got genuinely right"
+      hint: "Specific enough to be an instruction next time. \"The paving looks good\" is useless; \"ordering 8 per cent extra pavers\" is not."
+      type: "list"
+      rows: 3
 checklist:
   - "Every brief requirement scored honestly"
   - "Final cost and duration compared against the original estimates"

@@ -9,8 +9,27 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Hydrozone plan"
-  prompt: "Divide your garden into hydrozones — typically high (lawn, vegetables), medium (feature and exotic planting), low (established natives and waterwise planting) and none (dry, unirrigated). Draw the boundaries and estimate the area of each."
   workbookKey: "hydrozone-plan"
+  intro: "Divide the whole garden into hydrozones — typically high (lawn, vegetables), medium (feature and exotic planting), low (established natives and waterwise planting) and none (dry, unirrigated). Colour the block in: an area with no zone is an area nobody has decided how to water."
+  questions:
+    - key: "plan"
+      label: "Upload the hydrozone plan"
+      hint: "The whole block coloured in, one zone per area with no gaps, boundaries following something physical, and each zone's area in square metres."
+      type: "file"
+    - key: "zones"
+      label: "Your hydrozones, and the area of each"
+      hint: "One row per zone. Areas in square metres, measured off the plan, not guessed from a photo — they are the input to the irrigation design."
+      type: "table"
+      columns: ["Zone", "What is in it", "Area (m²)"]
+    - key: "boundaries"
+      label: "Where the boundaries run, and what each one follows"
+      hint: "A path, a mow strip, a wall, an edge, a change of level, a change of mulch. A boundary you cannot see is a boundary you cannot irrigate to."
+      type: "prose"
+      rows: 5
+    - key: "drawing"
+      label: "The zone drawing — scale, date and where it lives"
+      hint: "For example: 1:100 at A3, drawn 12 March, marked-up copy in the project folder."
+      type: "text"
 checklist:
   - "Every planted area belongs to exactly one hydrozone"
   - "High-water zones are small, deliberate and near the house"

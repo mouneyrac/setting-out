@@ -10,7 +10,7 @@ You play both parts, client and contractor. Eleven phases later you have
 professional skills, a real design package for your property, and a garden
 worth more than you spent on it.
 
-*Setting out* is the trade term for transferring a design onto the ground with
+_Setting out_ is the trade term for transferring a design onto the ground with
 pegs and string lines, before anyone digs. It is also what this course is for.
 
 ---
@@ -42,19 +42,19 @@ warning sign you cannot scroll past.
 
 Eleven phases, 91 lessons, 30 documents you produce yourself.
 
-| # | Phase | Lessons |
-|---|---|---|
-| 01 | The trade and the process | 4 |
-| 02 | First contact and the brief | 5 |
-| 03 | Site analysis | 10 |
-| 04 | Rules, permits and approvals | 7 |
-| 05 | Concept design | 8 |
-| 06 | Detailed design and documentation | 8 |
-| 07 | Costing, quoting and contract | 7 |
-| 08 | Build *(includes an 8-part irrigation mini-course)* | 25 |
-| 09 | Handover and records | 5 |
-| 10 | Maintenance and establishment | 9 |
-| 11 | Value and review | 3 |
+| #   | Phase                                               | Lessons |
+| --- | --------------------------------------------------- | ------- |
+| 01  | The trade and the process                           | 4       |
+| 02  | First contact and the brief                         | 5       |
+| 03  | Site analysis                                       | 10      |
+| 04  | Rules, permits and approvals                        | 7       |
+| 05  | Concept design                                      | 8       |
+| 06  | Detailed design and documentation                   | 8       |
+| 07  | Costing, quoting and contract                       | 7       |
+| 08  | Build _(includes an 8-part irrigation mini-course)_ | 25      |
+| 09  | Handover and records                                | 5       |
+| 10  | Maintenance and establishment                       | 9       |
+| 11  | Value and review                                    | 3       |
 
 Phases 2 and 3 are written. The rest have final titles, practical tasks and
 checklists — the checklists are usable on their own — with the prose and

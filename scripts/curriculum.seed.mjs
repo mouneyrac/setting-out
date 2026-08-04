@@ -263,7 +263,7 @@ export const curriculum = [
         slug: 'water-on-site',
         title: 'Water on site: drainage, soakwells, low spots and roof runoff',
         summary:
-          'Find out where every litre goes before you change a single level. Roof areas, downpipes, existing soakwells, surface falls, the puddle that never dries, and whether your neighbour\'s stormwater is your problem.',
+          "Find out where every litre goes before you change a single level. Roof areas, downpipes, existing soakwells, surface falls, the puddle that never dries, and whether your neighbour's stormwater is your problem.",
         time: '60 min',
         difficulty: 'intermediate',
         checklist: [
@@ -365,7 +365,7 @@ export const curriculum = [
         difficulty: 'intermediate',
         checklist: [
           'Identify your R-Code density and your local government',
-          'Find your council\'s local planning scheme and any local planning policies',
+          "Find your council's local planning scheme and any local planning policies",
           'Note setback requirements that affect structures you are planning',
           'Check whether your council mandates deep soil area or tree canopy',
         ],
@@ -675,7 +675,7 @@ export const curriculum = [
           workbookKey: 'drainage-plan',
         },
         checklist: [
-          'Impervious area measured and soakwell volume calculated to your council\'s rule',
+          "Impervious area measured and soakwell volume calculated to your council's rule",
           'Soakwell locations respect setbacks from buildings and boundaries',
           'All pipework has a stated fall',
           'No stormwater discharges onto a neighbour or the street illegally',
@@ -723,7 +723,7 @@ export const curriculum = [
         time: '1.5 h',
         difficulty: 'intermediate',
         licensedTrade:
-          'Mains-voltage electrical work in WA must be carried out by a licensed electrical contractor. Extra-low-voltage (12V) garden lighting downstream of a plugged-in transformer is generally DIY territory — the transformer\'s supply is not.',
+          "Mains-voltage electrical work in WA must be carried out by a licensed electrical contractor. Extra-low-voltage (12V) garden lighting downstream of a plugged-in transformer is generally DIY territory — the transformer's supply is not.",
         checklist: [
           'Light functions first — steps, thresholds, paths — then features',
           'Plan cable runs before surfaces go down',
@@ -892,7 +892,7 @@ export const curriculum = [
         difficulty: 'foundation',
         checklist: [
           'Plan material drop zones and waste zones that do not block access',
-          'Protect retained trees, existing surfaces and the neighbour\'s fence',
+          "Protect retained trees, existing surfaces and the neighbour's fence",
           'Set up water, power and shade for yourself',
           'Have the right PPE and know the heat-related limits of working in a Perth summer',
         ],
@@ -1023,7 +1023,7 @@ export const curriculum = [
         difficulty: 'advanced',
         checklist: [
           'Footings sized and dug to design depth',
-          'Joist spacing matches the board manufacturer\'s span table',
+          "Joist spacing matches the board manufacturer's span table",
           'Adequate ventilation and clearance beneath the deck',
           'Correct fixings for the timber and the coastal environment',
           'Termite management addressed where the deck meets the house',
@@ -1428,7 +1428,7 @@ export const curriculum = [
         checklist: [
           'Every station run and watched, head by head',
           'Blocked, broken, sunken and misaimed heads fixed',
-          'Run times adjusted for the season, not left at last summer\'s setting',
+          "Run times adjusted for the season, not left at last summer's setting",
           'Controller backup battery and programme checked',
           'Audit repeated before summer every year',
         ],
@@ -1458,7 +1458,7 @@ export const curriculum = [
           'Know why you are cutting before you cut',
           'Correct cut position — no stubs, no flush cuts',
           'Tools sharp and cleaned between plants where disease is a risk',
-          'Timing matched to each species\' flowering and growth habit',
+          "Timing matched to each species' flowering and growth habit",
         ],
       },
       {

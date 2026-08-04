@@ -12,6 +12,12 @@ export const prerender = false;
  * which means the reset link is only shown when a reset email can actually be
  * sent, rather than leading people into a dead end.
  */
+/** What the sign-in and forgot-password pages read from here. */
+export interface AuthConfig {
+  passwordReset: boolean;
+  google: boolean;
+}
+
 export const GET: APIRoute = () => {
   const env = bindings();
   return json({

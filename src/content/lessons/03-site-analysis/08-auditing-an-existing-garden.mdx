@@ -9,8 +9,33 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Existing garden audit"
-  prompt: "List every existing element on your block — each significant plant, paved area, structure, edge, and the retic system. For each: condition, remaining life, cost to keep versus cost to replace, and a verdict of KEEP, RELOCATE, REPLACE or REMOVE, with the reason."
   workbookKey: "existing-garden-audit"
+  intro: "Every existing element is either an asset that reduces the build cost or a liability that adds a demolition line. Force a verdict on all of them — KEEP, RELOCATE, REPLACE or REMOVE — and write the reason, because the reason survives when the design changes."
+  questions:
+    - key: "photos"
+      label: "Add your audit photos"
+      hint: "Every element you have given a verdict — plants, paved areas, structures, retic heads — plus the lifted pavers showing the base, and the existing controller program before you change it."
+      type: "file"
+    - key: "plants"
+      label: "Every significant plant"
+      hint: "Everything over knee height. Species or a photo reference, condition out of five, and the verdict. Most established Perth plants over 1.5 m are KEEP or REMOVE, not RELOCATE."
+      type: "table"
+      columns: ["Plant", "Condition /5", "Years left", "Cost to keep", "Cost to replace", "Verdict", "Reason"]
+    - key: "paved-areas"
+      label: "Every paved and poured area"
+      hint: "One row per area. Judge the base, not the surface — say which you are rating. \"REPLACE the base, KEEP the pavers\" is a legitimate verdict, so write it that way."
+      type: "table"
+      columns: ["Area", "Condition", "Years left", "Cost to keep", "Cost to replace", "Verdict", "Reason"]
+    - key: "structures-and-edges"
+      label: "Every structure and edge"
+      hint: "Retaining walls, fences, patios, sheds, decks, pool barriers, garden edging, steps. Anything built rather than grown."
+      type: "table"
+      columns: ["Structure or edge", "Condition", "Years left", "Cost to keep", "Cost to replace", "Verdict", "Reason"]
+    - key: "retic"
+      label: "The retic system, station by station"
+      hint: "Never write \"retic works\". One row per station, plus rows for the controller, the mainline and the bore or tap if you have one."
+      type: "table"
+      columns: ["Station", "Condition and faults", "Years left", "Cost to keep", "Cost to replace", "Verdict", "Reason"]
 checklist:
   - "Inventory every plant over knee height with a condition rating"
   - "Assess each hard surface for base failure, not just surface appearance"

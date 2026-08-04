@@ -9,8 +9,29 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Quantity take-off"
-  prompt: "Produce a full take-off from your drawings: m² of each surface, m³ of excavation, fill, sub-base, sand and soil, linear metres of edging, pipe and cable, and counts of every plant, fitting and unit — each with its wastage allowance."
   workbookKey: "take-off"
+  intro: "Work off the drawings you finished in Phase 6, in build order, and keep the nett figure and the order figure in separate columns. Wastage lives in the order column and never gets buried in the nett one."
+  questions:
+    - key: "surfaces"
+      label: "Every surface, in m²"
+      hint: "One line per shape, not per area — break irregular shapes into rectangles and triangles and show the dimensions. Cut allowance is 5% stretcher bond, 10% herringbone, 12–15% curves, 15% small or fiddly."
+      type: "table"
+      columns: ["Surface", "Dimensions", "Nett m²", "Wastage %", "Order m²"]
+    - key: "volumes"
+      label: "Excavation, fill, sub-base, sand and soil, in m³"
+      hint: "Area × depth, one line each. Add roughly 25% to compacted base, bulking to excavated spoil, and settlement to soil and mulch. Note where a yard sells by the tonne instead."
+      type: "table"
+      columns: ["Material", "Area × depth", "Nett m³", "Allowance", "Order m³"]
+    - key: "linear"
+      label: "Edging, pipe and cable, in linear metres"
+      hint: "Measured along the centre-line of the run, plus 5% for the wander, then rounded up to whole supplied lengths — coils, sections, rolls. Nobody sells 47.3 m of anything."
+      type: "table"
+      columns: ["Item", "Run", "Nett m", "Wastage %", "Order length"]
+    - key: "counts"
+      label: "Counts of every plant, fitting and unit"
+      hint: "Plants by pot size, blocks per block, sprinklers, drippers, lights, fixings and caps as separate items. Add attic stock where you cannot go back for four more in two years."
+      type: "table"
+      columns: ["Item", "Size or type", "Nett count", "Wastage", "Order count"]
 checklist:
   - "Every element on the drawings appears in the take-off"
   - "Volumes account for compaction and wastage"

@@ -1,10 +1,11 @@
 ---
-import type { GetStaticPaths } from 'astro';
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import ResourceCard from '../../../components/ResourceCard.astro';
 import VideoCard from '../../../components/VideoCard.astro';
+import DeliverableForm from '../../../components/DeliverableForm.astro';
 import { getPhase } from '../../../data/phases';
+import { getUser } from '../../../lib/server';
 import {
   allLessons,
   lessonSlug,
@@ -13,15 +14,33 @@ import {
   difficultyLabel,
 } from '../../../lib/curriculum';
 
-export const getStaticPaths = (async () => {
-  const lessons = await allLessons();
-  return lessons.map((lesson) => ({
-    params: { phase: getPhase(lesson.data.phase).slug, lesson: lessonSlug(lesson) },
-    props: { lesson, lessons },
-  }));
-}) satisfies GetStaticPaths;
+/**
+ * Lesson content is behind an account.
+ *
+ * The course map — phases, lesson titles, summaries, times — stays public,
+ * because seeing all ninety-one titles is the best argument for signing up and
+ * because it is already visible in the public repository anyway. What an
+ * account gets you is the lesson itself, plus progress and the workbook.
+ *
+ * This means lessons render on demand rather than at build time, so they are
+ * not in the Pagefind index — the search dialog merges a small prerendered
+ * lesson index instead. See /lessons-index.json.
+ */
+export const prerender = false;
 
-const { lesson, lessons } = Astro.props;
+const lessons = await allLessons();
+const lesson = lessons.find(
+  (l) =>
+    getPhase(l.data.phase).slug === Astro.params.phase && lessonSlug(l) === Astro.params.lesson,
+);
+if (!lesson) return new Response(null, { status: 404 });
+
+const user = await getUser(Astro.request);
+if (!user) {
+  // Come back here once they have signed in, rather than dumping them on /my/.
+  return Astro.redirect(`/sign-in/?next=${encodeURIComponent(Astro.url.pathname)}`);
+}
+
 const d = lesson.data;
 const phase = getPhase(d.phase);
 const { prev, next } = neighbours(lessons, lesson);
@@ -116,7 +135,9 @@ const phaseLessons = lessons.filter((l) => l.data.phase === d.phase);
             <p class="mb-6 flex flex-wrap items-baseline gap-x-2 text-[0.95rem] leading-snug">
               <span aria-hidden="true">{d.fieldStatus === 'in-progress' ? '🚧' : '📖'}</span>
               <span class="font-display font-700">
-                {d.fieldStatus === 'in-progress' ? 'Being done right now' : 'Researched, not yet done'}
+                {d.fieldStatus === 'in-progress'
+                  ? 'Being done right now'
+                  : 'Researched, not yet done'}
               </span>
               <span class="text-soft">— sources checked, but nobody has built this yet.</span>
               <a href="/tracker/" class="underline underline-offset-2 hover:text-paw">
@@ -169,55 +190,29 @@ const phaseLessons = lessons.filter((l) => l.data.phase === d.phase);
           )
         }
 
-        {
-          d.deliverable && (
-            <section class="mt-10">
-              <h2 class="font-display font-900 text-2xl sm:text-3xl">Do this on your own block</h2>
-              <div
-                class="mt-4 rounded-[18px] border-2 p-5 sm:p-6"
-                style="border-color: var(--paw); background: color-mix(in srgb, var(--paw) 7%, var(--surface));"
-              >
-                <p class="label">Field journal entry</p>
-                <h3 class="font-display font-700 text-xl sm:text-2xl leading-tight mt-1 text-paw">
-                  {d.deliverable.title}
-                </h3>
-                <p class="mt-3 leading-relaxed max-w-[62ch] font-hand text-[1.05rem]">
-                  {d.deliverable.prompt}
-                </p>
-
-                <div data-workbook={d.deliverable.workbookKey} class="mt-4" hidden>
-                  <textarea
-                    class="w-full min-h-[9rem] rounded-xl border-2 border-edge bg-surface p-3 leading-relaxed"
-                    placeholder="Write your answer here — it saves to your workbook automatically."
-                  ></textarea>
-                  <p class="label mt-1.5" data-workbook-status>Saved to your workbook</p>
-                </div>
-                <p class="note mt-3" data-workbook-signin>
-                  <a href="/my/" class="underline underline-offset-2 hover:text-paw">
-                    Sign in
-                  </a>{' '}
-                  to write this straight into your project workbook — or just keep it in a notebook.
-                </p>
-              </div>
-            </section>
-          )
-        }
+        {d.deliverable && <DeliverableForm deliverable={d.deliverable} lessonId={lesson.id} />}
 
         {
           d.checklist.length > 0 && (
-            <section class="mt-10">
-              <h2 class="font-display font-900 text-2xl sm:text-3xl">Checklist</h2>
+            <section class="mt-10" data-checklist={lesson.id}>
+              <div class="flex flex-wrap items-baseline gap-x-3">
+                <h2 class="font-display font-900 text-2xl sm:text-3xl">Checklist</h2>
+                <span class="label" data-checklist-count />
+              </div>
+              <p class="note mt-1">
+                Ticks are saved to your account, so this survives being closed.
+              </p>
               <ul class="mt-4 grid gap-2">
                 {d.checklist.map((item, i) => (
-                  <li class="marker flex gap-3 p-3.5 items-start">
-                    <span
-                      class="w-6 h-6 rounded-md border-2 border-edge shrink-0 mt-0.5 grid place-items-center text-xs font-display font-700"
-                      style="color: var(--ink-soft);"
-                      aria-hidden="true"
-                    >
-                      {i + 1}
-                    </span>
-                    <span class="leading-snug">{item}</span>
+                  <li>
+                    <label class="marker flex gap-3 p-3.5 items-start cursor-pointer">
+                      <input
+                        type="checkbox"
+                        data-check={i}
+                        class="w-5 h-5 mt-0.5 shrink-0 accent-[var(--leaf)] cursor-pointer"
+                      />
+                      <span class="leading-snug">{item}</span>
+                    </label>
                   </li>
                 ))}
               </ul>
@@ -359,81 +354,31 @@ const phaseLessons = lessons.filter((l) => l.data.phase === d.phase);
   </article>
 
   <script>
+    import { useSession } from '../../../lib/session';
+    import { rememberLesson } from '../../../lib/lesson/last-visited';
+    import { initChecklist } from '../../../lib/lesson/checklist';
+    import { initMarkDone } from '../../../lib/lesson/mark-done';
+
     // Lesson pages are prerendered for speed, so anything account-specific is
-    // filled in here after load.
+    // filled in here after load. Each piece works on its own; the session only
+    // decides what gets shown.
     const article = document.querySelector<HTMLElement>('[data-lesson-id]');
     const lessonId = article?.dataset.lessonId ?? '';
 
-    // Remember where you got to, so the home page can offer to resume even when
-    // you are signed out.
-    try {
-      localStorage.setItem(
-        'last-lesson',
-        JSON.stringify({
-          href: location.pathname,
-          title: document.querySelector('h1')?.textContent?.trim() ?? '',
-          id: lessonId,
-        }),
-      );
-    } catch {
-      /* Storage blocked. Nothing here depends on it. */
-    }
+    rememberLesson({
+      href: location.pathname,
+      title: document.querySelector('h1')?.textContent?.trim() ?? '',
+      id: lessonId,
+    });
 
-    const markBtn = document.querySelector<HTMLButtonElement>('[data-mark-done]');
-    const markLabel = document.querySelector<HTMLElement>('[data-mark-label]');
-    const workbook = document.querySelector<HTMLElement>('[data-workbook]');
-    const workbookArea = workbook?.querySelector('textarea');
-    const workbookStatus = document.querySelector<HTMLElement>('[data-workbook-status]');
-    const workbookSignin = document.querySelector<HTMLElement>('[data-workbook-signin]');
+    const checklist = initChecklist(document, lessonId);
+    const markDone = initMarkDone(document, lessonId);
 
-    let done = false;
-    const paint = () => {
-      if (!markLabel) return;
-      markLabel.textContent = done ? '✓ Done — tap to undo' : 'Mark this lesson done';
-      markBtn?.classList.toggle('btn-primary', done);
-      markBtn?.classList.toggle('btn-ghost', !done);
-    };
-
-    fetch('/api/me')
-      .then((r) => r.json())
+    useSession()
       .then((me) => {
         if (!me.signedIn) return;
-
-        if (markBtn) {
-          markBtn.hidden = false;
-          done = Boolean(me.progress?.[lessonId]);
-          paint();
-          markBtn.addEventListener('click', async () => {
-            done = !done;
-            paint();
-            await fetch('/api/progress', {
-              method: 'POST',
-              headers: { 'content-type': 'application/json' },
-              body: JSON.stringify({ lessonId, done }),
-            });
-          });
-        }
-
-        if (workbook && workbookArea) {
-          const key = workbook.dataset.workbook ?? '';
-          workbook.hidden = false;
-          if (workbookSignin) workbookSignin.hidden = true;
-          workbookArea.value = me.workbook?.[key] ?? '';
-
-          let timer: ReturnType<typeof setTimeout>;
-          workbookArea.addEventListener('input', () => {
-            if (workbookStatus) workbookStatus.textContent = 'Saving…';
-            clearTimeout(timer);
-            timer = setTimeout(async () => {
-              await fetch('/api/workbook', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ workbookKey: key, lessonId, content: workbookArea.value }),
-              });
-              if (workbookStatus) workbookStatus.textContent = 'Saved to your workbook';
-            }, 700);
-          });
-        }
+        checklist?.hydrate(me.workbook);
+        markDone?.hydrate(me.progress);
       })
       .catch(() => {
         /* Signed out or offline — the page works fine without any of this. */

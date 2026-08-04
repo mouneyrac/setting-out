@@ -9,8 +9,14 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Defect list"
-  prompt: "Walk the finished project and list every defect, unfinished item and thing that is not quite right, with a fix and a date. Include the ones you are tempted to pretend you cannot see."
   workbookKey: "defect-list"
+  intro: "Walk the finished project and write down everything that is not right — including the items you are tempted to pretend you cannot see."
+  questions:
+    - key: "defects"
+      label: "Every defect, unfinished item and thing that is not quite right"
+      hint: "One row per item, with a specific fix and a date. Nothing leaves the list because you decided it was probably fine — items leave when they are done."
+      type: "table"
+      columns: ["Zone", "What is wrong", "The fix", "Fix by"]
 checklist:
   - "Walked systematically, zone by zone, not wandering"
   - "Every item has a fix and a date"

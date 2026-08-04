@@ -1,4 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+// Imported from zod directly — re-exporting it from astro:content is deprecated.
+import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
 /**
@@ -58,6 +60,29 @@ const videoSchema = z.object({
   checkedOn: z.coerce.date(),
 });
 
+/**
+ * One field of a deliverable.
+ *
+ * Six types, deliberately — they are what the thirty deliverables actually
+ * need, and a small vocabulary is what stops the form component growing every
+ * time a lesson is written.
+ */
+const questionSchema = z.object({
+  /** Stable within its deliverable. Stored as `<workbookKey>.<key>`. */
+  key: z.string().regex(/^[a-z0-9-]+$/, 'question keys are lower-case, digits and hyphens only'),
+  label: z.string(),
+  /** Shown under the label — an example, a unit, a warning. */
+  hint: z.string().optional(),
+  type: z.enum(['prose', 'text', 'number', 'list', 'table', 'file']),
+  /** prose: rows of the textarea. list: how many blank lines to offer. */
+  rows: z.number().int().min(1).max(40).optional(),
+  /** number/text: rendered inside the field, e.g. "$" or "m²". */
+  prefix: z.string().optional(),
+  suffix: z.string().optional(),
+  /** table: the column headings. Rows are added by the reader. */
+  columns: z.array(z.string()).optional(),
+});
+
 /** A regulatory claim, with its source and the date we verified it. */
 const regulationSchema = z.object({
   claim: z.string(),
@@ -101,13 +126,29 @@ const lessons = defineCollection({
     series: z.string().optional(),
     /** Lesson ids that should be done first. */
     prerequisites: z.array(z.string()).default([]),
-    /** The "do this on your own block" task. Writes into the workbook. */
+    /**
+     * The "do this on your own block" task.
+     *
+     * `questions` is the real shape: a deliverable is a small form, answered
+     * where it is asked, and each answer is stored under
+     * `<workbookKey>.<question.key>`. Adding a question is a content edit — it
+     * needs no migration, because the store is key/value.
+     *
+     * `prompt` is the older single-paragraph form, kept optional so the thirty
+     * deliverables can be converted without breaking the build in between.
+     */
     deliverable: z
       .object({
         title: z.string(),
-        prompt: z.string(),
         /** Stable key — this is what the workbook stores against. */
         workbookKey: z.string(),
+        /** One or two lines of framing above the fields. */
+        intro: z.string().optional(),
+        prompt: z.string().optional(),
+        questions: z.array(questionSchema).optional(),
+      })
+      .refine((d) => d.questions?.length || d.prompt, {
+        message: 'A deliverable needs either questions[] or a prompt',
       })
       .optional(),
     checklist: z.array(z.string()).default([]),
@@ -137,20 +178,4 @@ const reference = defineCollection({
   }),
 });
 
-/** Downloadable templates: brief, site analysis sheet, quote, calendar. */
-const toolkit = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/toolkit' }),
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    order: z.number().default(0),
-    status: z.enum(['stub', 'draft', 'complete']).default('stub'),
-    /** Phase this template belongs to, for cross-linking. */
-    phase: z.number().int().min(1).max(11).optional(),
-    /** Path under /public for the downloadable file, if there is one. */
-    download: z.string().optional(),
-    format: z.enum(['pdf', 'csv', 'markdown', 'spreadsheet', 'print']).optional(),
-  }),
-});
-
-export const collections = { lessons, reference, toolkit };
+export const collections = { lessons, reference };

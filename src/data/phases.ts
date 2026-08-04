@@ -18,7 +18,8 @@ export const phases: Phase[] = [
     tagline: 'What the job actually is, before you touch a shovel',
     description:
       'Landscaping is three different jobs wearing the same word. Before anything else, work out which one you are doing at any given moment, what the whole professional sequence looks like, and how to run it honestly on a block you own.',
-    outcome: 'A clear map of the eleven phases, and a written definition of what "finished" means for your garden.',
+    outcome:
+      'A clear map of the eleven phases, and a written definition of what "finished" means for your garden.',
   },
   {
     number: 2,
@@ -27,7 +28,8 @@ export const phases: Phase[] = [
     tagline: 'The conversation that decides whether the project works',
     description:
       'A professional does not start designing when a client rings. They qualify, they visit, they have the uncomfortable money conversation, and they write it all down. The brief is the document every later decision gets measured against — including yours.',
-    outcome: 'A written design brief for your own property: goals, constraints, budget, and what you are not doing.',
+    outcome:
+      'A written design brief for your own property: goals, constraints, budget, and what you are not doing.',
   },
   {
     number: 3,
@@ -45,7 +47,8 @@ export const phases: Phase[] = [
     tagline: 'What Western Australia will and will not let you build',
     description:
       'WA has the strictest retaining wall threshold in the country, a permanent sprinkler roster, a winter sprinkler ban, and a council that will make you take it out if you get it wrong. Find out what applies to your block before you design around something you cannot have.',
-    outcome: 'A written list of every approval your project needs, with the relevant thresholds and who to ask.',
+    outcome:
+      'A written list of every approval your project needs, with the relevant thresholds and who to ask.',
   },
   {
     number: 5,
@@ -54,7 +57,8 @@ export const phases: Phase[] = [
     tagline: 'Turning a brief and a site into a plan',
     description:
       'The creative phase, and the one amateurs skip straight to. Done properly it is systematic: zone the space by function, resolve circulation, design for a 40-degree February, group plants by water need, then draw it.',
-    outcome: 'A concept plan for your property that answers the brief and respects the site analysis.',
+    outcome:
+      'A concept plan for your property that answers the brief and respects the site analysis.',
   },
   {
     number: 6,
@@ -63,7 +67,8 @@ export const phases: Phase[] = [
     tagline: 'Drawings you can actually build from',
     description:
       'A concept is a picture. Documentation is instructions: setting-out dimensions, levels, sections through every built element, drainage falls, irrigation stations, a plant schedule with counts and pot sizes. This is what separates a design from a wish.',
-    outcome: 'A full document set for your project — layout, levels, details, drainage, irrigation, planting, lighting, specification.',
+    outcome:
+      'A full document set for your project — layout, levels, details, drainage, irrigation, planting, lighting, specification.',
   },
   {
     number: 7,
@@ -72,7 +77,8 @@ export const phases: Phase[] = [
     tagline: 'What it costs, and what it really costs',
     description:
       'Take quantities off your own drawings, price them at Perth rates, add the costs beginners forget — tipping fees, plant hire, the bobcat that cannot get down the side — then decide what you build yourself and what you pay someone to do.',
-    outcome: 'A costed, staged project plan you can actually afford, with a DIY-versus-subcontract decision on every element.',
+    outcome:
+      'A costed, staged project plan you can actually afford, with a DIY-versus-subcontract decision on every element.',
   },
   {
     number: 8,
@@ -99,7 +105,8 @@ export const phases: Phase[] = [
     tagline: 'The phase that decides whether any of it survives',
     description:
       'More Perth gardens die in the first summer than are ever killed by bad design. Establishment care, seasonal watering within the roster, feeding sand that holds nothing, and knowing the local pests — this is where the value is kept.',
-    outcome: 'A year-round maintenance calendar built on the Noongar six seasons, and a retic system you can audit.',
+    outcome:
+      'A year-round maintenance calendar built on the Noongar six seasons, and a retic system you can audit.',
   },
   {
     number: 11,
@@ -108,7 +115,8 @@ export const phases: Phase[] = [
     tagline: 'What it was worth, and what you learnt',
     description:
       'Measure the result against the brief you wrote in phase 2, understand what landscaping actually does to a Perth property valuation, and write down what you would do differently. Then do the next one better.',
-    outcome: 'An honest project review, a documented portfolio, and a shortlist of what to change next time.',
+    outcome:
+      'An honest project review, a documented portfolio, and a shortlist of what to change next time.',
   },
 ];
 

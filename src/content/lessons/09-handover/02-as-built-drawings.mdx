@@ -9,8 +9,42 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "As-built drawings"
-  prompt: "Mark up your documentation with what was actually built: real dimensions, actual irrigation and cable routes, valve and junction positions, soakwell locations and depths, and any substituted material or plant."
   workbookKey: "as-built"
+  intro: "This is not a new drawing. It is your Phase 6 documentation corrected to what was actually built, and it is the only record of your buried services that will ever exist. Fill it in while you still remember where the mainline runs."
+  questions:
+    - key: "as-built-set"
+      label: "Upload the marked-up as-built set"
+      hint: "The Phase 6 sheets corrected on site in a colour that stands out and dated, with buried routes, valves and soakwells dimensioned from two permanent features. A scan or photograph of the marked-up prints is fine if the figures are legible."
+      type: "file"
+    - key: "marked-up-set"
+      label: "What you marked up, when, and where the file lives"
+      hint: "For example \"irrigation and drainage sheets marked in red on 14 March, scanned to as-built-hamersley-2026.pdf, cloud folder plus printed set in the house file\"."
+      type: "prose"
+      rows: 3
+    - key: "real-dimensions"
+      label: "Where the built dimensions differ from the drawn ones"
+      hint: "Real finished levels, actual falls, base depths, paving and wall sizes as built. Give the drawn figure and the real one."
+      type: "list"
+    - key: "routes"
+      label: "Actual irrigation and cable routes"
+      hint: "Every run, including the ones that moved around a root or rock. Two distances to two permanent features at each end and each change of direction. Depth to the top of the pipe or cable, off finished surface."
+      type: "table"
+      columns: ["Service", "Run (start to end)", "Distance from fixed point 1", "Distance from fixed point 2", "Depth (mm)"]
+    - key: "valves-and-junctions"
+      label: "Valve and junction positions"
+      hint: "Every solenoid with its station number, every wire joint, isolation valve and transformer. Two distances each, plus depth."
+      type: "table"
+      columns: ["Item", "Station", "Distance from fixed point 1", "Distance from fixed point 2", "Depth (mm)"]
+    - key: "soakwells"
+      label: "Soakwell locations and depths"
+      hint: "Depth to lid and depth to invert are different numbers and you need both. Lids disappear under 100 mm of mulch."
+      type: "table"
+      columns: ["Soakwell", "Distance from fixed point 1", "Distance from fixed point 2", "Diameter", "Depth to lid (mm)", "Depth to invert (mm)"]
+    - key: "substitutions"
+      label: "Substituted materials and plants"
+      hint: "Against the original schedule. Actual botanical name and cultivar, pot size, paver or block name and batch, supplier and date — a warranty is worthless without it."
+      type: "table"
+      columns: ["Specified", "Actually installed", "Quantity", "Supplier", "Date"]
 checklist:
   - "Every buried service marked with dimensions from two fixed points"
   - "Photographs of open trenches filed with the drawings"

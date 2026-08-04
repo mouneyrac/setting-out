@@ -9,8 +9,28 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Your project charter"
-  prompt: "In one paragraph: what does \"finished\" look like for your garden? Then three numbers — the budget you are willing to spend, the months you are willing to wait, and the hours per week you can actually work on it. Be honest; you will be measured against this in Phase 11."
   workbookKey: "project-charter"
+  intro: "Be honest. You will be measured against this in Phase 11, and the only person you can mislead here is yourself."
+  questions:
+    - key: "finished"
+      label: "What does \"finished\" look like for your garden?"
+      hint: "One paragraph. Describe the day it is done — what you can see, and what you are doing in it."
+      type: "prose"
+      rows: 5
+    - key: "budget"
+      label: "The budget you are willing to spend"
+      hint: "A real number, not a hope. Everything in Phase 7 gets compared against it."
+      type: "number"
+      prefix: "$"
+    - key: "months"
+      label: "The months you are willing to wait"
+      type: "number"
+      suffix: "months"
+    - key: "hours"
+      label: "Hours per week you can actually work on it"
+      hint: "Actually, not aspirationally. A garden built at four hours a week is a different design from one built at twenty."
+      type: "number"
+      suffix: "h/week"
 checklist:
   - "Write a one-paragraph definition of \"done\""
   - "Commit to a budget figure, a timeframe and a weekly hour count"

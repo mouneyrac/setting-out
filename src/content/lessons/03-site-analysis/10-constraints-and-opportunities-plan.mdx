@@ -9,8 +9,40 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Constraints and opportunities plan"
-  prompt: "Produce a single annotated overlay on your base plan marking every constraint (services, easements, setbacks, shade, root zones, poor drainage, hot walls, overlooking, access limits) and every opportunity (good views, sheltered corners, existing mature planting, level areas, sun in winter)."
   workbookKey: "constraints-opportunities"
+  intro: "One annotated overlay on your base plan, everything from this phase flattened onto it. The sheet itself lives in your files — what goes here is the record of what is marked on it, and what showed up when the layers came together."
+  questions:
+    - key: "plan"
+      label: "Upload the plan"
+      hint: "The flattened sheet — constraints in red, opportunities in green, hatched zones for areas, with a north arrow, a scale and a date on it."
+      type: "file"
+    - key: "drawing"
+      label: "Where the drawing lives"
+      hint: "File name and folder, or where the paper copy is kept. One line, so you can find it in Phase 5."
+      type: "text"
+    - key: "scale"
+      label: "Scale it is drawn at"
+      hint: "1:100 on a standard block, 1:200 on a big one. Check the north arrow is on the sheet."
+      type: "text"
+    - key: "dated"
+      label: "Date on the sheet"
+      hint: "Site analysis has a shelf life. A neighbour builds a two-storey and your shade layer is wrong."
+      type: "text"
+    - key: "constraints"
+      label: "Every constraint marked on the plan"
+      hint: "Services, easements, setbacks, shade, root zones, poor drainage, hot walls, overlooking, access limits. One row each, and the annotation should carry a number, a time, a direction or a depth."
+      type: "table"
+      columns: ["Constraint", "Where on the block", "What the annotation says"]
+    - key: "opportunities"
+      label: "Every opportunity marked on the plan"
+      hint: "Good views, sheltered corners, existing mature planting, level areas, winter sun. This is the half that gets skipped."
+      type: "table"
+      columns: ["Opportunity", "Where on the block", "What the annotation says"]
+    - key: "collisions"
+      label: "What showed up once it was all on one sheet"
+      hint: "The collisions — which constraint sits on top of which opportunity, and what that is going to cost you."
+      type: "prose"
+      rows: 4
 checklist:
   - "Every constraint from this phase appears on the drawing"
   - "Every opportunity is marked, not just the problems"

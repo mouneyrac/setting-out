@@ -230,7 +230,15 @@ const motes = [
         {
           has(1) && (
             <g class="anim-grow">
-              <ellipse cx="380" cy="398" rx="44" ry="15" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
+              <ellipse
+                cx="380"
+                cy="398"
+                rx="44"
+                ry="15"
+                fill="#DED0B3"
+                stroke="#C3B08B"
+                stroke-width="2"
+              />
             </g>
           )
         }
@@ -239,10 +247,42 @@ const motes = [
         {
           has(5) && (
             <g class="anim-grow">
-              <ellipse cx="452" cy="382" rx="37" ry="12.5" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
-              <ellipse cx="512" cy="365" rx="31" ry="10.5" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
-              <ellipse cx="562" cy="350" rx="26" ry="9" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
-              <ellipse cx="602" cy="338" rx="21" ry="7.5" fill="#DED0B3" stroke="#C3B08B" stroke-width="2" />
+              <ellipse
+                cx="452"
+                cy="382"
+                rx="37"
+                ry="12.5"
+                fill="#DED0B3"
+                stroke="#C3B08B"
+                stroke-width="2"
+              />
+              <ellipse
+                cx="512"
+                cy="365"
+                rx="31"
+                ry="10.5"
+                fill="#DED0B3"
+                stroke="#C3B08B"
+                stroke-width="2"
+              />
+              <ellipse
+                cx="562"
+                cy="350"
+                rx="26"
+                ry="9"
+                fill="#DED0B3"
+                stroke="#C3B08B"
+                stroke-width="2"
+              />
+              <ellipse
+                cx="602"
+                cy="338"
+                rx="21"
+                ry="7.5"
+                fill="#DED0B3"
+                stroke="#C3B08B"
+                stroke-width="2"
+              />
             </g>
           )
         }
@@ -293,7 +333,10 @@ const motes = [
                     stroke-width="4"
                     stroke-linecap="round"
                   />
-                  <path d={`M${s.x} ${s.b - s.h} q 10 -6 15 -16 q -13 -1 -15 16 z`} fill="#E2542B" />
+                  <path
+                    d={`M${s.x} ${s.b - s.h} q 10 -6 15 -16 q -13 -1 -15 16 z`}
+                    fill="#E2542B"
+                  />
                   <path
                     d={`M${s.x} ${s.b - s.h + 11} q -10 -6 -15 -16 q 13 -1 15 16 z`}
                     fill="#F4703F"
@@ -344,10 +387,7 @@ const motes = [
         }
 
         <!-- ── The seedling: there from the very first visit ────────── -->
-        <g
-          class="anim-sway"
-          style="transform-origin: 340px 400px; animation-duration: 5.5s;"
-        >
+        <g class="anim-sway" style="transform-origin: 340px 400px; animation-duration: 5.5s;">
           <line
             x1="340"
             y1="400"

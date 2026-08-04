@@ -9,8 +9,39 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Maintenance manual"
-  prompt: "Write the manual for your garden: seasonal task calendar, irrigation programmes for each season, plant-by-plant care notes, fertiliser programme, pruning times, and the establishment schedule for the first twelve weeks."
   workbookKey: "maintenance-manual"
+  intro: "Write it for someone who was not there — a house-sitter, or yourself next winter. Start with the establishment schedule, because it is the part that expires."
+  questions:
+    - key: "establishment-schedule"
+      label: "The establishment schedule for the first twelve weeks"
+      hint: "One row per period. New plantings and retained plants do not share a schedule — say what each gets. Put the exemption end date in the last column."
+      type: "table"
+      columns: ["Period", "New plants", "New turf", "Retained plants"]
+    - key: "irrigation-programme"
+      label: "The irrigation programme for each season"
+      hint: "One summer programme, then the seasonal adjust. Perth and South West: 100% Jan–Feb, 80% Mar, 60% Apr, manual only May and Sept, Switch-off 1 June to 31 Aug, 60% Oct, 80% Nov, 90% Dec."
+      type: "table"
+      columns: ["Season or month", "Seasonal adjust", "Stations running", "Minutes per station", "Days and start time"]
+    - key: "plant-notes"
+      label: "Plant-by-plant care notes"
+      hint: "Ordered by where they are, not alphabetically — a house-sitter navigates by location. On a renovation, say whether each one is new, retained or relocated."
+      type: "table"
+      columns: ["Location", "Plant", "New / retained / relocated", "Station", "Feed", "Prune when", "What stress looks like"]
+    - key: "fertiliser-programme"
+      label: "The fertiliser programme"
+      hint: "Product, rate and months for each area. Lawn: N:P:K around 10:1:6, max 25 g/m² couch or 12 g/m² kikuyu and buffalo, Sept–Nov and Mar–Apr only. Natives: low-phosphorus or nothing."
+      type: "table"
+      columns: ["Area or plant group", "Product", "Rate", "Months"]
+    - key: "pruning-times"
+      label: "Pruning times"
+      hint: "A month, not a season, and the reason. Include what nobody is to touch — anything near the overhead service, ladder or chainsaw work above shoulder height, any electrical fault."
+      type: "table"
+      columns: ["Plant or group", "Month", "What gets cut", "Why"]
+    - key: "seasonal-calendar"
+      label: "The twelve-month task calendar"
+      hint: "Twelve rows, one page. Include the fixed dates: 1 June controller off, 1 September roster resumes, wetting agent at the start of winter and again in early summer, mulch to 5–10 cm annually, retic service before October."
+      type: "table"
+      columns: ["Month", "Water", "Feed", "Prune", "Check"]
 checklist:
   - "Seasonal calendar covers all twelve months"
   - "Irrigation programme stated for each season, within the roster"

@@ -9,8 +9,36 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Zoning diagram"
-  prompt: "Produce at least three different bubble diagrams for your block, allocating every square metre to a function drawn from your brief. Then pick one and say why it beat the others."
   workbookKey: "zoning-diagram"
+  intro: "The diagrams stay on tracing paper. What goes here is the record of what you drew, what you allocated, and which one won — so you do not rebuild this decision in six weeks."
+  questions:
+    - key: "sheets"
+      label: "Upload your zoning diagrams"
+      hint: "Photograph or scan every sheet — each blob named with its target area, the movement arrows, and the scale and date legible."
+      type: "file"
+    - key: "diagrams"
+      label: "The diagrams you drew"
+      hint: "Three minimum, each a genuinely different strategy — not three versions of one idea. Add a row for every extra sheet."
+      type: "table"
+      columns: ["Diagram", "The strategy in one line", "Where the sheet or file lives"]
+    - key: "scale"
+      label: "Scale you drew at"
+      hint: "1:100 on A3 suits most blocks. Date every sheet — you will be drawing over these again in the next lesson."
+      type: "text"
+    - key: "zones"
+      label: "Every function, and the space you gave it"
+      hint: "Straight off your brief, plus the service list — bins, clothesline, storage, side access, plant and services. Nothing on the block is left white."
+      type: "table"
+      columns: ["Function", "Target area (m²)", "Where it sits on the chosen diagram"]
+    - key: "chosen"
+      label: "The diagram you chose"
+      hint: "Name it exactly as you named it above."
+      type: "text"
+    - key: "why"
+      label: "Why it beat the others"
+      hint: "Two or three sentences. What each of the others did worse, and on what grounds — the bin walk, sun and shade, services, machine access, adjacency."
+      type: "prose"
+      rows: 4
 checklist:
   - "Every function in your brief has a zone"
   - "The unglamorous zones — bins, storage, clothesline — are allocated"

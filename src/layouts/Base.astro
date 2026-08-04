@@ -3,6 +3,7 @@ import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import AlphaBanner from '../components/AlphaBanner.astro';
+import Atmosphere from '../components/Atmosphere.astro';
 import { BUILD_ID } from '../lib/build';
 
 interface Props {
@@ -59,7 +60,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
 
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col paper-grain lit">
+    <Atmosphere />
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-3 focus:left-3 btn btn-primary"

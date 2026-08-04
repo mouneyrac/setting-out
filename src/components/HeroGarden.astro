@@ -1,0 +1,390 @@
+---
+import { blob, canopy, grassRow, ridge } from '../lib/painterly';
+
+/**
+ * The hero: a Perth garden, painted rather than assembled.
+ *
+ * Everything that used to be an ellipse is now a wandering outline from
+ * `painterly.ts`, every mass is built in three tones — shadow, body, sunlit rim
+ * — the way a gouache background is laid down, and the distance is carried by
+ * atmospheric perspective rather than by scale alone: the far scarp is pale and
+ * desaturated, the foreground is fully saturated and detailed.
+ *
+ * The grass is the piece worth looking at twice. Each blade carries its own
+ * wind phase, so a gust crosses the row from left to right instead of every
+ * blade twitching in unison. That travelling wave is the difference between a
+ * picture with an animation on it and a picture with weather in it.
+ *
+ * All paths are generated at build time from fixed seeds, so this is static
+ * markup — no runtime cost, no layout shift, and it renders identically every
+ * time.
+ */
+
+const W = 800;
+const H = 420;
+const HORIZON = 250;
+
+const farScarp = ridge({
+  from: -20,
+  to: W + 20,
+  y: HORIZON - 26,
+  amplitude: 20,
+  crests: 3,
+  baseline: H,
+  seed: 41,
+});
+const midHill = ridge({
+  from: -20,
+  to: W + 20,
+  y: HORIZON + 6,
+  amplitude: 26,
+  crests: 4,
+  baseline: H,
+  seed: 17,
+});
+const nearGround = ridge({
+  from: -20,
+  to: W + 20,
+  y: HORIZON + 58,
+  amplitude: 14,
+  crests: 3,
+  baseline: H,
+  seed: 92,
+});
+
+// Cumulus: a body with a flattened, shadowed underside — clouds have volume.
+const clouds = [
+  { x: 130, y: 78, s: 1, seed: 5, drift: 150 },
+  { x: 430, y: 56, s: 0.7, seed: 23, drift: 210 },
+  { x: 660, y: 104, s: 0.85, seed: 61, drift: 180 },
+];
+
+// Foliage as clumps, so the canopy has interior edges instead of one outline.
+const treeClumps = canopy({ cx: 656, cy: 216, rx: 82, ry: 56, clumps: 14, seed: 3 });
+const shrubClumps = [
+  { at: [236, 322], r: [46, 26], seed: 31, phase: 0.12 },
+  { at: [458, 332], r: [52, 28], seed: 57, phase: 0.42 },
+].map((s) => ({
+  ...s,
+  clumps: canopy({ cx: s.at[0]!, cy: s.at[1]!, rx: s.r[0]!, ry: s.r[1]!, clumps: 7, seed: s.seed }),
+}));
+
+/**
+ * The jacaranda flowers October to December in Perth and is green the rest of
+ * the year. Tying its colour to the season's *wildflower* would have painted a
+ * yellow jacaranda in August, which is the kind of detail a Perth reader would
+ * spot immediately.
+ */
+const month = Number(
+  new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Perth', month: 'numeric' }).format(
+    new Date(),
+  ),
+);
+const flowering = month >= 10 || month === 12;
+const tree = flowering
+  ? { flowering, shade: '#6B54A0', body: '#8B72C0', lit: '#A896D8' }
+  : { flowering, shade: '#2F5540', body: '#4C7A50', lit: '#6FA860' };
+
+/** Coursed limestone: staggered joints, varied block lengths, a shadow below. */
+const blocks = [0, 1, 2].flatMap((row) =>
+  [0, 1, 2, 3].map((col) => {
+    const w = 26 + ((row * 7 + col * 11) % 14);
+    return {
+      x: 96 + col * 66 + (row % 2 ? 22 : 0) + ((col * 5) % 7),
+      y: 328 - row * 21,
+      w,
+      tone: ['#EFE1C2', '#E7D6B4', '#F2E6CB'][(row + col) % 3]!,
+      seed: 200 + row * 10 + col,
+    };
+  }),
+);
+
+const grass = grassRow(-10, W + 10, H - 14, 150, 77);
+
+// Kangaroo paw: the one hot accent, and the plant this palette is named for.
+const paws = [340, 372, 398, 528, 556].map((x, i) => ({
+  x,
+  h: 54 + ((i * 13) % 26),
+  phase: Number((x / W) * 0.25).toFixed(3),
+}));
+---
+
+<div class="hero-garden relative">
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    class="w-full h-auto block"
+    role="img"
+    aria-label="A Perth garden: limestone wall, kangaroo paw, a jacaranda in flower, and the scarp in the distance."
+  >
+    <defs>
+      <linearGradient id="hg-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--sky-high)"></stop>
+        <stop offset="100%" stop-color="var(--sky-low)"></stop>
+      </linearGradient>
+
+      <radialGradient id="hg-sun">
+        <stop offset="0%" stop-color="#FFF9E6" stop-opacity="0.95"></stop>
+        <stop offset="45%" stop-color="#FFEFC4" stop-opacity="0.5"></stop>
+        <stop offset="100%" stop-color="#FFEFC4" stop-opacity="0"></stop>
+      </radialGradient>
+
+      <!-- Haze on the horizon: the season's own, so Bunuru really does swim. -->
+      <linearGradient id="hg-haze" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--sky-low)" stop-opacity="0"></stop>
+        <stop offset="100%" stop-color="var(--sky-low)" stop-opacity="0.9"></stop>
+      </linearGradient>
+
+      <clipPath id="hg-frame"><rect width={W} height={H} rx="22"></rect></clipPath>
+    </defs>
+
+    <g clip-path="url(#hg-frame)">
+      <rect width={W} height={H} fill="url(#hg-sky)"></rect>
+      <circle cx="678" cy="72" r="104" fill="url(#hg-sun)"></circle>
+
+      {
+        clouds.map((c) => (
+          <g class="anim-drift" style={`animation-duration:${c.drift}s`}>
+            <g transform={`translate(${c.x} ${c.y}) scale(${c.s})`}>
+              {/* Shadowed underside first, then the sunlit mass above it. */}
+              <path
+                d={blob({ cx: 0, cy: 8, rx: 62, ry: 20, lobes: 9, jitter: 0.2, seed: c.seed })}
+                fill="#D8E4EC"
+                opacity="0.75"
+              />
+              <path
+                d={blob({
+                  cx: 0,
+                  cy: 0,
+                  rx: 58,
+                  ry: 22,
+                  lobes: 10,
+                  jitter: 0.24,
+                  seed: c.seed + 1,
+                })}
+                fill="#FFFFFF"
+                opacity="0.92"
+              />
+            </g>
+          </g>
+        ))
+      }
+
+      {/* ── Distance ──────────────────────────────────────────────────── */}
+      <path d={farScarp} fill="var(--jacaranda)" class="depth-far" opacity="0.35"></path>
+      <path d={midHill} fill="var(--leaf-deep)" class="depth-mid" opacity="0.62"></path>
+      <rect y={HORIZON - 70} width={W} height="120" fill="url(#hg-haze)" opacity="var(--haze)"
+      ></rect>
+      <path d={nearGround} fill="var(--leaf)" class="depth-near" opacity="0.92"></path>
+
+      {/* ── The jacaranda ─────────────────────────────────────────────── */}
+      <g>
+        <ellipse cx="656" cy="352" rx="66" ry="12" fill="var(--leaf-deep)" opacity="0.22"></ellipse>
+        <path
+          d="M648 352 C644 320,650 292,656 262 C660 240,664 232,668 226 L680 228 C674 240,670 250,668 266 C664 296,662 324,664 352 Z"
+          fill="#6B5138"></path>
+        <path
+          d="M660 288 C640 274,626 268,612 266"
+          stroke="#6B5138"
+          stroke-width="5"
+          fill="none"
+          stroke-linecap="round"></path>
+        <path
+          d="M662 268 C682 254,694 250,708 250"
+          stroke="#6B5138"
+          stroke-width="4"
+          fill="none"
+          stroke-linecap="round"></path>
+
+        <g class="windy" style="--wind-phase:0.82;--wind-amp:0.55deg;transform-origin:656px 352px">
+          {
+            treeClumps.map((c) => (
+              <path
+                d={c.d}
+                fill={`color-mix(in srgb, ${tree.lit} ${Math.round(c.light * 100)}%, ${tree.shade})`}
+              />
+            ))
+          }
+        </g>
+
+        {/* Fallen flowers — the thing everyone in Perth recognises in November. */}
+        {
+          tree.flowering && (
+            <g fill={tree.body} opacity="0.45">
+              <path
+                d={blob({ cx: 622, cy: 356, rx: 16, ry: 4, lobes: 7, jitter: 0.4, seed: 71 })}
+              />
+              <path
+                d={blob({ cx: 676, cy: 362, rx: 22, ry: 5, lobes: 7, jitter: 0.4, seed: 73 })}
+              />
+            </g>
+          )
+        }
+      </g>
+
+      {/* ── Limestone wall ────────────────────────────────────────────── */}
+      <g>
+        <path
+          d={blob({ cx: 232, cy: 330, rx: 152, ry: 16, lobes: 8, jitter: 0.08, seed: 180 })}
+          fill="#C6AE84"
+          opacity="0.5"></path>
+        {
+          blocks.map((b) => (
+            <g>
+              <path
+                d={blob({
+                  cx: b.x,
+                  cy: b.y + 2,
+                  rx: b.w,
+                  ry: 12,
+                  lobes: 9,
+                  jitter: 0.16,
+                  seed: b.seed,
+                })}
+                fill="#C2A87E"
+              />
+              <path
+                d={blob({
+                  cx: b.x,
+                  cy: b.y,
+                  rx: b.w,
+                  ry: 11,
+                  lobes: 9,
+                  jitter: 0.16,
+                  seed: b.seed,
+                })}
+                fill={b.tone}
+              />
+            </g>
+          ))
+        }
+      </g>
+
+      {/* ── Planting ──────────────────────────────────────────────────── */}
+      {
+        shrubClumps.map((s) => (
+          <g class="windy" style={`--wind-phase:${s.phase};--wind-amp:1.1deg`}>
+            {/* Mulch ring: a planted bed, not a bush sitting on a lawn. */}
+            <path
+              d={blob({
+                cx: s.at[0]!,
+                cy: s.at[1]! + 22,
+                rx: s.r[0]! * 1.2,
+                ry: 11,
+                lobes: 8,
+                jitter: 0.18,
+                seed: s.seed + 500,
+              })}
+              fill="#6B5138"
+              opacity="0.35"
+            />
+            {s.clumps.map((c) => (
+              <path
+                d={c.d}
+                fill={`color-mix(in srgb, var(--leaf) ${Math.round(c.light * 100)}%, var(--leaf-deep))`}
+              />
+            ))}
+          </g>
+        ))
+      }
+
+      {
+        /* A willie wagtail. It is on the wall for eleven seconds out of every
+          forty — the sort of thing you only catch if you stay a while. */
+      }
+      <g class="wagtail">
+        <path
+          d={blob({ cx: 176, cy: 292, rx: 11, ry: 8, lobes: 8, jitter: 0.22, seed: 91 })}
+          fill="#26312E"></path>
+        <path d="M186 288 l13 -7 l-2 7 l2 5 z" fill="#26312E"></path>
+        <circle cx="168" cy="286" r="6" fill="#26312E"></circle>
+        <circle cx="166" cy="285" r="1.5" fill="#FFFDF7"></circle>
+        <path d="M162 287 l-5 1 l5 1.6 z" fill="#C9A227"></path>
+        <path
+          d="M172 296 q 4 4 -2 6"
+          stroke="#FFFDF7"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"></path>
+      </g>
+
+      {
+        paws.map((p) => (
+          <g class="windy" style={`--wind-phase:${p.phase};--wind-amp:2.4deg`}>
+            <path
+              d={`M${p.x} 356 C${p.x - 3} ${356 - p.h * 0.6},${p.x + 2} ${356 - p.h * 0.8},${p.x} ${356 - p.h}`}
+              stroke="var(--leaf-deep)"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <path
+              d={blob({ cx: p.x, cy: 356 - p.h, rx: 6, ry: 11, lobes: 7, jitter: 0.35, seed: p.x })}
+              fill="var(--paw)"
+            />
+          </g>
+        ))
+      }
+
+      {/* ── Grass, with the gust travelling across it ─────────────────── */}
+      <g fill="var(--leaf-deep)" opacity="0.62">
+        {
+          grass.map((b) => (
+            <path d={b.d} class="windy" style={`--wind-phase:${b.phase};--wind-amp:${b.amp}deg`} />
+          ))
+        }
+      </g>
+    </g>
+  </svg>
+</div>
+
+<style>
+  /* The frame is a painted panel, not a UI card: a soft warm shadow and no
+     hard border, so it sits in the page rather than on it. */
+  /* The bird arrives, stays a moment, and goes. Never on a loop tight enough
+     to become a distraction while someone is reading the copy beside it. */
+  .wagtail {
+    transform-origin: 176px 296px;
+    animation: wagtail-visit 40s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  @keyframes wagtail-visit {
+    0%,
+    62% {
+      opacity: 0;
+      transform: translate(-40px, 14px) scale(0.9);
+    }
+    66%,
+    88% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+    72%,
+    80% {
+      transform: translate(0, -2px) scale(1);
+    }
+    76% {
+      transform: translate(3px, 0) scale(1);
+    }
+    94%,
+    100% {
+      opacity: 0;
+      transform: translate(46px, -18px) scale(0.85);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wagtail {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hero-garden svg {
+    border-radius: 22px;
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--edge-strong) 60%, transparent),
+      0 24px 48px -20px color-mix(in srgb, var(--ink) 45%, transparent);
+  }
+</style>

@@ -9,8 +9,42 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Levels and grading plan"
-  prompt: "Mark the finished level of every surface, the fall direction and gradient of each, all step locations and riser heights, and calculate your cut-and-fill volumes. Confirm every surface drains somewhere legal."
   workbookKey: "grading-plan"
+  intro: "Every level here is an offset from your site datum, and a surface with no stated fall has no fall. Write the numbers down before a bobcat turns up to guess them."
+  questions:
+    - key: "plan"
+      label: "Upload the grading plan"
+      hint: "A scan or photo showing the datum, every finished level in mm, a fall arrow and gradient on each surface, and where each arrow terminates."
+      type: "file"
+    - key: "plan-record"
+      label: "Where the marked-up plan lives, its scale and its date"
+      hint: "For example \"grading-plan-v2.pdf, 1:100 at A3, 12 March, datum = garage floor at RL 100.000\"."
+      type: "text"
+    - key: "surface-levels"
+      label: "Every finished surface: level, fall and where the water ends up"
+      hint: "One row per surface. Levels in mm relative to your datum. Fall as a ratio or mm/m. \"Towards the fence\" is not a destination — name the soakwell, soakage bed, swale or connection."
+      type: "table"
+      columns: ["Surface", "Finished level", "Fall direction", "Gradient", "Drains to"]
+    - key: "steps"
+      label: "Every step location, with the riser arithmetic"
+      hint: "Total rise ÷ number of risers = riser height, every one the same. Riser 115–190 mm, going 240–355 mm, 2R+G between 550 and 700 mm."
+      type: "table"
+      columns: ["Location", "Total rise (mm)", "Number of risers", "Riser height (mm)", "Going (mm)"]
+    - key: "cut-volume"
+      label: "Total cut"
+      hint: "Grid method, and remember to deduct the pavement build-up — about 175 mm under a paved terrace is spoil too."
+      type: "number"
+      suffix: "m³"
+    - key: "fill-volume"
+      label: "Total fill"
+      hint: "If cut and fill do not roughly balance, you are paying to cart sand one way or the other. Say which."
+      type: "number"
+      suffix: "m³"
+    - key: "drains-legally"
+      label: "Confirm every surface drains somewhere legal"
+      hint: "Nothing at the house — 50 mm fall over the first metre and slab clearance kept. Nothing over a boundary. Every arrow terminates at a device with real capacity."
+      type: "prose"
+      rows: 4
 checklist:
   - "Every paved surface has a stated fall and direction"
   - "No water is directed at the house or a boundary"

@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  // Server and shared logic only — the code where a type error is a real bug.
+  //
+  // .astro files are excluded on purpose. @astrojs/cloudflare injects the
+  // Workers runtime types globally, and its `Element` (from HTMLRewriter)
+  // shadows the DOM one, so every `querySelector().append()` in a client script
+  // reports a false error. Checking them produces ~60 findings that are all
+  // noise, which would bury the real ones. `npm run typecheck` still runs the
+  // full astro check for anyone who wants to look.
+  "include": [
+    ".astro/types.d.ts",
+    "worker-configuration.d.ts",
+    "src/lib/**/*.ts",
+    "src/db/**/*.ts",
+    "src/pages/api/**/*.ts",
+    "src/data/**/*.ts"
+  ],
+  "exclude": ["src/**/*.astro", "**/*.test.ts", "node_modules", "dist"],
+  "compilerOptions": { "noEmit": true, "ignoreDeprecations": "6.0" }
+}

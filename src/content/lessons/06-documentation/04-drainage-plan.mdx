@@ -9,8 +9,43 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Drainage plan"
-  prompt: "Calculate the required soakwell volume for all new impervious area, mark soakwell positions with their distances from buildings and boundaries, show all connecting pipework with falls, and mark subsoil drains and their outlets."
   workbookKey: "drainage-plan"
+  intro: "Every figure here comes from your own council's current stormwater sheet, not from another suburb's. Size and place the drainage before you finalise the levels — the soakwell invert sets every level above it."
+  questions:
+    - key: "drawing"
+      label: "Upload the drainage plan"
+      hint: "Soakwell positions and sizes, every pipe run with its fall and invert levels, subsoil drains and their outlets, and the surface falls away from the house."
+      type: "file"
+    - key: "impervious-area"
+      label: "New impervious area"
+      hint: "Roof, driveway, paving, concrete, alfresco slab, pool surround. Measure each off your layout plan and total them. New area only — measure it separately from what was already there."
+      type: "number"
+      suffix: "m²"
+    - key: "required-volume"
+      label: "Required soakwell volume, calculated to your council's rule"
+      hint: "Impervious area × your council's factor. Stirling 0.015 m, Claremont and East Fremantle 0.0125 m, Joondalup a capacity table instead. Ring your own building services counter and use the number on their sheet."
+      type: "number"
+      suffix: "m³"
+    - key: "soakwells"
+      label: "Soakwell schedule and positions"
+      hint: "One row per well. Design to the strictest setback you might be held to, and check the well sits above the maximum groundwater level for your address."
+      type: "table"
+      columns: ["Well", "Size (dia × deep, mm)", "Capacity (m³)", "What it takes (roof / paving)", "Position on plan", "Clear of building (m)", "Clear of boundary (m)"]
+    - key: "pipework"
+      label: "Connecting pipework and falls"
+      hint: "Every run gets a stated fall as a ratio, with invert levels at both ends off your levels and grading plan. Include downpipes, grated inlets and the surface falls away from the house."
+      type: "table"
+      columns: ["Run (from → to)", "Pipe size (mm)", "Fall (ratio)", "Invert in (m AHD)", "Invert out (m AHD)", "Cover depth (mm)"]
+    - key: "subsoil-drains"
+      label: "Subsoil drains and their outlets"
+      hint: "Behind every retaining wall, at the base of every cut, around any sunken courtyard. Minimum 1:300 uniform fall, and draw the outlet — a drain with nowhere to discharge is a trench that stays full."
+      type: "table"
+      columns: ["Location", "Length (m)", "Fall (ratio)", "Discharges to", "Silt pit or sump?"]
+    - key: "drawing-record"
+      label: "The drawing itself — scale, date and where it lives"
+      hint: "Scale, north point, date, revision, and the file or folder it is in. Note the council sheet and edition you sized it against so you can defend the numbers later."
+      type: "prose"
+      rows: 4
 checklist:
   - "Impervious area measured and soakwell volume calculated to your council's rule"
   - "Soakwell locations respect setbacks from buildings and boundaries"

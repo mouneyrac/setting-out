@@ -18,7 +18,14 @@
   aria-label="Search the course"
   aria-keyshortcuts="Control+K Meta+K"
 >
-  <svg viewBox="0 0 20 20" class="w-4.5 h-4.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+  <svg
+    viewBox="0 0 20 20"
+    class="w-4.5 h-4.5 shrink-0"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    aria-hidden="true"
+  >
     <circle cx="9" cy="9" r="6"></circle>
     <path d="m13.5 13.5 4 4" stroke-linecap="round"></path>
   </svg>
@@ -38,7 +45,14 @@
 >
   <div class="cutout overflow-hidden mx-3">
     <div class="flex items-center gap-3 px-4 py-3 border-b-2 border-edge">
-      <svg viewBox="0 0 20 20" class="w-5 h-5 shrink-0 text-soft" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <svg
+        viewBox="0 0 20 20"
+        class="w-5 h-5 shrink-0 text-soft"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
         <circle cx="9" cy="9" r="6"></circle>
         <path d="m13.5 13.5 4 4" stroke-linecap="round"></path>
       </svg>
@@ -59,7 +73,12 @@
       >
     </div>
 
-    <div id="search-results" class="max-h-[60vh] overflow-y-auto" role="listbox" aria-label="Results">
+    <div
+      id="search-results"
+      class="max-h-[60vh] overflow-y-auto"
+      role="listbox"
+      aria-label="Results"
+    >
       <p class="note px-4 py-5" id="search-hint">
         Search every lesson, checklist and resource. Try a plant, a material, or a problem you have.
       </p>
@@ -68,6 +87,7 @@
 </dialog>
 
 <script>
+  import type { LessonIndexEntry } from '../pages/lessons-index.json';
   const openBtn = document.getElementById('search-open') as HTMLButtonElement;
   const dialog = document.getElementById('search-dialog') as HTMLDialogElement;
   const input = document.getElementById('search-input') as HTMLInputElement;
@@ -75,8 +95,25 @@
   const closeBtn = document.getElementById('search-close');
 
   if (openBtn && dialog && input && results) {
-    let pagefind: any = null;
-    let loading: Promise<any> | null = null;
+    /**
+     * What `render` needs from a hit. Pagefind results and lesson matches are
+     * rendered by the same code, so they are made to share this shape.
+     */
+    interface Hit {
+      url: string;
+      excerpt: string;
+      meta?: { title?: string };
+      /** Set on lesson matches only — the phase the lesson belongs to. */
+      _lesson?: string;
+    }
+
+    interface PagefindModule {
+      init(): Promise<void>;
+      search(query: string): Promise<{ results: { data(): Promise<Hit> }[] }>;
+    }
+
+    let pagefind: PagefindModule | null = null;
+    let loading: Promise<PagefindModule | null> | null = null;
     let token = 0;
 
     // Pagefind only exists in a real build, so this is loaded lazily and its
@@ -85,7 +122,7 @@
       if (pagefind) return Promise.resolve(pagefind);
       if (!loading) {
         loading = import(/* @vite-ignore */ '/pagefind/pagefind.js')
-          .then(async (module: any) => {
+          .then(async (module) => {
             await module.init();
             pagefind = module;
             return module;
@@ -98,7 +135,7 @@
     const escape = (s: string) =>
       s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
-    const render = (items: any[], query: string) => {
+    const render = (items: Hit[], query: string) => {
       if (!items.length) {
         results.innerHTML = `<p class="note px-4 py-5">Nothing matches “${escape(query)}”. Try a broader word — the course covers a lot of ground under plainer names.</p>`;
         return;
@@ -114,6 +151,40 @@
         .join('');
     };
 
+    // Lesson pages render on demand now that they are behind an account, so
+    // Pagefind cannot index them. Their titles and summaries are published
+    // separately and matched here, so search still finds lessons.
+    let lessonIndex: LessonIndexEntry[] | null = null;
+    const loadLessons = () => {
+      if (lessonIndex) return Promise.resolve(lessonIndex);
+      return fetch('/lessons-index.json')
+        .then((r) => r.json())
+        .then((data) => (lessonIndex = data as LessonIndexEntry[]))
+        .catch(() => (lessonIndex = []));
+    };
+
+    const matchLessons = (query: string) => {
+      const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+      if (!words.length || !lessonIndex) return [];
+      return lessonIndex
+        .map((l) => {
+          const hay = `${l.t} ${l.s} ${l.p}`.toLowerCase();
+          const hits = words.filter((w) => hay.includes(w)).length;
+          // Title matches are worth more than a mention in the summary.
+          const inTitle = words.filter((w) => l.t.toLowerCase().includes(w)).length;
+          return { l, score: hits + inTitle * 2 };
+        })
+        .filter((m) => m.score >= words.length)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 6)
+        .map((m) => ({
+          url: m.l.u,
+          meta: { title: m.l.t },
+          excerpt: escape(m.l.s),
+          _lesson: m.l.p,
+        }));
+    };
+
     const run = async (query: string) => {
       const mine = ++token;
       if (!query.trim()) {
@@ -121,21 +192,23 @@
         return;
       }
 
-      const module = await loadPagefind();
+      results.innerHTML = `<p class="note px-4 py-5">Looking…</p>`;
+
+      const [module] = await Promise.all([loadPagefind(), loadLessons()]);
       if (mine !== token) return;
 
-      if (!module) {
-        results.innerHTML = `<p class="note px-4 py-5">Search is only available on the built site, not in local dev.</p>`;
-        return;
+      const lessonHits = matchLessons(query);
+
+      let pageHits: Hit[] = [];
+      if (module) {
+        const search = await module.search(query);
+        if (mine !== token) return;
+        pageHits = await Promise.all(search.results.slice(0, 8).map((r) => r.data()));
+        if (mine !== token) return;
       }
 
-      results.innerHTML = `<p class="note px-4 py-5">Looking…</p>`;
-      const search = await module.search(query);
-      if (mine !== token) return;
-
-      const items = await Promise.all(search.results.slice(0, 12).map((r: any) => r.data()));
-      if (mine !== token) return;
-      render(items, query);
+      // Lessons first — they are what someone is usually after.
+      render([...lessonHits, ...pageHits], query);
     };
 
     let debounce: ReturnType<typeof setTimeout>;
@@ -162,7 +235,8 @@
     addEventListener('keydown', (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
-        dialog.open ? dialog.close() : open();
+        if (dialog.open) dialog.close();
+        else open();
       }
     });
 

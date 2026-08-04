@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 
 <Base
   title="Sign in"
-  description="Sign in to track your progress, grow your garden and keep your project workbook. Everything on this site is readable without an account."
+  description="Sign in to track your progress, grow your garden and keep your project workbook. The course map, library and WA reference pages stay open."
 >
   <section class="relative overflow-hidden">
     <div
@@ -23,9 +23,10 @@ import Base from '../layouts/Base.astro';
         Keep your progress and your workbook
       </h1>
       <p class="mt-4 leading-relaxed text-soft">
-        An account does three things: it grows your garden as you finish phases, it saves the
-        documents you write for each deliverable, and it remembers your block. Nothing on this site
-        is hidden behind it — every lesson is readable signed out.
+        The lessons are behind an account. Not to sell you anything — this is free and always will
+        be — but because the course only works if it tracks your progress, saves the documents you
+        write for each deliverable, and knows your block. And because in alpha it is worth knowing
+        who is actually out there.
       </p>
 
       <div class="cutout p-5 sm:p-7 mt-7">
@@ -117,6 +118,8 @@ import Base from '../layouts/Base.astro';
   </section>
 
   <script>
+    import type { AuthConfig } from './api/auth-config';
+
     const form = document.getElementById('auth-form') as HTMLFormElement;
     const tabIn = document.getElementById('tab-signin') as HTMLButtonElement;
     const tabUp = document.getElementById('tab-signup') as HTMLButtonElement;
@@ -132,7 +135,7 @@ import Base from '../layouts/Base.astro';
 
     // Only offer the reset link when a reset email can actually be sent.
     fetch('/api/auth-config')
-      .then((r) => r.json())
+      .then((r) => r.json() as Promise<AuthConfig>)
       .then((config) => {
         if (config.passwordReset) {
           const link = document.getElementById('forgot-link');
@@ -208,11 +211,13 @@ import Base from '../layouts/Base.astro';
           } catch {
             /* No storage. The header will ask the server instead. */
           }
-          window.location.href = '/my/';
+          // Back to whatever they were trying to read, if anything.
+          const next = new URLSearchParams(location.search).get('next');
+          window.location.href = next && next.startsWith('/') ? next : '/my/';
           return;
         }
 
-        const data = await response.json().catch(() => ({}) as Record<string, unknown>);
+        const data = (await response.json().catch(() => ({}))) as Record<string, unknown>;
         const message = typeof data.message === 'string' ? data.message : '';
 
         if (response.status === 401 || /invalid/i.test(message)) {

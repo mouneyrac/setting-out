@@ -17,16 +17,25 @@
     // Without this, `not_found_handling: 404-page` can answer a request that
     // matches no static asset before the Worker ever runs — which is exactly
     // what the account routes are. Force them to the Worker.
-    "run_worker_first": ["/my/*", "/api/*"]
+    "run_worker_first": ["/my/*", "/api/*", "/curriculum/*"],
   },
+
+  // Drawings and photos. Free tier is 10 GB, and uploads are capped per file
+  // and per question so one enthusiastic reader cannot exhaust it.
+  "r2_buckets": [
+    {
+      "binding": "FILES",
+      "bucket_name": "setting-out-files",
+    },
+  ],
 
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "learnlandscaping",
       "database_id": "e353181c-b62d-4e66-981c-462408f16547",
-      "migrations_dir": "drizzle"
-    }
+      "migrations_dir": "drizzle",
+    },
   ],
 
   // The Worker id stays "learnlandscaping" — renaming it would create a new
@@ -35,6 +44,6 @@
   "routes": [{ "pattern": "settingout.mouneyrac.com", "custom_domain": true }],
 
   "observability": {
-    "enabled": true
-  }
+    "enabled": true,
+  },
 }

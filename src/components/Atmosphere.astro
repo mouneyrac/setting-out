@@ -1,0 +1,115 @@
+---
+/**
+ * The filters and the light, mounted once per page.
+ *
+ * The SVG carries no picture — it is a filter library. `#deckle-edge` displaces
+ * a card's background with turbulence so its edge reads as torn paper rather
+ * than a perfect radius, and the two variants are the endpoints of a very slow
+ * settle so the sheet is never quite still.
+ *
+ * The script sets the light. It runs inline and early — before paint, not after
+ * hydration — because a page that flashes noon and then fades to dusk would be
+ * worse than one that never changed at all.
+ */
+---
+
+<svg aria-hidden="true" focusable="false" class="absolute w-0 h-0 overflow-hidden">
+  <defs>
+    <filter id="deckle-edge" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.028 0.04"
+        numOctaves="4"
+        seed="7"
+        result="n"></feTurbulence>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="n"
+        scale="7"
+        xChannelSelector="R"
+        yChannelSelector="G"></feDisplacementMap>
+    </filter>
+
+    <filter id="deckle-edge-2" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.03 0.036"
+        numOctaves="4"
+        seed="19"
+        result="n"></feTurbulence>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="n"
+        scale="9"
+        xChannelSelector="R"
+        yChannelSelector="G"></feDisplacementMap>
+    </filter>
+
+    <!-- Gouache: pigment settling unevenly across a wash. Used on the world's
+         hills and on the growing garden, never on anything holding text. -->
+    <filter id="gouache" x="-4%" y="-4%" width="108%" height="108%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3" result="grain"
+      ></feTurbulence>
+      <feColorMatrix in="grain" type="saturate" values="0" result="grey"></feColorMatrix>
+      <feComposite operator="in" in="grey" in2="SourceGraphic" result="masked"></feComposite>
+      <feBlend in="SourceGraphic" in2="masked" mode="multiply" result="pigment"></feBlend>
+      <!-- A soft edge, so a shape looks laid down with a brush, not cut out. -->
+      <feGaussianBlur in="pigment" stdDeviation="0.4"></feGaussianBlur>
+    </filter>
+  </defs>
+</svg>
+
+<script>
+  import { perthSky } from '../lib/atmosphere';
+
+  /**
+   * Paint the page with the light in Perth right now.
+   *
+   * Re-run on a timer as well as on load: someone reading a long lesson at
+   * dusk should watch the light go, which is a small thing that says a person
+   * made this. Fifteen minutes is frequent enough to catch the transition and
+   * rare enough to cost nothing.
+   */
+  const paint = () => {
+    const { season, light } = perthSky();
+    const root = document.documentElement;
+
+    root.style.setProperty('--light', light.warmth);
+    root.style.setProperty('--light-strength', String(light.tint));
+    root.style.setProperty('--bloom', season.bloom);
+    root.style.setProperty('--haze', String(season.haze));
+
+    // The sky only leads the palette in light mode. In dark mode the page is a
+    // Ghibli night — moonlit blue-teal — and a Bunuru haze over it would just
+    // look like a mistake.
+    //
+    // The properties must be *removed*, not merely left unset: an inline style
+    // on :root beats the stylesheet, so once a light sky had been written here
+    // switching to dark could not undo it, and the hero copy ended up pale text
+    // on a pale summer sky. Caught by looking at the page in dark mode.
+    const dark =
+      root.dataset.theme === 'dark' ||
+      (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+
+    if (dark) {
+      root.style.removeProperty('--sky-high');
+      root.style.removeProperty('--sky-low');
+    } else {
+      root.style.setProperty('--sky-high', season.skyHigh);
+      root.style.setProperty('--sky-low', season.skyLow);
+    }
+
+    root.dataset.season = season.key;
+    root.dataset.daypart = light.part;
+  };
+
+  paint();
+  setInterval(paint, 15 * 60 * 1000);
+
+  // The theme toggle rewrites the palette, so the sky has to be reapplied after
+  // it — otherwise switching back to light leaves last night's sky.
+  new MutationObserver(paint).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+</script>

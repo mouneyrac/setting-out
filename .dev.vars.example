@@ -1,0 +1,10 @@
+# Copy to .dev.vars for local development. None of these are needed to read the
+# course; they are what makes accounts work on localhost.
+#
+#   BETTER_AUTH_SECRET=$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
+#
+# Optional. Without RESEND_API_KEY the password-reset flow stays switched off,
+# which is deliberate — see src/lib/email.ts.
+BETTER_AUTH_SECRET=generate-a-random-32-byte-hex-string
+# RESEND_API_KEY=
+# EMAIL_FROM=Setting Out <noreply@example.com>

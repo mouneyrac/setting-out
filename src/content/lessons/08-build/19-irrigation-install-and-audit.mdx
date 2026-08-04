@@ -10,8 +10,32 @@ updated: 2026-08-02
 series: "Irrigation mini-course"
 deliverable:
   title: "Irrigation as-built and audit"
-  prompt: "Record the as-built layout — mainline route, valve positions, station numbers and what each covers — and the results of your commissioning audit: pressure at the furthest head on each station, catch-cup uniformity, and final run times."
   workbookKey: "irrigation-as-built"
+  intro: "Fill this in while the trenches are still open. In three years nobody remembers where anything is, and Perth sand looks identical everywhere."
+  questions:
+    - key: "as-built"
+      label: "Upload the as-built"
+      hint: "The marked-up plan and the open-trench photos, showing the mainline route, every valve box and which station is which, taken before backfilling."
+      type: "file"
+    - key: "mainline-route"
+      label: "The mainline route"
+      hint: "Where the mainline runs, from the cut-in to the last valve. Dimension it off permanent features — the meter box, a building corner, a fence post — not a garden bed that will move."
+      type: "prose"
+      rows: 5
+    - key: "valve-positions"
+      label: "Valve positions"
+      hint: "Two offsets to every valve box, each measured from something that will still be there in ten years."
+      type: "table"
+      columns: ["Valve / station", "Where it is", "Offset 1", "Offset 2"]
+    - key: "stations"
+      label: "Station numbers, what each covers, and the audit results"
+      hint: "One row per station. Pressure is measured at the furthest head, under normal operating conditions. Run times come from the audit, not from a guess."
+      type: "table"
+      columns: ["Station", "What it covers", "Pressure at furthest head (kPa)", "Catch-cup DU (%)", "Final run time (min)"]
+    - key: "record"
+      label: "Where the as-built record lives"
+      hint: "The marked-up plan and the open-trench photos — where they are filed, and the date you recorded them."
+      type: "text"
 checklist:
   - "Pipe flushed thoroughly before heads were fitted"
   - "Every head set to the correct arc and adjusted for radius"

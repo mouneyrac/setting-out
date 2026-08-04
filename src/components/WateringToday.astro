@@ -87,20 +87,11 @@
 </style>
 
 <script>
-  // Roster by the last digit of the house or lot number — Perth and Mandurah
-  // (Area 3). Source: DWER, "Check garden bore water restrictions".
-  const ROSTER: Record<number, [string, string]> = {
-    0: ['Friday', 'Monday'],
-    1: ['Wednesday', 'Saturday'],
-    2: ['Thursday', 'Sunday'],
-    3: ['Friday', 'Monday'],
-    4: ['Saturday', 'Tuesday'],
-    5: ['Sunday', 'Wednesday'],
-    6: ['Monday', 'Thursday'],
-    7: ['Tuesday', 'Friday'],
-    8: ['Wednesday', 'Saturday'],
-    9: ['Thursday', 'Sunday'],
-  };
+  import { useSession } from '../lib/session';
+
+  // The roster itself lives in src/lib/roster.ts and is unit tested there.
+  // Duplicating it here would mean the tests covered nothing that ships.
+  import { perthToday, rosterAnswer } from '../lib/roster';
 
   const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.digit-btn'));
   const answer = document.getElementById('water-answer');
@@ -109,41 +100,56 @@
   const daysLine = document.getElementById('water-days');
 
   if (buttons.length && answer && headline && detail && daysLine) {
-    /** Today in Perth, regardless of where the device thinks it is. */
-    const perthNow = () => {
-      const parts = new Intl.DateTimeFormat('en-AU', {
-        timeZone: 'Australia/Perth',
-        weekday: 'long',
-        day: 'numeric',
-        month: 'numeric',
-      }).formatToParts(new Date());
-      const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
-      return { weekday: get('weekday'), month: Number(get('month')), day: Number(get('day')) };
+    /** Build the explanation as elements — never innerHTML with a template. */
+    const say = (parts: (string | HTMLElement)[]) => {
+      detail.replaceChildren();
+      for (const part of parts) {
+        detail.appendChild(typeof part === 'string' ? document.createTextNode(part) : part);
+      }
+    };
+    const bold = (text: string) => {
+      const el = document.createElement('strong');
+      el.textContent = text;
+      return el;
     };
 
-    // The Sprinkler Switch-off: 1 June to 31 August, every year.
-    const inSwitchOff = (month: number) => month >= 6 && month <= 8;
-
     const render = (digit: number) => {
-      const [first, second] = ROSTER[digit];
-      const { weekday, month } = perthNow();
+      const { weekday, month } = perthToday();
+      const { verdict, days } = rosterAnswer(digit, weekday, month);
+      const [first, second] = days;
 
       daysLine.textContent = `Houses ending in ${digit} are rostered for ${first} and ${second}.`;
 
-      if (inSwitchOff(month)) {
+      if (verdict === 'switch-off') {
         headline.textContent = 'No — the Sprinkler Switch-off is on.';
         headline.style.color = 'var(--paw)';
-        detail.innerHTML =
-          'From <strong>1 June to 31 August</strong> sprinklers are banned across Perth and Mandurah, on scheme water <em>and</em> bore. The only lawful watering is a handheld hose with one outlet, or a watering can. A $100 fine applies, and a controller that was left programmed is not a defence.';
-      } else if (weekday === first || weekday === second) {
+        say([
+          'From ',
+          bold('1 June to 31 August'),
+          ' sprinklers are banned across Perth and Mandurah, on scheme water and bore. The only lawful watering is a handheld hose with one outlet, or a watering can. A $100 fine applies, and a controller that was left programmed is not a defence.',
+        ]);
+      } else if (verdict === 'rostered-today') {
         headline.textContent = `Yes — ${weekday} is one of your rostered days.`;
         headline.style.color = 'var(--leaf-deep)';
-        detail.innerHTML =
-          'Sprinklers may run <strong>once</strong> today, either <strong>before 9am</strong> or <strong>after 6pm</strong> — one window, not both.';
+        say([
+          'Sprinklers may run ',
+          bold('once'),
+          ' today, either ',
+          bold('before 9am'),
+          ' or ',
+          bold('after 6pm'),
+          ' — one window, not both.',
+        ]);
       } else {
         headline.textContent = `No — ${weekday} is not one of your rostered days.`;
         headline.style.color = 'var(--paw)';
-        detail.innerHTML = `Your days are <strong>${first}</strong> and <strong>${second}</strong>. Watering outside them risks a $100 on-the-spot fine. A handheld hose or watering can is allowed any day.`;
+        say([
+          'Your days are ',
+          bold(first),
+          ' and ',
+          bold(second),
+          '. Watering outside them risks a $100 on-the-spot fine. A handheld hose or watering can is allowed any day.',
+        ]);
       }
 
       answer.hidden = false;
@@ -167,7 +173,6 @@
       button.addEventListener('click', () => select(Number(button.dataset.digit)));
     }
 
-    // Remembered from last time, or taken from your property profile if signed in.
     try {
       const stored = localStorage.getItem('house-digit');
       if (stored !== null && /^\d$/.test(stored)) select(Number(stored), false);
@@ -175,8 +180,7 @@
       /* No storage. */
     }
 
-    fetch('/api/me')
-      .then((r) => r.json())
+    useSession()
       .then((me) => {
         const digit = me?.property?.houseNumberLastDigit;
         if (/^\d$/.test(String(digit ?? ''))) select(Number(digit), false);

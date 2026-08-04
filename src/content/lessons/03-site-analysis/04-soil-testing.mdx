@@ -9,8 +9,19 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Soil report"
-  prompt: "Record results for each test area on your block: soil type, pH, water repellency (the water-drop test), depth to any hard layer, and drainage rate. Note which areas will need the most amendment."
   workbookKey: "soil-report"
+  intro: "Test by zone, not by block — a renovation site is never uniform. Use the same zone names you used when you measured up, one row per test area."
+  questions:
+    - key: "test-results"
+      label: "Record the results for each test area on your block"
+      hint: "One row per zone. State whether the pH is a water-kit reading or CaCl2 — they differ by about 0.7 units. For depth, note what stopped the bar: limestone, coffee rock or compaction."
+      type: "table"
+      columns: ["Zone", "Soil type", "pH", "Water drop (sec)", "Depth to hard layer (mm)", "Drainage (mm/hr)"]
+    - key: "amendment-priority"
+      label: "Which areas will need the most amendment?"
+      hint: "Worst first, and say what each one needs — wetting agent, clay and organic matter, ripping, or rock breaking per pit. These are the numbers you price from in Phase 7."
+      type: "prose"
+      rows: 4
 checklist:
   - "Run the water-drop test for hydrophobicity in at least three spots"
   - "Test pH in each planting zone"

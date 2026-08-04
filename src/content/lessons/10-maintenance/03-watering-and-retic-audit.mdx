@@ -9,8 +9,38 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Retic audit record"
-  prompt: "Run a full station-by-station audit: every head checked for arc, radius, blockage and damage; pressure checked; catch-cup uniformity re-tested on the important stations; run times adjusted for the season. Record what you found and fixed."
   workbookKey: "retic-audit"
+  intro: "Run every station and stand in it, head by head. Record it per head, not per station — \"Station 4 patchy\" is not actionable — and keep the record, because next September's audit is only useful compared against this one."
+  questions:
+    - key: "heads"
+      label: "Every head checked, station by station"
+      hint: "Arc, radius, blockage, damage. One row per fault: \"Station 4, second head from the west, arc closed to 90 and throwing at the fence\"."
+      type: "table"
+      columns: ["Station", "Which head", "Fault found", "Fixed or still to do"]
+    - key: "pressure"
+      label: "What the pressure told you"
+      hint: "Fine fog drifting off the zone is over-pressure. Weak throw and a dry ring around the head is under-pressure or too many heads on the station. Name the stations and what you did about it."
+      type: "prose"
+      rows: 4
+    - key: "uniformity"
+      label: "Catch-cup results on the stations that matter"
+      hint: "The main lawn and the bed carrying the most value. A DU that has fallen since last year means something physical changed — go and find it."
+      type: "table"
+      columns: ["Station", "Minutes to 10 mm", "DU this year", "DU last year"]
+    - key: "run-times"
+      label: "Run times as you have left them"
+      type: "table"
+      columns: ["Station", "Head type", "Run time as found", "Run time now set"]
+    - key: "seasonal-adjust"
+      label: "Seasonal adjust the controller is now on"
+      hint: "The Water Corporation percentage for the month you are in — 100% January and February, 80% March, 60% April and October, 80% November, 90% December."
+      type: "number"
+      suffix: "%"
+    - key: "found-and-fixed"
+      label: "What the audit found, and what it changed"
+      hint: "The summary you will read first next September. Include anything you found but could not fix on the day."
+      type: "prose"
+      rows: 5
 checklist:
   - "Every station run and watched, head by head"
   - "Blocked, broken, sunken and misaimed heads fixed"

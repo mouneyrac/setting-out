@@ -71,10 +71,10 @@ const done = all.filter((l) => l.data.fieldStatus === 'field-tested');
       <div class="sign mt-6 max-w-[76ch]">
         <p class="leading-relaxed">
           <strong class="font-display">How to use this honestly.</strong>
-          Follow the field-tested lessons. For everything else, the research is real and every link
-          was checked — but nobody has felt what happens when it goes wrong. Verify anything that
-          costs real money or carries real risk before you commit to it, and get a qualified person
-          to look at structural, drainage and electrical work regardless.
+          Follow the field-tested lessons. For everything else, the research is real and every link was
+          checked — but nobody has felt what happens when it goes wrong. Verify anything that costs real
+          money or carries real risk before you commit to it, and get a qualified person to look at structural,
+          drainage and electrical work regardless.
         </p>
       </div>
     </div>
@@ -83,7 +83,9 @@ const done = all.filter((l) => l.data.fieldStatus === 'field-tested');
   {
     done.length > 0 && (
       <section class="mx-auto max-w-[84rem] px-4 sm:px-6 pb-10">
-        <h2 class="font-display font-900 text-2xl sm:text-3xl">What has been done, and what it taught</h2>
+        <h2 class="font-display font-900 text-2xl sm:text-3xl">
+          What has been done, and what it taught
+        </h2>
         <ul class="grid gap-3 mt-4">
           {done.map((lesson) => (
             <li class="cutout p-5 list-none">
@@ -104,7 +106,9 @@ const done = all.filter((l) => l.data.fieldStatus === 'field-tested');
                 )}
               </div>
               {lesson.data.fieldNotes && (
-                <p class="mt-2 leading-relaxed font-hand text-[1.05rem]">{lesson.data.fieldNotes}</p>
+                <p class="mt-2 leading-relaxed font-hand text-[1.05rem]">
+                  {lesson.data.fieldNotes}
+                </p>
               )}
             </li>
           ))}

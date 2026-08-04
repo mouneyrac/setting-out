@@ -5,7 +5,10 @@ import Base from '../layouts/Base.astro';
 <Base title="Page not found" description="That page does not exist." sheetRef="SHEET — / NOT FOUND">
   <section class="mx-auto max-w-[86rem] px-4 sm:px-6 py-20">
     <p class="label text-banksia">404 — this path leads nowhere</p>
-    <h1 class="mt-3 font-display font-700 leading-[0.95]" style="font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);">
+    <h1
+      class="mt-3 font-display font-700 leading-[0.95]"
+      style="font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);"
+    >
       Nothing growing here.
     </h1>
     <p class="mt-4 max-w-[52ch] text-lg leading-relaxed text-soft">
@@ -13,18 +16,8 @@ import Base from '../layouts/Base.astro';
       course is being built.
     </p>
     <div class="mt-7 flex flex-wrap gap-3">
-      <a
-        href="/curriculum/"
-        class="btn btn-primary"
-      >
-        Go to the curriculum
-      </a>
-      <a
-        href="/"
-        class="btn btn-ghost"
-      >
-        Back to the start
-      </a>
+      <a href="/curriculum/" class="btn btn-primary"> Go to the curriculum </a>
+      <a href="/" class="btn btn-ghost"> Back to the start </a>
     </div>
   </section>
 </Base>

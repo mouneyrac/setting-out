@@ -1,0 +1,12 @@
+dist
+.astro
+.wrangler
+drizzle
+node_modules
+package-lock.json
+src/content
+
+# generated
+worker-configuration.d.ts
+test-results
+playwright-report

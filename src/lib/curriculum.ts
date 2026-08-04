@@ -23,9 +23,7 @@ export function phaseUrl(phase: Phase): string {
 /** All lessons, sorted by phase then position within the phase. */
 export async function allLessons(): Promise<Lesson[]> {
   const lessons = await getCollection('lessons');
-  return lessons.sort(
-    (a, b) => a.data.phase - b.data.phase || a.data.order - b.data.order,
-  );
+  return lessons.sort((a, b) => a.data.phase - b.data.phase || a.data.order - b.data.order);
 }
 
 export interface PhaseGroup {

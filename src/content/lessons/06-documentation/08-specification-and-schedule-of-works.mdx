@@ -9,8 +9,19 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Specification and schedule of works"
-  prompt: "Write the specification for every element (material, standard, method, finish) and the schedule of works listing each task in build order with its dependencies, durations, and who does it — you or a subcontractor."
   workbookKey: "specification"
+  intro: "The test is blunt: could a competent stranger build this without ringing you? If not, it is not finished."
+  questions:
+    - key: "specification"
+      label: "The specification, one row per element"
+      hint: "Precise enough to order from. Write in must and will, never may or should. \"Or equal approved\" with nobody named as the approver is not a specification."
+      type: "table"
+      columns: ["Element", "Material", "Standard", "Method", "Finish"]
+    - key: "schedule-of-works"
+      label: "The schedule of works, in build order"
+      hint: "Rows top to bottom in the order you will build. Approvals and service locations first, anything damageable last. Who: you, or the named trade."
+      type: "table"
+      columns: ["Task", "Depends on", "Duration", "Who does it"]
 checklist:
   - "Every material is specified with enough precision to order it"
   - "Tasks are in a build order that does not require undoing anything"

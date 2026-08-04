@@ -2,12 +2,13 @@ import { env } from 'cloudflare:workers';
 import { drizzle } from 'drizzle-orm/d1';
 import { schema } from '../db/schema';
 import { createAuth } from './auth';
+import type { MailEnv } from './email';
 
 /**
  * Cloudflare bindings. `env` is only populated inside a request, which is why
  * everything here is a function rather than a module-level constant.
  */
-type Bindings = {
+type Bindings = MailEnv & {
   DB: D1Database;
   BETTER_AUTH_SECRET?: string;
   BETTER_AUTH_URL?: string;

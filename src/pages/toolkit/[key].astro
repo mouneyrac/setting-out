@@ -1,0 +1,333 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import { allLessons, lessonUrl } from '../../lib/curriculum';
+import { phases, getPhase } from '../../data/phases';
+
+/**
+ * The print view of a deliverable — or of a whole phase.
+ *
+ * There is exactly one source of truth per document: the `questions` in the
+ * lesson frontmatter. This renders them as a paper form you can print blank and
+ * fill with a pencil in the garden, or print already filled from your workbook.
+ * Previously the toolkit held its own parallel copy of six of these, stored in
+ * localStorage where the account could never see it.
+ */
+export const getStaticPaths = (async () => {
+  const lessons = await allLessons();
+  const withDeliverable = lessons.filter((l) => l.data.deliverable);
+
+  const single = withDeliverable.map((lesson) => ({
+    params: { key: lesson.data.deliverable!.workbookKey },
+    props: { lessons: [lesson], heading: lesson.data.deliverable!.title, isPhase: false },
+  }));
+
+  // A whole phase on paper — what you actually want for a site visit, and what
+  // the old composite "site analysis" template was reaching for.
+  const wholePhases = phases
+    .filter((p) => withDeliverable.some((l) => l.data.phase === p.number))
+    .map((p) => ({
+      params: { key: `phase-${p.number}` },
+      props: {
+        lessons: withDeliverable.filter((l) => l.data.phase === p.number),
+        heading: `Phase ${String(p.number).padStart(2, '0')} — ${p.title}`,
+        isPhase: true,
+      },
+    }));
+
+  return [...single, ...wholePhases];
+}) satisfies GetStaticPaths;
+
+const { lessons, heading, isPhase } = Astro.props;
+
+const docs = lessons.map((lesson) => ({
+  lesson,
+  phase: getPhase(lesson.data.phase),
+  d: lesson.data.deliverable!,
+  questions: lesson.data.deliverable!.questions ?? [],
+}));
+
+const keys = docs.map((doc) => doc.d.workbookKey);
+---
+
+<Base title={`${heading} — print`} description={`A printable field sheet for ${heading}.`}>
+  <div class="mx-auto max-w-[62rem] px-4 sm:px-6 pt-8 pb-16" data-print-keys={JSON.stringify(keys)}>
+    <!-- Screen-only chrome. -->
+    <div class="no-print">
+      <nav class="label flex items-center gap-2" aria-label="Breadcrumb">
+        <a href="/toolkit/" class="hover:text-paw transition-colors">Toolkit</a>
+        <span aria-hidden="true">›</span>
+        <span>{heading}</span>
+      </nav>
+
+      <h1
+        class="mt-4 font-display font-900 leading-[1.08]"
+        style="font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.9rem);"
+      >
+        {heading}
+      </h1>
+
+      <p class="mt-3 leading-relaxed text-soft max-w-[64ch]">
+        {
+          isPhase
+            ? 'Every document this phase asks you to produce, on paper. Take it outside — you will not have signal, and you will have dirt on your hands.'
+            : 'The same questions as the lesson, laid out for paper. Print it blank and fill it with a pencil, or sign in and print what you have already written.'
+        }
+      </p>
+
+      <div class="flex flex-wrap gap-3 mt-5">
+        <button type="button" class="btn btn-primary text-sm py-2.5 px-5" id="print">
+          Print or save as PDF
+        </button>
+        {
+          !isPhase && (
+            <a href={lessonUrl(docs[0].lesson)} class="btn btn-ghost text-sm py-2.5 px-5">
+              Read the lesson →
+            </a>
+          )
+        }
+      </div>
+      <p class="note mt-3" id="fill-status" aria-live="polite"></p>
+    </div>
+
+    <!-- The sheets -->
+    {
+      docs.map((doc, i) => (
+        <article class:list={['print-sheet', i > 0 && 'page-break']} data-doc={doc.d.workbookKey}>
+          <header class="print-header">
+            <h2 class="font-display font-900 text-2xl">{doc.d.title}</h2>
+            <p class="label mt-1">
+              Setting Out · Phase {String(doc.phase.number).padStart(2, '0')} — {doc.phase.title}
+            </p>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <label class="block">
+                <span class="label block mb-1">Property</span>
+                <span class="line-blank" />
+              </label>
+              <label class="block">
+                <span class="label block mb-1">Date</span>
+                <span class="line-blank" />
+              </label>
+            </div>
+          </header>
+
+          <div class="mt-6 grid gap-5">
+            {doc.questions.map((q) => (
+              <section class="break-inside-avoid" data-q={`${doc.d.workbookKey}.${q.key}`}>
+                <p class="label">{q.label}</p>
+                {q.hint && <p class="note mt-0.5">{q.hint}</p>}
+
+                {q.type === 'table' ? (
+                  <div class="scroll-x mt-2">
+                    <table class="template-table">
+                      <thead>
+                        <tr>
+                          {(q.columns ?? []).map((c) => (
+                            <th>{c}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody data-rows>
+                        {Array.from({ length: 8 }).map(() => (
+                          <tr>
+                            {(q.columns ?? []).map(() => (
+                              <td>
+                                <span class="cell-blank" />
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : q.type === 'list' ? (
+                  <div class="mt-2 grid gap-2" data-rows>
+                    {Array.from({ length: 6 }).map(() => (
+                      <span class="line-blank" />
+                    ))}
+                  </div>
+                ) : q.type === 'prose' ? (
+                  <div class="mt-2 grid gap-3.5" data-rows>
+                    {Array.from({ length: q.rows ?? 4 }).map(() => (
+                      <span class="line-blank" />
+                    ))}
+                  </div>
+                ) : (
+                  <div class="mt-2 flex items-baseline gap-2">
+                    {q.prefix && <span class="font-display font-700">{q.prefix}</span>}
+                    <span class="line-blank flex-1" />
+                    {q.suffix && <span class="font-display font-700">{q.suffix}</span>}
+                  </div>
+                )}
+              </section>
+            ))}
+          </div>
+
+          <footer class="print-footer">
+            <p class="label">
+              settingout.mouneyrac.com — educational material, not professional advice. Confirm
+              regulatory detail with your local council before you build, dig or spend.
+            </p>
+          </footer>
+        </article>
+      ))
+    }
+  </div>
+
+  <style is:global>
+    .line-blank {
+      display: block;
+      border-bottom: 1.5px solid var(--edge-strong);
+      min-height: 1.6rem;
+    }
+    .cell-blank {
+      display: block;
+      min-height: 1.5rem;
+      min-width: 5rem;
+    }
+    /* Filled from the workbook, when signed in. */
+    .filled {
+      border-bottom-color: transparent;
+      font-family: var(--font-hand);
+      white-space: pre-wrap;
+    }
+    .print-header,
+    .print-footer {
+      display: none;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm;
+      }
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 10.5pt;
+        line-height: 1.4;
+      }
+      header[class*='sticky'],
+      footer,
+      .no-print,
+      #alpha-banner,
+      #update-pill,
+      #search-dialog {
+        display: none !important;
+      }
+      .print-header,
+      .print-footer {
+        display: block;
+      }
+      .print-header {
+        border-bottom: 2px solid #000;
+        padding-bottom: 8px;
+      }
+      .print-footer {
+        border-top: 1px solid #999;
+        margin-top: 18px;
+        padding-top: 6px;
+      }
+      .page-break {
+        break-before: page;
+      }
+      .break-inside-avoid {
+        break-inside: avoid;
+      }
+      .line-blank,
+      .template-table th,
+      .template-table td {
+        border-color: #999 !important;
+      }
+      .template-table th {
+        background: #eee !important;
+        color: #000 !important;
+      }
+      .scroll-x {
+        overflow: visible !important;
+      }
+      .note,
+      .label {
+        color: #444 !important;
+      }
+    }
+  </style>
+
+  <script>
+    import { useSession } from '../../lib/session';
+
+    document.getElementById('print')?.addEventListener('click', () => window.print());
+
+    // Print it filled if there is anything to fill it with. Signed out, or with
+    // nothing written yet, it stays a blank field sheet — which is the point.
+    const root = document.querySelector<HTMLElement>('[data-print-keys]');
+    const status = document.getElementById('fill-status');
+
+    if (root) {
+      useSession()
+        .then((me) => {
+          if (!me.signedIn) return;
+          const workbook: Record<string, string> = me.workbook ?? {};
+          let filled = 0;
+
+          for (const section of Array.from(document.querySelectorAll<HTMLElement>('[data-q]'))) {
+            const raw = workbook[section.dataset.q!];
+            if (!raw) continue;
+            const rows = section.querySelector<HTMLElement>('[data-rows]');
+
+            let value: unknown = raw;
+            try {
+              if (raw.startsWith('[')) value = JSON.parse(raw);
+            } catch {
+              /* Plain text after all. */
+            }
+
+            if (Array.isArray(value) && Array.isArray(value[0])) {
+              // table
+              const body = rows as HTMLElement;
+              body.replaceChildren();
+              for (const row of value as string[][]) {
+                const tr = document.createElement('tr');
+                for (const cell of row) {
+                  const td = document.createElement('td');
+                  td.className = 'px-2 py-1.5 filled';
+                  td.textContent = cell;
+                  tr.appendChild(td);
+                }
+                body.appendChild(tr);
+              }
+            } else if (Array.isArray(value)) {
+              // list
+              rows!.replaceChildren();
+              for (const v of value as string[]) {
+                const line = document.createElement('span');
+                line.className = 'line-blank filled';
+                line.textContent = v;
+                rows!.appendChild(line);
+              }
+            } else if (rows) {
+              rows.replaceChildren();
+              const line = document.createElement('span');
+              line.className = 'line-blank filled';
+              line.textContent = String(value);
+              rows.appendChild(line);
+            } else {
+              const line = section.querySelector<HTMLElement>('.line-blank');
+              if (line) {
+                line.classList.add('filled');
+                line.textContent = String(value);
+              }
+            }
+            filled++;
+          }
+
+          if (status) {
+            status.textContent = filled
+              ? `Filled in ${filled} answers from your workbook. Print it as it is, or print a blank one from a private window.`
+              : 'Nothing written for this yet — it will print blank, ready for a pencil.';
+          }
+        })
+        .catch(() => undefined);
+    }
+  </script>
+</Base>

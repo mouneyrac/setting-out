@@ -9,8 +9,27 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Material palette"
-  prompt: "Assemble a mood board and a written material palette: paving, walling, decking, edging, mulch, screening and furniture. For each, note the material, an approximate Perth rate, how it weathers here, and why it belongs with the others."
   workbookKey: "material-palette"
+  intro: "A mood board is a picture of a garden you liked. A palette is the short list of materials you have agreed to use — and the much longer list you have agreed not to."
+  questions:
+    - key: "mood-board"
+      label: "Upload your mood board"
+      hint: "One image or PDF showing the whole board at once, so the repeating materials, colours and finishes are visible together."
+      type: "file"
+    - key: "mood-board-location"
+      label: "Where does your mood board live?"
+      hint: "A Pinterest board URL, a photo folder, a pinned-up sheet of prints. Somewhere you can go back to, not a memory."
+      type: "text"
+    - key: "mood-board-reading"
+      label: "What does the mood board actually show, once you look across it?"
+      hint: "Name the materials, colours and finishes that keep repeating — and anything you thought you liked that only appears once."
+      type: "prose"
+      rows: 4
+    - key: "palette"
+      label: "Your written material palette, one row per element"
+      hint: "Paving, walling, decking, edging, mulch, screening, furniture. Rates from a published list or a supply quote — say which."
+      type: "table"
+      columns: ["Element", "Material", "Approx Perth rate", "How it weathers here", "Why it belongs with the others"]
 checklist:
   - "Limit yourself to a small number of materials and repeat them"
   - "Check how each material performs in Perth sun, salt and sand"

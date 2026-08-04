@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import { allLessons } from '../lib/curriculum';
 import { getCollection } from 'astro:content';
-import { templates } from '../data/templates';
 
 const lessons = await allLessons();
 const reference = await getCollection('reference');
@@ -18,6 +17,7 @@ const videoCount = lessons.reduce((n, l) => n + l.data.videos.length, 0);
 const regulationCount =
   lessons.reduce((n, l) => n + l.data.regulations.length, 0) +
   reference.reduce((n, r) => n + r.data.regulations.length, 0);
+const deliverableCount = lessons.filter((l) => l.data.deliverable).length;
 const fieldTested = lessons.filter((l) => l.data.fieldStatus === 'field-tested').length;
 
 /**
@@ -48,9 +48,9 @@ const shelves = [
     href: '/toolkit/',
     emoji: '🖨️',
     title: 'Toolkit',
-    stat: String(templates.length),
-    statLabel: 'printable templates',
-    body: 'Brief, site analysis, garden audit, plant schedule, cost plan, retic audit, maintenance calendar. Fill them in on screen or print them to A4 — nothing you type leaves your browser.',
+    stat: String(deliverableCount),
+    statLabel: 'documents you produce',
+    body: 'Every document the course asks you to produce, from the brief to the maintenance calendar. Answer them in the lesson and they collect in your workbook, or print any of them to A4 — blank for a pencil, or filled with what you have already written.',
   },
   {
     href: '/tracker/',
@@ -73,7 +73,7 @@ const shelves = [
 
 <Base
   title="Library"
-  description="Everything beside the course itself: 1,556 verified resources, the WA reference pages, printable templates, the public tracker, and an honest account of what this is."
+  description="Everything beside the course itself: the verified resources, the WA reference pages, the documents you produce, the public tracker, and an honest account of what this is."
 >
   <section class="relative overflow-hidden">
     <div
@@ -97,8 +97,8 @@ const shelves = [
 
       <p class="note mt-4 max-w-[62ch]">
         {resourceCount.toLocaleString('en-AU')} external resources, {videoCount} videos and
-        {' '}{regulationCount} regulatory claims — every one fetched, then refetched by a second
-        pass that checked the page still said what the annotation claimed.
+        {' '}{regulationCount} regulatory claims — every one fetched, then refetched by a second pass
+        that checked the page still said what the annotation claimed.
       </p>
     </div>
   </section>

@@ -20,7 +20,7 @@ Human-readable summary: <https://creativecommons.org/licenses/by-sa/4.0/>
 - **ShareAlike** — if you remix or build upon the material, you must distribute
   your contributions under the same licence.
 
-## What this licence does *not* cover
+## What this licence does _not_ cover
 
 The course links to and quotes from third-party resources — Water Corporation
 guidance, Kings Park plant information, Australian Standards, YouTube videos,

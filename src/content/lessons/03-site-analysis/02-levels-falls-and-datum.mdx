@@ -9,8 +9,41 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Levels survey"
-  prompt: "Set a permanent datum point on your block and record spot levels on a grid across the site, plus at every door threshold, boundary corner, and existing drain. Mark them on your base plan."
   workbookKey: "levels-survey"
+  intro: "Every drainage decision, step, wall and paved surface later in this course is measured off the datum you set here. Set it so it is still there — and still findable — at the end of the build."
+  questions:
+    - key: "levels-plan"
+      label: "Upload the levels plan"
+      hint: "The base plan with the datum marked, every spot level annotated against it, and the scale and date on the sheet. A photograph of a hand-drawn sheet is fine if the numbers are legible."
+      type: "file"
+    - key: "datum-point"
+      label: "Where your datum is, and what it physically is"
+      hint: "Specific enough to find it again in two years — \"galvanised nail in the north-east corner of the front porch slab\", not \"near the porch\". Pick something that will not be dug up, paved over or moved."
+      type: "text"
+    - key: "datum-value"
+      label: "The value you assigned to the datum"
+      hint: "An assumed 100.000 m is standard practice and keeps every reading positive. Use AHD only if you levelled from a Landgate benchmark or a surveyor gave you one."
+      type: "text"
+    - key: "grid-spacing"
+      label: "Grid spacing you used for the spot levels"
+      hint: "Tighter on a small or broken block, wider on a flat one. Note it here so you know how much you are interpolating between points."
+      type: "number"
+      suffix: "m"
+    - key: "spot-levels"
+      label: "The spot levels"
+      hint: "Every grid point, plus every door threshold, every boundary corner and every existing drain, pit or gully. Name each point so it matches the mark on your plan."
+      type: "table"
+      columns: ["Point", "What it is", "Staff reading (mm)", "Level (m)"]
+    - key: "base-plan"
+      label: "The base plan with the levels marked on it"
+      hint: "Scale, date, and where the drawing or file lives. Say how the datum and the levels are annotated on it."
+      type: "prose"
+      rows: 4
+    - key: "what-it-showed"
+      label: "What the levels told you about the block"
+      hint: "Fall across the site in mm and as a percentage, which way it runs, the high and low points, and anything that surprised you."
+      type: "prose"
+      rows: 5
 checklist:
   - "Establish and physically mark a permanent datum"
   - "Record spot levels on a grid and at all critical points"

@@ -1,0 +1,202 @@
+---
+import { blob, canopy } from '../lib/painterly';
+
+/**
+ * A phase, as a seed packet.
+ *
+ * The brief in DESIGN.md always said the phase cards should be seed packets and
+ * they never were — eleven identical white rectangles, which is the most
+ * generic thing a web page can do and the point where the art direction used to
+ * die below the fold.
+ *
+ * The design language is borrowed honestly from a real packet: a printed colour
+ * band across the top, a small illustration window, the variety name set large,
+ * and a row of growing data at the foot. The trick is that the sowing data is
+ * *real course data* wearing a gardening costume — lessons for seed count, the
+ * deliverable for what it yields. It decorates nothing; it labels the thing.
+ */
+
+interface Props {
+  number: number;
+  title: string;
+  tagline: string;
+  lessons: number;
+  href: string;
+  /** What the phase produces — the packet's "yield". */
+  yields?: string;
+}
+
+const { number, title, tagline, lessons, href, yields } = Astro.props;
+
+/**
+ * Each packet gets its own plant, drawn from the phase number so it is stable
+ * across builds and every phase is visibly a different variety.
+ */
+const seed = number * 97;
+/**
+ * Eleven phases, eleven habits of growth — a low spreading groundcover for one,
+ * an upright grass for another — so a reader can tell the packets apart at a
+ * glance the way you can tell real ones apart on a rack.
+ */
+const HABITS = [
+  { rx: 34, ry: 15, cy: 34, clumps: 7, stem: 'M50 46 C48 42,50 38,50 34' },
+  { rx: 20, ry: 24, cy: 26, clumps: 6, stem: 'M50 46 C47 38,51 30,50 24' },
+  { rx: 28, ry: 20, cy: 28, clumps: 9, stem: 'M50 46 C49 40,51 34,50 28' },
+];
+const habit = HABITS[number % HABITS.length]!;
+const clumps = canopy({
+  cx: 50,
+  cy: habit.cy,
+  rx: habit.rx,
+  ry: habit.ry,
+  clumps: habit.clumps,
+  seed,
+});
+/** Mulch, not a drop shadow — the plant is in ground, not floating. */
+const mulch = blob({ cx: 50, cy: 48, rx: 18, ry: 3.5, lobes: 8, jitter: 0.25, seed: seed + 5 });
+
+/** The band colour cycles through the palette so the eleven are tellable apart. */
+const BANDS = ['var(--leaf)', 'var(--banksia)', 'var(--jacaranda)', 'var(--paw)'];
+const band = BANDS[number % BANDS.length];
+---
+
+<a href={href} class="packet cutout cutout-lift block h-full">
+  <span class="packet-band" style={`background:${band}`}>
+    <span class="packet-no">No. {String(number).padStart(2, '0')}</span>
+    <span class="packet-hole" aria-hidden="true"></span>
+  </span>
+
+  <span class="packet-window" aria-hidden="true">
+    <svg viewBox="0 0 100 56" class="w-full h-full block">
+      <path d={mulch} fill="#8A6A45" opacity="0.55"></path>
+      <g
+        class="windy"
+        style={`--wind-phase:${((number * 0.09) % 1).toFixed(2)};--wind-amp:1.6deg;transform-origin:50px 48px`}
+      >
+        <path
+          d={habit.stem}
+          stroke="var(--leaf-deep)"
+          stroke-width="2.2"
+          fill="none"
+          stroke-linecap="round"></path>
+        {
+          clumps.map((c) => (
+            <path
+              d={c.d}
+              fill={`color-mix(in srgb, var(--leaf) ${Math.round(c.light * 100)}%, var(--leaf-deep))`}
+            />
+          ))
+        }
+      </g>
+    </svg>
+  </span>
+
+  <span class="packet-body">
+    <span class="packet-title">{title}</span>
+    <span class="packet-tagline note">{tagline}</span>
+  </span>
+
+  <span class="packet-data">
+    <span><b>{lessons}</b> lessons</span>
+    {
+      yields && (
+        <span class="packet-yield">
+          yields <b>{yields}</b>
+        </span>
+      )
+    }
+  </span>
+</a>
+
+<style>
+  .packet {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    overflow: hidden;
+    padding: 0;
+    /* Packets are portrait and slightly irregular, the way a rack of them is. */
+    border-radius: 14px;
+  }
+
+  .packet-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.85rem 0.55rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #fffdf7;
+    /* A printed band never lands square on the paper. */
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+  }
+
+  /* The punched hole every seed packet has, for the display hook. */
+  .packet-hole {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 55%, transparent);
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.4);
+  }
+
+  .packet-window {
+    display: block;
+    margin: 0.7rem 0.85rem 0;
+    padding: 0.3rem 0 0;
+    aspect-ratio: 100 / 56;
+    background: color-mix(in srgb, var(--sky-low) 55%, var(--surface));
+    border-radius: 10px;
+    /* An illustration window is printed *into* the packet, so it sits below the
+       surface rather than floating on it. */
+    box-shadow: inset 0 2px 5px -2px color-mix(in srgb, var(--ink) 40%, transparent);
+  }
+
+  .packet-body {
+    display: block;
+    padding: 0.7rem 0.85rem 0.35rem;
+  }
+
+  .packet-title {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .packet-tagline {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.92rem;
+  }
+
+  /* The sowing data, set the way a packet sets it: small caps, hairline rule. */
+  .packet-data {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.9rem;
+    padding: 0.5rem 0.85rem 0.75rem;
+    margin: 0 0.85rem 0.15rem;
+    border-top: 1px dashed var(--edge-strong);
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .packet-data b {
+    color: var(--ink);
+    font-weight: 900;
+  }
+
+  .packet-yield {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>

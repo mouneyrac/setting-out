@@ -9,8 +9,33 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Staging plan"
-  prompt: "Break your project into stages with a budget and target season for each. Ensure services and drainage precede surfaces, irrigation precedes soil and planting, and each stage leaves the garden in a usable state."
   workbookKey: "staging-plan"
+  intro: "Two tests, and a stage that fails either one is in the wrong place: nothing gets dug up twice, and the garden is usable at the end of every stage."
+  questions:
+    - key: "plan"
+      label: "Upload your staging plan"
+      hint: "A marked-up site plan or programme showing each stage, the area of the block it covers, its budget and its target season."
+      type: "file"
+    - key: "stages"
+      label: "Your stages, with a budget and a target season for each"
+      hint: "Break at trade boundaries, not mid-trade. Seasons as a Perth window — March–May, June–August, September–November, December–February."
+      type: "table"
+      columns: ["Stage", "Works included", "Budget", "Target season"]
+    - key: "services-before-surfaces"
+      label: "Where do services and drainage sit relative to the surfaces above them?"
+      hint: "Stormwater, soakwells, sleeves and conduit are deep and permanent. Name the stage each lands in, and the surface it ends up under."
+      type: "prose"
+      rows: 4
+    - key: "irrigation-before-planting"
+      label: "Where does the irrigation sit relative to the soil and the planting?"
+      hint: "Mainline, valves and wiring go in before the paving; laterals and dripline after the imported soil and before the plants. Say which stage each half is in."
+      type: "prose"
+      rows: 4
+    - key: "usable-state"
+      label: "What the garden looks like at the end of each stage"
+      hint: "One line per stage. If you cannot write that line, the stage boundary is in the wrong place."
+      type: "list"
+      rows: 5
 checklist:
   - "No stage requires undoing a previous stage"
   - "Planting stages land in autumn where possible"

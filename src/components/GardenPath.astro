@@ -8,6 +8,7 @@
  * garden establishing.
  */
 import { phases } from '../data/phases';
+import { blob } from '../lib/painterly';
 
 interface Props {
   counts: Map<number, number>;
@@ -18,7 +19,43 @@ const { counts, done = new Set<number>() } = Astro.props;
 
 /** Little plants that appear beside the path, denser further along. */
 const sprigs = (n: number) => Math.min(5, 1 + Math.floor(n / 2.4));
+
+/**
+ * Stepping stones, cut rather than turned.
+ *
+ * These were perfect circles, which no laid stone has ever been. Each one is a
+ * blob path used as a clip-path, seeded from the phase number so it is stable
+ * and no two stones in the column repeat.
+ *
+ * The path coordinates are in a 0–100 box because `clip-path: path()` does not
+ * accept percentages; `clipPathUnits` on an SVG clipPath does, so the shapes go
+ * through a hidden <svg> and are referenced by id.
+ */
+const stones = phases.map((phase) => ({
+  number: phase.number,
+  d: blob({
+    cx: 0.5,
+    cy: 0.5,
+    rx: 0.47,
+    ry: 0.45,
+    lobes: 9,
+    jitter: 0.09,
+    seed: phase.number * 37,
+  }),
+}));
 ---
+
+<svg aria-hidden="true" focusable="false" class="absolute w-0 h-0 overflow-hidden">
+  <defs>
+    {
+      stones.map((s) => (
+        <clipPath id={`stone-${s.number}`} clipPathUnits="objectBoundingBox">
+          <path d={s.d} />
+        </clipPath>
+      ))
+    }
+  </defs>
+</svg>
 
 <ol class="relative">
   <!-- The path itself: small round pebbles running down behind the stones -->
@@ -38,12 +75,12 @@ const sprigs = (n: number) => Math.min(5, 1 + Math.floor(n / 2.4));
           {/* Stepping stone */}
           <a
             href={`/curriculum/${phase.slug}/`}
-            class="absolute left-0 top-1 w-14 h-14 sm:w-[70px] sm:h-[70px] rounded-full grid place-items-center font-display font-900 text-xl sm:text-2xl border-[3px] transition-transform duration-200 hover:scale-105 focus-visible:scale-105"
-            style={
+            class="stone absolute left-0 top-1 w-14 h-14 sm:w-[70px] sm:h-[70px] grid place-items-center font-display font-900 text-xl sm:text-2xl transition-transform duration-200 hover:scale-105 focus-visible:scale-105"
+            style={`clip-path: url(#stone-${phase.number}); ${
               complete
-                ? 'background: var(--leaf); border-color: var(--leaf-deep); color: #FFFDF7;'
-                : 'background: var(--surface); border-color: var(--edge-strong); color: var(--ink);'
-            }
+                ? 'background: var(--leaf); color: #FFFDF7;'
+                : 'background: var(--edge); color: var(--ink);'
+            }`}
             aria-label={`Phase ${phase.number}: ${phase.title}`}
           >
             {complete ? '✓' : String(phase.number).padStart(2, '0')}
@@ -59,8 +96,8 @@ const sprigs = (n: number) => Math.min(5, 1 + Math.floor(n / 2.4));
                 width="16"
                 height={20 + ((i * 7) % 16)}
                 viewBox="0 0 16 32"
-                class="anim-sway"
-                style={`transform-origin: bottom center; animation-duration: ${6 + i}s; animation-delay: -${i}s;`}
+                class="windy"
+                style={`--wind-phase:${((phase.number * 0.07 + i * 0.05) % 1).toFixed(2)};--wind-amp:${2.4 + i * 0.4}deg`}
               >
                 <path
                   d="M8 32V11"
@@ -78,10 +115,7 @@ const sprigs = (n: number) => Math.min(5, 1 + Math.floor(n / 2.4));
           <article class="cutout cutout-lift p-4 sm:p-5">
             <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h2 class="font-display font-700 text-2xl sm:text-[1.7rem] leading-tight">
-                <a
-                  href={`/curriculum/${phase.slug}/`}
-                  class="hover:text-paw transition-colors"
-                >
+                <a href={`/curriculum/${phase.slug}/`} class="hover:text-paw transition-colors">
                   {phase.title}
                 </a>
               </h2>
@@ -101,3 +135,12 @@ const sprigs = (n: number) => Math.min(5, 1 + Math.floor(n / 2.4));
     })
   }
 </ol>
+
+<style>
+  /* A laid stone sits *in* the ground: a soft shadow beneath, no drawn border
+     (a clip-path cannot carry one), and a hairline of lighter stone on top. */
+  .stone {
+    filter: drop-shadow(0 3px 0 var(--edge-strong))
+      drop-shadow(0 8px 10px color-mix(in srgb, var(--ink) 30%, transparent));
+  }
+</style>

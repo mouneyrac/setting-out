@@ -23,24 +23,76 @@ const rows = await getDb()
 const byKey = new Map(rows.map((r) => [r.workbookKey, r]));
 const lessons = await allLessons();
 
-/** Every deliverable in course order, with whatever has been written for it. */
+/**
+ * Answers are stored one per question, under `<workbookKey>.<question.key>`.
+ * `list` and `table` values are JSON in the same text column, so they are
+ * parsed here rather than in a second table.
+ */
+const parseValue = (type: string, raw: string): string | string[] | string[][] => {
+  if (!raw) return '';
+  if (type === 'list' || type === 'table' || type === 'file') {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return raw;
+    }
+  }
+  return raw;
+};
+
 const sections = lessons
   .filter((l) => l.data.deliverable)
   .map((lesson) => {
-    const deliverable = lesson.data.deliverable!;
-    const entry = byKey.get(deliverable.workbookKey);
-    const content = entry?.content?.trim() ?? '';
+    const d = lesson.data.deliverable!;
+    const questions = d.questions ?? [];
+
+    const answers = questions.map((q) => {
+      const entry = byKey.get(`${d.workbookKey}.${q.key}`);
+      const value = parseValue(q.type, entry?.content ?? '');
+      const filled = Array.isArray(value) ? value.length > 0 : Boolean(value);
+      return { q, value, filled, updatedAt: entry?.updatedAt ?? null };
+    });
+
+    // The single-blob shape from before questions existed, so nothing written
+    // under the old scheme silently disappears.
+    const legacy = byKey.get(d.workbookKey)?.content?.trim() ?? '';
+
+    const done = answers.filter((a) => a.filled).length;
     return {
       lesson,
       phase: getPhase(lesson.data.phase),
-      deliverable,
-      content,
-      written: content.length > 0,
-      updatedAt: entry?.updatedAt ?? null,
+      deliverable: d,
+      answers,
+      legacy,
+      done,
+      total: questions.length,
+      started: done > 0 || Boolean(legacy),
+      updatedAt:
+        answers
+          .map((a) => a.updatedAt)
+          .filter(Boolean)
+          .sort()
+          .at(-1) ?? null,
     };
   });
 
-const writtenCount = sections.filter((s) => s.written).length;
+const completeCount = sections.filter((s) => s.total > 0 && s.done === s.total).length;
+const totalAnswers = sections.reduce((n, s) => n + s.total, 0);
+const filledAnswers = sections.reduce((n, s) => n + s.done, 0);
+
+/** Flat payload for the Markdown export, so the client does not re-derive it. */
+const exportData = sections.map((s) => ({
+  phase: s.phase.number,
+  phaseTitle: s.phase.title,
+  title: s.deliverable.title,
+  legacy: s.legacy,
+  answers: s.answers.map((a) => ({
+    label: a.q.label,
+    type: a.q.type,
+    columns: a.q.columns ?? [],
+    value: a.value,
+  })),
+}));
 ---
 
 <Base
@@ -55,7 +107,7 @@ const writtenCount = sections.filter((s) => s.written).length;
     >
     </div>
 
-    <div class="mx-auto max-w-[60rem] px-4 sm:px-6 pt-10 pb-8">
+    <div class="mx-auto max-w-[62rem] px-4 sm:px-6 pt-10 pb-8">
       <nav class="label flex items-center gap-2" aria-label="Breadcrumb">
         <a href="/my/" class="hover:text-paw transition-colors">My garden</a>
         <span aria-hidden="true">›</span>
@@ -74,9 +126,12 @@ const writtenCount = sections.filter((s) => s.written).length;
         have paid a designer for, except you understand every page of it.
       </p>
 
-      <div class="flex flex-wrap items-center gap-3 mt-6">
+      <div class="flex flex-wrap items-center gap-2.5 mt-6 no-print">
         <span class="cutout px-4 py-1.5 text-sm font-display font-700">
-          {writtenCount} of {sections.length} written
+          {completeCount} of {sections.length} finished
+        </span>
+        <span class="cutout px-4 py-1.5 text-sm font-display font-700">
+          {filledAnswers} of {totalAnswers} answers
         </span>
         <button type="button" id="download" class="btn btn-primary text-sm py-2.5 px-5">
           Download as Markdown
@@ -86,13 +141,13 @@ const writtenCount = sections.filter((s) => s.written).length;
     </div>
   </section>
 
-  <section class="mx-auto max-w-[60rem] px-4 sm:px-6 pb-16">
+  <section class="mx-auto max-w-[62rem] px-4 sm:px-6 pb-16">
     <ol class="grid gap-4">
       {
         sections.map((s, i) => (
           <li class="list-none">
             <article
-              class:list={['cutout p-5 sm:p-6', !s.written && 'opacity-70']}
+              class:list={['cutout p-5 sm:p-6', !s.started && 'opacity-70 no-print']}
               id={s.deliverable.workbookKey}
             >
               <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -105,33 +160,130 @@ const writtenCount = sections.filter((s) => s.written).length;
                     {s.deliverable.title}
                   </h2>
                 </div>
+                {s.total > 0 && (
+                  <span class="label">
+                    {s.done}/{s.total}
+                  </span>
+                )}
               </div>
 
-              {s.written ? (
+              {s.started ? (
                 <>
-                  <p class="mt-4 leading-relaxed whitespace-pre-wrap">{s.content}</p>
-                  <p class="note mt-3">
-                    Last edited{' '}
-                    {s.updatedAt?.toLocaleDateString('en-AU', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}{' '}
-                    ·{' '}
-                    <a
-                      href={lessonUrl(s.lesson)}
-                      class="underline underline-offset-2 hover:text-paw transition-colors"
-                    >
-                      edit in the lesson
-                    </a>
-                  </p>
+                  <dl class="mt-4 grid gap-4">
+                    {s.answers
+                      .filter((a) => a.filled)
+                      .map((a) => (
+                        <div>
+                          <dt class="label">{a.q.label}</dt>
+                          <dd class="mt-1 leading-relaxed">
+                            {a.q.type === 'file' && Array.isArray(a.value) ? (
+                              <ul class="grid gap-2 sm:grid-cols-2">
+                                {(a.value as any[]).map((f: any) => (
+                                  <li class="marker flex items-center gap-3 p-2.5">
+                                    {String(f.type ?? '').startsWith('image/') ? (
+                                      <img
+                                        src={`/api/file/${f.key}`}
+                                        alt=""
+                                        loading="lazy"
+                                        class="w-14 h-14 object-cover rounded-lg shrink-0"
+                                      />
+                                    ) : (
+                                      <span
+                                        class="w-14 h-14 grid place-items-center rounded-lg shrink-0 text-xl"
+                                        style="background: var(--surface-2);"
+                                        aria-hidden="true"
+                                      >
+                                        📄
+                                      </span>
+                                    )}
+                                    <a
+                                      href={`/api/file/${f.key}`}
+                                      target="_blank"
+                                      rel="noopener"
+                                      class="min-w-0 truncate underline underline-offset-2 hover:text-paw"
+                                    >
+                                      {f.name}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : a.q.type === 'list' && Array.isArray(a.value) ? (
+                              <ul class="grid gap-1">
+                                {(a.value as string[]).map((v) => (
+                                  <li class="flex gap-2">
+                                    <span class="text-paw" aria-hidden="true">
+                                      —
+                                    </span>
+                                    <span>{v}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : a.q.type === 'table' && Array.isArray(a.value) ? (
+                              <div class="scroll-x">
+                                <table class="template-table">
+                                  <thead>
+                                    <tr>
+                                      {(a.q.columns ?? []).map((c) => (
+                                        <th>{c}</th>
+                                      ))}
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {(a.value as string[][]).map((row) => (
+                                      <tr>
+                                        {row.map((cell) => (
+                                          <td class="px-2 py-1.5">{cell}</td>
+                                        ))}
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            ) : (
+                              <span class="whitespace-pre-wrap">
+                                {a.q.prefix}
+                                {a.value as string}
+                                {a.q.suffix ? ` ${a.q.suffix}` : ''}
+                              </span>
+                            )}
+                          </dd>
+                        </div>
+                      ))}
+                  </dl>
+
+                  {s.legacy && (
+                    <div class="mt-4 rounded-xl p-3" style="background: var(--surface-2);">
+                      <p class="label">Written before this became a form</p>
+                      <p class="mt-1 leading-relaxed whitespace-pre-wrap">{s.legacy}</p>
+                    </div>
+                  )}
+
+                  {s.done < s.total && (
+                    <p class="note mt-3 no-print">
+                      {s.total - s.done} still to answer ·{' '}
+                      <a
+                        href={lessonUrl(s.lesson)}
+                        class="underline underline-offset-2 hover:text-paw"
+                      >
+                        finish it in the lesson
+                      </a>
+                    </p>
+                  )}
                 </>
               ) : (
                 <>
-                  <p class="mt-3 font-hand text-[1.05rem] leading-relaxed text-soft">
-                    {s.deliverable.prompt}
-                  </p>
-                  <a href={lessonUrl(s.lesson)} class="btn btn-ghost text-sm py-2 px-4 mt-4">
+                  <ul class="mt-3 grid gap-1.5">
+                    {s.answers.map((a) => (
+                      <li class="flex gap-2 text-soft text-[0.95rem]">
+                        <span aria-hidden="true">—</span>
+                        <span class="leading-snug">{a.q.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href={lessonUrl(s.lesson)}
+                    class="btn btn-ghost text-sm py-2 px-4 mt-4 no-print"
+                  >
                     Write this one →
                   </a>
                 </>
@@ -143,7 +295,20 @@ const writtenCount = sections.filter((s) => s.written).length;
     </ol>
   </section>
 
-  <script is:inline define:vars={{ sections: sections.map((s) => ({ phase: s.phase.number, phaseTitle: s.phase.title, title: s.deliverable.title, prompt: s.deliverable.prompt, content: s.content })) }}>
+  <style is:global>
+    @media print {
+      .no-print,
+      header[class*='sticky'],
+      footer {
+        display: none !important;
+      }
+      body {
+        background: #fff !important;
+      }
+    }
+  </style>
+
+  <script is:inline define:vars={{ sections: exportData }}>
     document.getElementById('print')?.addEventListener('click', () => window.print());
 
     document.getElementById('download')?.addEventListener('click', () => {
@@ -156,7 +321,38 @@ const writtenCount = sections.filter((s) => s.written).length;
           lines.push(`## Phase ${String(s.phase).padStart(2, '0')} — ${s.phaseTitle}`, '');
         }
         lines.push(`### ${s.title}`, '');
-        lines.push(s.content ? s.content : `_Not written yet._\n\n> ${s.prompt}`, '');
+
+        const answered = s.answers.filter((a) =>
+          Array.isArray(a.value) ? a.value.length : a.value,
+        );
+
+        if (!answered.length && !s.legacy) {
+          lines.push('_Not written yet._', '');
+          continue;
+        }
+
+        for (const a of answered) {
+          lines.push(`**${a.label}**`, '');
+          if (a.type === 'file' && Array.isArray(a.value)) {
+            for (const f of a.value)
+              lines.push(`- ${f.name} (uploaded ${String(f.at).slice(0, 10)})`);
+            lines.push('');
+          } else if (a.type === 'list' && Array.isArray(a.value)) {
+            for (const v of a.value) lines.push(`- ${v}`);
+            lines.push('');
+          } else if (a.type === 'table' && Array.isArray(a.value)) {
+            if (a.columns.length) {
+              lines.push(`| ${a.columns.join(' | ')} |`);
+              lines.push(`| ${a.columns.map(() => '---').join(' | ')} |`);
+            }
+            for (const row of a.value) lines.push(`| ${row.join(' | ')} |`);
+            lines.push('');
+          } else {
+            lines.push(String(a.value), '');
+          }
+        }
+
+        if (s.legacy) lines.push('_Written before this became a form:_', '', s.legacy, '');
       }
 
       const blob = new Blob([lines.join('\n')], { type: 'text/markdown' });

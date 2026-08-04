@@ -9,8 +9,32 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Planting plan and schedule"
-  prompt: "Draw every plant at its mature spread, and produce a schedule listing botanical name, common name, quantity, pot size, spacing, mature height and width, hydrozone, and sun requirement. Total the plant cost."
   workbookKey: "planting-plan"
+  intro: "The drawing proves the plants fit at maturity. The schedule is what the wholesaler quotes and what comes off the truck, so it has to be right in the terms a nursery understands."
+  questions:
+    - key: "plan"
+      label: "Upload the planting plan"
+      hint: "The scaled drawing with every plant circled at mature spread, keyed or labelled to the species in the schedule."
+      type: "file"
+    - key: "drawing"
+      label: "Where the planting plan lives, its scale, and the date"
+      hint: "Note the percentage of mature spread you drew trees at as well — one figure for the whole drawing, e.g. \"planting-plan-1to100-2026-08.pdf, 1:100, trees at 80% of mature spread\"."
+      type: "text"
+    - key: "mature-spread"
+      label: "What drawing at mature spread changed"
+      hint: "Circles at half the mature spread, plants you are keeping at current spread plus five to ten years. What did not fit, and what did the quantities do?"
+      type: "prose"
+      rows: 4
+    - key: "schedule"
+      label: "The plant schedule"
+      hint: "One row per species. Quantity from the spacing arithmetic, not from counting circles. Pot size in trade sizes — tube, 140 mm, 200 mm, 25 L, 45 L, 100 L."
+      type: "table"
+      columns: ["Botanical name", "Common name", "Qty", "Pot size", "Spacing (mm)", "Mature H x W (m)", "Hydrozone", "Sun"]
+    - key: "plant-total"
+      label: "Total plant cost"
+      hint: "Quantity x rate, extended and totalled. Ex GST is how wholesale quotes come — say which you have written here."
+      type: "number"
+      prefix: "$"
 checklist:
   - "Plants are drawn at mature size, not planting size"
   - "Every species suits its hydrozone and aspect"

@@ -9,8 +9,30 @@ status: complete
 updated: 2026-08-02
 deliverable:
   title: "Your water rules"
-  prompt: "Record your rostered watering days (from your house number), your legal watering windows, the winter ban dates, your water source (scheme, bore, or both), and any new-garden exemption you may be entitled to. This governs your entire irrigation design."
   workbookKey: "water-rules"
+  intro: "This governs your entire irrigation design — lawn area, plant palette, station run times and your planting date. Get it down before anything is drawn."
+  questions:
+    - key: "rostered-days"
+      label: "Your two rostered watering days"
+      hint: "Set by the last digit of your street number, not your unit number. Confirm it with Water Corporation's lookup rather than the table alone."
+      type: "text"
+    - key: "windows"
+      label: "Your legal watering windows"
+      hint: "Once a day, before 9am or after 6pm. Write the window you will actually run. $100 on the spot outside it, and a controller malfunction is not a defence."
+      type: "text"
+    - key: "winter-ban"
+      label: "The winter ban dates"
+      hint: "The Sprinkler Switch-off. Write the dates and what they close off in your build programme."
+      type: "text"
+    - key: "water-source"
+      label: "Your water source"
+      hint: "Scheme, bore, or both. A bore is on the same roster, the same windows and the same switch-off — note anything specific to yours, such as a shared bore or a licence threshold."
+      type: "text"
+    - key: "exemption"
+      label: "The new-garden exemption you are entitled to"
+      hint: "42 days from planting between 1 October and 31 March, 35 days between 1 April and 30 September. Give your planned planting date, the days it earns you, and the date you apply."
+      type: "prose"
+      rows: 4
 checklist:
   - "Determine your rostered days from your house or lot number"
   - "Confirm the legal watering windows and penalties"

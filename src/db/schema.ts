@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index, unique } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, index, unique, primaryKey } from 'drizzle-orm/sqlite-core';
 
 /* ─────────────────────────────────────────────────────────────────────────
    Better Auth core tables.
@@ -150,6 +150,26 @@ export const lessonNote = sqliteTable(
   ],
 );
 
+/**
+ * Rate-limit counters.
+ *
+ * Workers have no shared memory, so the counter has to live somewhere durable.
+ * A fixed window keyed by (bucket:subject, windowStart) is one row and one
+ * upsert per request — coarse, but the limit is what has to be right, not the
+ * window boundary.
+ */
+export const rateLimit = sqliteTable(
+  'rate_limit',
+  {
+    /** `<bucket>:<userId or IP>` */
+    key: text('key').notNull(),
+    /** Unix seconds, rounded down to the window size. */
+    windowStart: integer('window_start').notNull(),
+    count: integer('count').notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.key, t.windowStart] })],
+);
+
 export const schema = {
   user,
   session,
@@ -159,4 +179,5 @@ export const schema = {
   lessonProgress,
   workbookEntry,
   lessonNote,
+  rateLimit,
 };

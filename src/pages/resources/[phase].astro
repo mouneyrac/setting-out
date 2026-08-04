@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import ResourceCard from '../../components/ResourceCard.astro';
 import { allLessons, lessonUrl } from '../../lib/curriculum';
-import { phases, getPhase } from '../../data/phases';
+import { phases } from '../../data/phases';
 
 export const getStaticPaths = (async () => {
   const lessons = await allLessons();
@@ -111,11 +111,7 @@ const types = [...new Set(entries.map((e) => e.resource.type))].sort();
       ) : (
         <ul class="grid gap-3" id="resource-list">
           {entries.map((e) => (
-            <ResourceCard
-              resource={e.resource}
-              context={e.lessonTitle}
-              contextUrl={e.lessonUrl}
-            />
+            <ResourceCard resource={e.resource} context={e.lessonTitle} contextUrl={e.lessonUrl} />
           ))}
         </ul>
       )

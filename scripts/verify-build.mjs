@@ -6,7 +6,7 @@
  * nothing complained — the site simply had a search box that could never return
  * a result. Silent absence is the failure mode worth guarding against.
  */
-import { access, readdir } from 'node:fs/promises';
+import { access, readdir, readFile } from 'node:fs/promises';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -47,14 +47,32 @@ for (const dir of REQUIRED_DIRS) {
   }
 }
 
-// The search index is useless if it indexed nothing.
+// Pagefind now only covers the public pages — lesson bodies are behind an
+// account and render on demand, so they cannot be indexed from static HTML.
+// Lessons are searchable through /lessons-index.json instead, and both halves
+// have to be present or search silently half-works.
 try {
   const fragments = await readdir(join(client, 'pagefind', 'fragment'));
-  if (fragments.length < 10) {
-    problems.push(`pagefind indexed only ${fragments.length} fragments — expected the whole course`);
+  if (fragments.length < 3) {
+    problems.push(
+      `pagefind indexed only ${fragments.length} fragments — expected the public pages`,
+    );
   }
 } catch {
   problems.push('missing dist/client/pagefind/fragment — the search index did not build');
+}
+
+try {
+  const raw = await readFile(join(client, 'lessons-index.json'), 'utf8');
+  const index = JSON.parse(raw);
+  if (!Array.isArray(index) || index.length < 80) {
+    problems.push(`lessons-index.json holds ${index?.length ?? 0} lessons — expected all 91`);
+  }
+  if (index.some((l) => 'body' in l || 'content' in l)) {
+    problems.push('lessons-index.json contains lesson bodies — that would undo the account gate');
+  }
+} catch {
+  problems.push('missing dist/client/lessons-index.json — lessons would be unsearchable');
 }
 
 if (problems.length) {

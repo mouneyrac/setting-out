@@ -1,0 +1,407 @@
+---
+/**
+ * A deliverable, rendered as the small form it actually is.
+ *
+ * Every answer saves under `<workbookKey>.<question.key>`, so adding a question
+ * to a lesson never needs a migration. Values load and save through /api/me and
+ * /api/workbook, which is why the page can stay fast: nothing here is rendered
+ * on the server, it hydrates after load.
+ *
+ * `list` and `table` answers are stored as JSON in the same text column. That
+ * keeps one storage shape for everything, at the cost of the export having to
+ * parse them — a trade worth making to avoid a second table.
+ */
+import type { CollectionEntry } from 'astro:content';
+
+type Deliverable = NonNullable<CollectionEntry<'lessons'>['data']['deliverable']>;
+
+interface Props {
+  deliverable: Deliverable;
+  lessonId: string;
+}
+const { deliverable: d, lessonId } = Astro.props;
+
+// During conversion a deliverable may still be a single paragraph.
+const questions = d.questions ?? [
+  { key: 'answer', label: d.title, hint: d.prompt, type: 'prose' as const, rows: 8 },
+];
+---
+
+<section class="mt-10">
+  <h2 class="font-display font-900 text-2xl sm:text-3xl">Do this on your own block</h2>
+
+  <div
+    class="mt-4 rounded-[18px] border-2 p-5 sm:p-6"
+    style="border-color: var(--paw); background: color-mix(in srgb, var(--paw) 6%, var(--surface));"
+    data-deliverable={d.workbookKey}
+    data-lesson-id={lessonId}
+  >
+    <div class="flex flex-wrap items-baseline gap-x-3">
+      <p class="label">Field journal entry</p>
+      <h3 class="font-display font-700 text-xl sm:text-2xl leading-tight text-paw w-full">
+        {d.title}
+      </h3>
+    </div>
+
+    {d.intro && <p class="mt-2 font-hand text-[1.05rem] leading-relaxed">{d.intro}</p>}
+
+    <!-- Signed out: show what will be asked, and why an account is needed. -->
+    <div data-signed-out class="mt-4">
+      <ol class="grid gap-2">
+        {
+          questions.map((q) => (
+            <li class="flex gap-2.5 items-baseline">
+              <span class="text-paw" aria-hidden="true">
+                —
+              </span>
+              <span class="leading-snug">{q.label}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="note mt-4">
+        <a href="/sign-in/" class="underline underline-offset-2 hover:text-paw">Sign in</a>
+        to answer these here and keep them in your workbook.
+      </p>
+    </div>
+
+    <!-- Signed in: the actual form. -->
+    <div data-signed-in hidden class="mt-4 grid gap-5">
+      {
+        questions.map((q) => (
+          <div data-field={q.key} data-type={q.type}>
+            <label class="label block mb-1" for={`${d.workbookKey}-${q.key}`}>
+              {q.label}
+            </label>
+            {q.hint && <p class="note mb-1.5 -mt-0.5">{q.hint}</p>}
+
+            {q.type === 'prose' && (
+              <textarea
+                id={`${d.workbookKey}-${q.key}`}
+                rows={q.rows ?? 5}
+                class="w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5 leading-relaxed"
+              />
+            )}
+
+            {(q.type === 'text' || q.type === 'number') && (
+              <div class="flex items-center gap-2">
+                {q.prefix && <span class="font-display font-700 text-soft">{q.prefix}</span>}
+                <input
+                  id={`${d.workbookKey}-${q.key}`}
+                  type={q.type === 'number' ? 'number' : 'text'}
+                  class="flex-1 min-w-0 rounded-xl border-2 border-edge bg-surface px-3.5 py-2.5"
+                />
+                {q.suffix && <span class="font-display font-700 text-soft">{q.suffix}</span>}
+              </div>
+            )}
+
+            {q.type === 'list' && (
+              <div>
+                <div data-list-rows class="grid gap-2" />
+                <button type="button" data-add-row class="btn btn-ghost text-sm py-1.5 px-4 mt-2">
+                  Add another
+                </button>
+              </div>
+            )}
+
+            {q.type === 'file' && (
+              <div>
+                <div data-files class="grid gap-2 mb-2" />
+                <label class="btn btn-ghost text-sm py-1.5 px-4 cursor-pointer inline-flex">
+                  Add a drawing or photo
+                  <input
+                    type="file"
+                    class="sr-only"
+                    data-upload
+                    accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf"
+                  />
+                </label>
+                <p class="note mt-1.5">Images or PDF, up to 10 MB each.</p>
+              </div>
+            )}
+
+            {q.type === 'table' && (
+              <div>
+                <div class="scroll-x">
+                  <table class="template-table" data-columns={JSON.stringify(q.columns ?? [])}>
+                    <thead>
+                      <tr>
+                        {(q.columns ?? []).map((c) => (
+                          <th>{c}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody data-table-rows />
+                  </table>
+                </div>
+                <button type="button" data-add-row class="btn btn-ghost text-sm py-1.5 px-4 mt-2">
+                  Add a row
+                </button>
+              </div>
+            )}
+          </div>
+        ))
+      }
+
+      <p class="label" data-save-status aria-live="polite">Saved to your workbook</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { useSession } from '../lib/session';
+  import type { StoredFile } from '../pages/api/upload';
+
+  /** What /api/upload answers with, success or failure. */
+  type UploadReply = { files?: StoredFile[]; error?: string };
+
+  // One deliverable per lesson, so a single instance is enough.
+  const root = document.querySelector<HTMLElement>('[data-deliverable]');
+
+  if (root) {
+    const workbookKey = root.dataset.deliverable!;
+    const lessonId = root.dataset.lessonId ?? '';
+    const signedOut = root.querySelector<HTMLElement>('[data-signed-out]')!;
+    const signedIn = root.querySelector<HTMLElement>('[data-signed-in]')!;
+    const status = root.querySelector<HTMLElement>('[data-save-status]')!;
+
+    const fields = Array.from(root.querySelectorAll<HTMLElement>('[data-field]'));
+    const fullKey = (key: string) => `${workbookKey}.${key}`;
+
+    /* ── list and table rows ──────────────────────────────────────── */
+    const listRow = (value = '') => {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = value;
+      input.className = 'w-full rounded-xl border-2 border-edge bg-surface px-3.5 py-2';
+      return input;
+    };
+
+    const tableRow = (columns: string[], values: string[] = []) => {
+      const tr = document.createElement('tr');
+      columns.forEach((_, i) => {
+        const td = document.createElement('td');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = values[i] ?? '';
+        input.className = 'cell-field';
+        td.appendChild(input);
+        tr.appendChild(td);
+      });
+      return tr;
+    };
+
+    /** Read one field's current value as a string, ready to store. */
+    const readField = (field: HTMLElement): string => {
+      const type = field.dataset.type;
+      if (type === 'list') {
+        const values = Array.from(field.querySelectorAll('input'))
+          .map((i) => i.value.trim())
+          .filter(Boolean);
+        return values.length ? JSON.stringify(values) : '';
+      }
+      if (type === 'table') {
+        const rows = Array.from(field.querySelectorAll('tbody tr'))
+          .map((tr) => Array.from(tr.querySelectorAll('input')).map((i) => i.value.trim()))
+          .filter((r) => r.some(Boolean));
+        return rows.length ? JSON.stringify(rows) : '';
+      }
+      const el = field.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+      return el?.value.trim() ?? '';
+    };
+
+    const writeField = (field: HTMLElement, raw: string) => {
+      const type = field.dataset.type;
+
+      if (type === 'list') {
+        const host = field.querySelector<HTMLElement>('[data-list-rows]')!;
+        host.replaceChildren();
+        let values: string[];
+        try {
+          values = raw ? JSON.parse(raw) : [];
+        } catch {
+          values = raw ? [raw] : [];
+        }
+        for (const v of values.length ? values : ['', '']) host.appendChild(listRow(v));
+        return;
+      }
+
+      if (type === 'table') {
+        const table = field.querySelector<HTMLTableElement>('table')!;
+        const columns: string[] = JSON.parse(table.dataset.columns || '[]');
+        const body = table.querySelector('tbody')!;
+        body.replaceChildren();
+        let rows: string[][];
+        try {
+          rows = raw ? JSON.parse(raw) : [];
+        } catch {
+          rows = [];
+        }
+        (rows.length ? rows : [[], [], []]).forEach((r) => body.appendChild(tableRow(columns, r)));
+        return;
+      }
+
+      const el = field.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+      if (el) el.value = raw;
+    };
+
+    /* ── files ────────────────────────────────────────────────────── */
+    const renderFiles = (field: HTMLElement, files: StoredFile[]) => {
+      const host = field.querySelector<HTMLElement>('[data-files]');
+      if (!host) return;
+      host.replaceChildren();
+
+      for (const f of files) {
+        const row = document.createElement('div');
+        row.className = 'marker flex items-center gap-3 p-2.5';
+
+        if (f.type?.startsWith('image/')) {
+          const img = document.createElement('img');
+          img.src = `/api/file/${f.key}`;
+          img.alt = '';
+          img.loading = 'lazy';
+          img.className = 'w-14 h-14 object-cover rounded-lg shrink-0';
+          row.appendChild(img);
+        } else {
+          const badge = document.createElement('span');
+          badge.className = 'w-14 h-14 grid place-items-center rounded-lg shrink-0 text-xl';
+          badge.style.background = 'var(--surface-2)';
+          badge.textContent = '📄';
+          row.appendChild(badge);
+        }
+
+        const link = document.createElement('a');
+        link.href = `/api/file/${f.key}`;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.className = 'flex-1 min-w-0 underline underline-offset-2 hover:text-paw truncate';
+        link.textContent = f.name;
+        row.appendChild(link);
+
+        const size = document.createElement('span');
+        size.className = 'label shrink-0';
+        size.textContent = `${Math.max(1, Math.round(f.size / 1024))} KB`;
+        row.appendChild(size);
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'label shrink-0 hover:text-paw';
+        remove.textContent = 'Remove';
+        remove.addEventListener('click', async () => {
+          if (!confirm(`Remove ${f.name}?`)) return;
+          const response = await fetch('/api/upload', {
+            method: 'DELETE',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ key: f.key, workbookKey: fullKey(field.dataset.field!) }),
+          });
+          if (response.ok) {
+            const reply = (await response.json()) as UploadReply;
+            renderFiles(field, reply.files ?? []);
+          }
+        });
+        row.appendChild(remove);
+
+        host.appendChild(row);
+      }
+    };
+
+    for (const field of fields) {
+      if (field.dataset.type !== 'file') continue;
+      const input = field.querySelector<HTMLInputElement>('[data-upload]');
+      input?.addEventListener('change', async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        status.textContent = `Uploading ${file.name}…`;
+
+        const body = new FormData();
+        body.append('file', file);
+        body.append('workbookKey', fullKey(field.dataset.field!));
+        body.append('lessonId', lessonId);
+
+        try {
+          const response = await fetch('/api/upload', { method: 'POST', body });
+          const data = (await response.json()) as UploadReply;
+          if (!response.ok) {
+            status.textContent = data.error ?? 'That upload did not work';
+          } else {
+            renderFiles(field, data.files ?? []);
+            status.textContent = 'Saved to your workbook';
+          }
+        } catch {
+          status.textContent = 'Offline — the file was not uploaded';
+        }
+        input.value = '';
+      });
+    }
+
+    /* ── saving ───────────────────────────────────────────────────── */
+    const timers = new Map<string, ReturnType<typeof setTimeout>>();
+
+    const save = (field: HTMLElement) => {
+      const key = fullKey(field.dataset.field!);
+      status.textContent = 'Saving…';
+      clearTimeout(timers.get(key));
+      timers.set(
+        key,
+        setTimeout(async () => {
+          try {
+            const response = await fetch('/api/workbook', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ workbookKey: key, lessonId, content: readField(field) }),
+            });
+            status.textContent = response.ok
+              ? 'Saved to your workbook'
+              : 'Could not save — check your connection';
+          } catch {
+            status.textContent = 'Offline — this will not be saved until you reconnect';
+          }
+        }, 700),
+      );
+    };
+
+    // Delegated, so rows added later are covered without rebinding.
+    for (const field of fields) {
+      if (field.dataset.type === 'file') continue;
+      field.addEventListener('input', () => save(field));
+
+      field.querySelector('[data-add-row]')?.addEventListener('click', () => {
+        if (field.dataset.type === 'list') {
+          field.querySelector('[data-list-rows]')!.appendChild(listRow());
+        } else {
+          const table = field.querySelector<HTMLTableElement>('table')!;
+          const columns: string[] = JSON.parse(table.dataset.columns || '[]');
+          table.querySelector('tbody')!.appendChild(tableRow(columns));
+        }
+      });
+    }
+
+    /* ── load ─────────────────────────────────────────────────────── */
+    useSession()
+      .then((me) => {
+        if (!me.signedIn) return;
+        signedOut.hidden = true;
+        signedIn.hidden = false;
+        for (const field of fields) {
+          const raw = me.workbook?.[fullKey(field.dataset.field!)] ?? '';
+          if (field.dataset.type === 'file') {
+            // The stored value is whatever was written last; a corrupt or
+            // hand-edited entry must not take the whole form down.
+            let files: StoredFile[];
+            try {
+              files = raw ? (JSON.parse(raw) as StoredFile[]) : [];
+            } catch {
+              files = [];
+            }
+            renderFiles(field, files);
+          } else {
+            writeField(field, raw);
+          }
+        }
+        status.textContent = '';
+      })
+      .catch(() => {
+        /* Signed out or offline — the read-only list of questions stays. */
+      });
+  }
+</script>

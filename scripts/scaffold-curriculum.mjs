@@ -68,7 +68,11 @@ let created = 0;
 let skipped = 0;
 
 for (const lesson of flatLessons()) {
-  const file = join(lessonsDir, lesson.dir, `${String(lesson.order).padStart(2, '0')}-${lesson.slug}.mdx`);
+  const file = join(
+    lessonsDir,
+    lesson.dir,
+    `${String(lesson.order).padStart(2, '0')}-${lesson.slug}.mdx`,
+  );
   if (await exists(file)) {
     skipped++;
     continue;

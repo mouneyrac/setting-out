@@ -50,12 +50,7 @@ const rel = relevance[r.waRelevance];
     </span>
     <span class="label">{r.type}</span>
     {r.duration && <span class="label">{r.duration}</span>}
-    <span
-      class:list={[
-        'label ml-auto',
-        r.waRelevance === 'wa-specific' && 'text-leaf',
-      ]}
-    >
+    <span class:list={['label ml-auto', r.waRelevance === 'wa-specific' && 'text-leaf']}>
       <span aria-hidden="true">{rel.emoji}</span>
       {rel.label}
     </span>
@@ -76,7 +71,10 @@ const rel = relevance[r.waRelevance];
 
   {
     r.waCaveat && (
-      <div class="mt-3 rounded-xl p-3" style="background: color-mix(in srgb, var(--sky-high) 16%, var(--surface));">
+      <div
+        class="mt-3 rounded-xl p-3"
+        style="background: color-mix(in srgb, var(--sky-high) 16%, var(--surface));"
+      >
         <span class="label block mb-0.5">Change this for Perth</span>
         <p class="text-[0.95rem] leading-relaxed">{r.waCaveat}</p>
       </div>
@@ -91,7 +89,10 @@ const rel = relevance[r.waRelevance];
       context && contextUrl && (
         <>
           {' · from '}
-          <a href={contextUrl} class="underline underline-offset-2 hover:text-paw transition-colors">
+          <a
+            href={contextUrl}
+            class="underline underline-offset-2 hover:text-paw transition-colors"
+          >
             {context}
           </a>
         </>
